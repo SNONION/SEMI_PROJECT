@@ -5,17 +5,18 @@ SEMI_Project
 
 매핑주소 : 
 1) 페이지 이동용 매핑주소 : 이동하는 페이지명.파일명 두 글자
-   ex) .do / .me / .us 등등
-3) 기능 구현을 위한 매핑주소 : CRUD(SQL) + 사용테이블명.파일명 두 글자
-   ex) .do / .me / .us 등등 ex) insertUser.us -> 회원가입 매핑주소
+ex) .do / .me / .us 등등
+2) 기능 구현을 위한 매핑주소 : CRUD(SQL) + 사용테이블명.파일명 두 글자
+ex) .do / .me / .us 등등 ex) insertUser.us -> 회원가입 매핑주소
 
 Controller
 1) 페이지 이동용 controller : 이동하는 페이지명 + Controller
 2) 기능 구현을 위한 controller : 테이블명 + CRUD(SQL) + Controller
    
 메소드명
-- CRUD + 테이블명()
-ex) insertUserInfo() -> 회원가입 삽입 메소드
+- CRUD + 테이블명 또는 기능명()
+ex) insertUserInfo() -> 회원정보 삽입 메소드
+ex) selectUserInfo() -> 로그인한 정보를 가지고 UserInfo테이블에 있는 회원인지 확인하는 메소드
 
     
 ************ 작성시 주의사항 **************
