@@ -8,7 +8,7 @@
 </head>
 <body>
 	<%@ include file="/views/common/menuBar.jsp" %>
-	
+	<!-- 테스트용 변경사항 -->
 	<!-- 
 		************ 작성 기준 ************
 		
