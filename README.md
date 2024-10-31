@@ -1,6 +1,9 @@
 # SEMI_Project
 SEMI_Project
 
+각 파일에 DAO.java filePath 변경해주세요
+XXXDao(해당 클래스파일명).class.getResource("/resource/mappers/사용하는 mapper.xml").getPath();
+
 ************ 작성 기준 ************
 
 매핑주소 : 
