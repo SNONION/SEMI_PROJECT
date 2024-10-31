@@ -3,12 +3,19 @@ SEMI_Project
 
 ************ 작성 기준 ************
 
-매핑주소 : CRUD + 사용테이블명 . vo파일이 들어있는 상위파일의 앞 두글자
-	ex) insertUser.us -> 회원가입 매핑주소
-Controller : 테이블명 + CRUD + Controller
-	ex) UserInfoInsertController -> 회원가입 컨트롤러
-메소드명 : CRUD + 테이블명()
-	ex) insertUserInfo() -> 회원가입 삽입 메소드
+매핑주소 : 
+1) 페이지 이동용 매핑주소 : 이동하는 페이지명.파일명 두 글자
+   ex) .do / .me / .us 등등
+3) 기능 구현을 위한 매핑주소 : CRUD(SQL) + 사용테이블명.파일명 두 글자
+   ex) .do / .me / .us 등등 ex) insertUser.us -> 회원가입 매핑주소
+
+Controller
+1) 페이지 이동용 controller : 이동하는 페이지명 + Controller
+2) 기능 구현을 위한 controller : 테이블명 + CRUD(SQL) + Controller
+   
+메소드명
+- CRUD + 테이블명()
+ex) insertUserInfo() -> 회원가입 삽입 메소드
 
     
 ************ 작성시 주의사항 **************
