@@ -4,11 +4,11 @@ SEMI_Project
 ************ 작성 기준 ************
 
 매핑주소 : CRUD + 사용테이블명 . vo파일이 들어있는 상위파일의 앞 두글자
-				ex) insertUser.us -> 회원가입 매핑주소
+	ex) insertUser.us -> 회원가입 매핑주소
 Controller : 테이블명 + CRUD + Controller
-					ex) UserInfoInsertController -> 회원가입 컨트롤러
+	ex) UserInfoInsertController -> 회원가입 컨트롤러
 메소드명 : CRUD + 테이블명()
-				ex) insertUserInfo() -> 회원가입 삽입 메소드
+	ex) insertUserInfo() -> 회원가입 삽입 메소드
 
     
 ************ 작성시 주의사항 **************
