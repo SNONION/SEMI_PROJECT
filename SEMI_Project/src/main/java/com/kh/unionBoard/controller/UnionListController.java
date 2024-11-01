@@ -1,13 +1,17 @@
 package com.kh.unionBoard.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
+import com.kh.unionBoard.model.vo.UnionBoard;
 
 /**
  * Servlet implementation class UnionListController
@@ -68,7 +72,6 @@ public class UnionListController extends HttpServlet {
 		
 		
 		
-		
 		if(maxPage<endPage) {
 			endPage = maxPage;
 		}
@@ -76,12 +79,18 @@ public class UnionListController extends HttpServlet {
 		
 		
 		
+		PageInfo pi = new PageInfo(listCount,currentPage,pageLimit,unionBoardLimit,maxPage,startPage,endPage);
+		
+		
+		ArrayList<UnionBoard> list = new UnionBoardService().selectList(pi);
 		
 		
 		
+		request.setAttribute("list",list);
+		request.setAttribute("pi", pi);
 		
 		
-		
+		request.getRequestDispatcher("/views/Unionboard/BoardListView.jsp").forward(request, response);
 	}
 
 	/**
