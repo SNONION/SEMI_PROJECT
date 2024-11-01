@@ -5,10 +5,25 @@
 	<entry key="listCount">
 	
 	    SELECT COUNT(*) COUNT
-	    FROM BOARD
+	    FROM UNIONBOARD
 	    WHERE STATUS = 'Y'
 	
 	
 	</entry>
+	
+	<entry key="selectList">
+	
+	   SELECT *
+	   FROM (SELECT ROWNUM RNUM,A)
+	   
+	
+	
+	
+	
+	
+	</entry>
+	
+	
+	
 
 </properties>
