@@ -72,8 +72,7 @@ public class UnionBoardDao {
 	public ArrayList<UnionBoard> selectList(Connection conn, PageInfo pi) {
 		
 		
-		 PreparedStatement pstmt = null;
-		 ResultSet rset = null;
+		
 		 
 		 
 		 ArrayList<UnionBoard> list = new ArrayList<>();
@@ -98,7 +97,7 @@ public class UnionBoardDao {
 				
 				rset = pstmt.executeQuery();
 				
-				
+			
 				
 			
 								

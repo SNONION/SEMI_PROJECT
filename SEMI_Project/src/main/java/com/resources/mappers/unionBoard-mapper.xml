@@ -13,8 +13,7 @@
 	
 	<entry key="selectList">
 	
-	   SELECT *
-	   FROM (SELECT ROWNUM RNUM,A)
+	  
 	   
 	
 	
