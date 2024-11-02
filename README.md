@@ -37,7 +37,7 @@ Controller <br>
 메소드명 <br>
 - CRUD + 테이블명 또는 기능명() <br>
 ex) insertUserInfo() -> 회원정보 삽입 메소드 <br>
-ex) selectUserInfo() -> 로그인한 정보를 가지고 UserInfo테이블에 있는 회원인지 확인하는 메소드 <br>
+ex) selectUserInfo() -> 로그인한 정보를 가지고 UserInfo테이블에 있는 회원인지 확인하는 메소드 <br><br>
 
     
 ************ 작성시 주의사항 **************<br>
