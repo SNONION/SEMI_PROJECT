@@ -43,7 +43,7 @@ ex) selectUserInfo() -> 로그인한 정보를 가지고 UserInfo테이블에 �
 ************ 작성시 주의사항 **************<br>
 		
 1. 이미 작성되어있는 파일의 경우에는 변경 전에 먼저 슬랙에 말씀해주세요.
-2. dao의 경우 상단에 Connection(con), PreparedStatement(pstmt), ResultSet(rset), Properties(pro) 객체들은 생성되어있습니다.
+2. dao의 경우 상단에 Connection(con), PreparedStatement(pstmt), ResultSet(rset), Properties(pro) 객체들은 생성되어있습니다.<br>
 	 따로 메소드 안에서 생성하실 필요없습니다.
 3. Controller에 경우 위 작성 기준에 맞게 작성해주세요.
 4. 상점이미지와 통합게시판에서 사용하는 이미지는 /resources/해당파일명/해당이미지명.확장자
