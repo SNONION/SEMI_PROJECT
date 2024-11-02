@@ -1,19 +1,31 @@
 package com.kh.user.model.vo;
 
-import java.sql.Date;
-
 public class WorkoutList {
 
     private int UserNo;
 	private String workoutTitle;
 	private String workoutContent;
-	private Date workoutDate;
+	private String workoutDate;
 	
 	public WorkoutList() {
 		super();
 	}
+	
+	public WorkoutList(int userNo, String workoutTitle, String workoutContent) {
+		super();
+		UserNo = userNo;
+		this.workoutTitle = workoutTitle;
+		this.workoutContent = workoutContent;
+	}
 
-	public WorkoutList(int userNo, String workoutTitle, String workoutContent, Date workoutDate) {
+	public WorkoutList(String workoutTitle, String workoutContent, String workoutDate) {
+		super();
+		this.workoutTitle = workoutTitle;
+		this.workoutContent = workoutContent;
+		this.workoutDate = workoutDate;
+	}
+
+	public WorkoutList(int userNo, String workoutTitle, String workoutContent, String workoutDate) {
 		super();
 		UserNo = userNo;
 		this.workoutTitle = workoutTitle;
@@ -45,11 +57,11 @@ public class WorkoutList {
 		this.workoutContent = workoutContent;
 	}
 
-	public Date getWorkoutDate() {
+	public String getWorkoutDate() {
 		return workoutDate;
 	}
 
-	public void setWorkoutDate(Date workoutDate) {
+	public void setWorkoutDate(String workoutDate) {
 		this.workoutDate = workoutDate;
 	}
 
