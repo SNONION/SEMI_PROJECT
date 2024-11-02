@@ -11,21 +11,21 @@
 
 
 
-
+=========================================================================== <br>
 <h3>commit time</h4>
-1) 평일
+1) 평일 <br>
    - 오전 0930 - 1000 <br>
    - 오후 1300 - 1310 <br>
    - 오후 1800 - 1820 <br>
-===========================================================================
+=========================================================================== <br>
 
 SEMI_Project
 
 각 파일에 DAO.java filePath 변경해주세요 <br>
 java/resources 로 경로 변경해주시고 <br>
-XXXDao(해당 클래스파일명).class.getResource("/resource/mappers/사용하는 mapper.xml").getPath();
+XXXDao(해당 클래스파일명).class.getResource("/resource/mappers/사용하는 mapper.xml").getPath(); <br><br>
 
-************ 작성 기준 ************
+************ 작성 기준 ************<br><br>
 
 매핑주소 :  <br>
 1) 페이지 이동용 매핑주소 : 이동하는 페이지명.파일명 두 글자 <br>
@@ -36,14 +36,14 @@ ex) .do / .me / .us 등등 ex) insertUser.us -> 회원가입 매핑주소 <br>
 Controller <br>
 1) 페이지 이동용 controller : 이동하는 페이지명 + Controller <br>
 2) 기능 구현을 위한 controller : 테이블명 + CRUD(SQL) + Controller <br>
-    <br>
+<br>
 메소드명 <br>
 - CRUD + 테이블명 또는 기능명() <br>
 ex) insertUserInfo() -> 회원정보 삽입 메소드 <br>
 ex) selectUserInfo() -> 로그인한 정보를 가지고 UserInfo테이블에 있는 회원인지 확인하는 메소드 <br><br>
 
     
-************ 작성시 주의사항 **************<br>
+************ 작성시 주의사항 **************<br><br>
 		
 1. 이미 작성되어있는 파일의 경우에는 변경 전에 먼저 슬랙에 말씀해주세요.
 2. dao의 경우 상단에 Connection(con), PreparedStatement(pstmt), ResultSet(rset), Properties(pro) 객체들은 생성되어있습니다.<br>
