@@ -103,7 +103,8 @@ h3 {
 		
 		<script>
 			$("#iList-tbody").on("click","tr",function(){
-				if(${iList != null}){
+				
+				if(${not empty iList}){
 					if(confirm("아이템을 사용하시겠습니까?")){
 						$.ajax({
 							url : "/semi/deleteItem.us",
@@ -120,6 +121,14 @@ h3 {
 						});
 					}
 				}
+				else{
+					if(confirm("상점페이지로 이동하시겠습니까?")){
+						
+						// 상점페이지로 이동하는 기능 구현
+						alert("아직 구현되지 않은 기능입니다 \n <mypage.jsp 128번줄부터 기능구현>");
+						
+					}
+				}
 			});
 		</script>
 
@@ -134,7 +143,7 @@ h3 {
 
 					<!-- 운동 내용 머리글 -->
 					<div class="modal-header">
-						<h4 class="modal-title">문의사항</h4>
+						<h4 class="modal-title">운동기록</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -313,20 +322,22 @@ h3 {
 		<script>
 			function deleteRequest(){
 				var requestNo = $("#outputRno").text();
-				console.log(requestNo);
-				$.ajax({
-					url : "/semi/deleteRequest.rq",
-					data : {
-						requestNo : requestNo,
-						userNo : "${user.userNo}"
-					},
-					success : function(alertMsg){
-						alert(alertMsg);
-					},
-					error : function(){
-						console.log("요청 오류")
-					}
-				});
+				
+				if(confirm("요청을 취소하시겠습니까?")){
+					$.ajax({
+						url : "/semi/deleteRequest.rq",
+						data : {
+							requestNo : requestNo,
+							userNo : "${user.userNo}"
+						},
+						success : function(alertMsg){
+							alert(alertMsg);
+						},
+						error : function(){
+							console.log("요청 오류")
+						}
+					});
+				}
 			};
 		</script>
 
@@ -350,7 +361,12 @@ h3 {
 				<tbody id="rList-tbody">
 					<c:choose>
 						<c:when test="${empty rList}">
-							작성된 문의글이 없습니다
+							<tr>
+								<td>-</td>
+								<td>작성된 문의글이 없습니다</td>
+								<td>-</td>
+								<td>none</td>
+							</tr>
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="i" items="${rList}">
@@ -394,54 +410,67 @@ h3 {
 
 	<script>
 		$("#wList-tbody").on("click","tr", function(){
-			var workoutContent = $(this).children().first().text();
-			var workoutTitle = $(this).children().first().next().text();
-			var workoutDate = $(this).children().first().next().next().text();
 			
-			console.log(workoutContent);
-			console.log(workoutTitle);
-			console.log(workoutDate);
-			
-			$("#workoutContent").text(workoutContent);
-			$("#workoutTitle").text(workoutTitle);
-			$("#workoutDate").text(workoutDate);
-			
-			$("#workoutContentModal").modal("show");
+			if(${not empty wList}){
+				var workoutContent = $(this).children().first().text();
+				var workoutTitle = $(this).children().first().next().text();
+				var workoutDate = $(this).children().first().next().next().text();
+				
+				console.log(workoutContent);
+				console.log(workoutTitle);
+				console.log(workoutDate);
+				
+				$("#workoutContent").text(workoutContent);
+				$("#workoutTitle").text(workoutTitle);
+				$("#workoutDate").text(workoutDate);
+				
+				$("#workoutContentModal").modal("show");
+			}
+			else{
+				if(confirm("운동을 기록하시겠습니까?")){
+					// 게시판 -> 글 작성으로 이동
+					
+					alert("아직 구현되지 않은 기능입니다.\n <mypage.jsp 426번줄부터 시작>")
+					
+				}
+			}
 		});
 	
 		$("#rList-tbody").on("click", "tr", function() {
 			var requestNo = $(this).children().first().text();
 			
-			$.ajax({
-				url : "/semi/requestList.rq",
-				method : "post",
-				data : {
-					requestNo : requestNo,
-					userNo : "${user.userNo}"
-				},
-				success : function(req){
-					$("#outputRno").text(req.requestNo);
-					$("#outputRtitle").text(req.requestTitle);
-					$("#outputRwriter").text(req.requestWriter);
-					$("#outputRdate").text(req.requestDate);
-					$("#outputRcontent").text(req.requestContent);
-					
-					$("#outputRcheck input").remove();
-					
-					if(req.checkStatus == 'Y'){
-						$("#outputRcheck").append($("<input type='checkBox' checked disabled>"));
+			if(${not empty rList}){
+				$.ajax({
+					url : "/semi/requestList.rq",
+					method : "post",
+					data : {
+						requestNo : requestNo,
+						userNo : "${user.userNo}"
+					},
+					success : function(req){
+						$("#outputRno").text(req.requestNo);
+						$("#outputRtitle").text(req.requestTitle);
+						$("#outputRwriter").text(req.requestWriter);
+						$("#outputRdate").text(req.requestDate);
+						$("#outputRcontent").text(req.requestContent);
+						
+						$("#outputRcheck input").remove();
+						
+						if(req.checkStatus == 'Y'){
+							$("#outputRcheck").append($("<input type='checkBox' checked disabled>"));
+						}
+						else{
+							$("#outputRcheck").append($("<input type='checkBox' disabled>"));
+						}
+						
+						$("#outputRModal").modal("show");
+						
+					},
+					error : function(){
+						alert("요청 오류");
 					}
-					else{
-						$("#outputRcheck").append($("<input type='checkBox' disabled>"));
-					}
-					
-					$("#outputRModal").modal("show");
-					
-				},
-				error : function(){
-					alert("요청 오류");
-				}
-			});
+				});
+			}
 		});
 	
 		$("#request-footer>button").click(function(){
