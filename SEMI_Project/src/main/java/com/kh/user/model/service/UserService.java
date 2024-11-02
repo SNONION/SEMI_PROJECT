@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.user.model.dao.UserDao;
 import com.kh.user.model.vo.MyItems;
@@ -182,6 +183,17 @@ public class UserService {
 		JDBCTemplate.close(con);
 		
 		return result;
+	}
+
+	public Answer selectAnswer(int requestNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		Answer answer = dao.selectAnswer(con, requestNo);
+		
+		JDBCTemplate.close(con);
+		
+		return answer;
 	}
 
 }

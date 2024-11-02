@@ -125,4 +125,12 @@
 		AND     WORKOUT_CONTENT = ?
 	</entry>
 	
+	<entry key="selectAnswer">
+		SELECT  ANS_CONTENT,
+		        ANS_NAME,
+		        ANSWER_DATE
+		FROM    TB_ANSWER
+		WHERE   RQ_NO = ?
+	</entry>
+	
 </properties>

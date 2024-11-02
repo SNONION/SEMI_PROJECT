@@ -13,6 +13,13 @@ public class Answer {
 		super();
 	}
 
+	public Answer(String answerContent, String answerWriter, Date answerDate) {
+		super();
+		this.answerContent = answerContent;
+		this.answerWriter = answerWriter;
+		this.answerDate = answerDate;
+	}
+
 	public Answer(int requestNo, String answerContent, String answerWriter, Date answerDate) {
 		super();
 		this.requestNo = requestNo;

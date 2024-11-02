@@ -310,8 +310,27 @@ h3 {
 								<td id="outputRcheck"></td>
 							</tr>
 						</table>
-					</div>
+
+						<br>
 					
+						<div class="adminReply-area">
+							<table border="1">
+								<tr>
+									<th width="150px">작성자 :</th>
+									<td id="adminReplyWriter">-</td>
+								</tr>
+								<tr>
+									<th width="150px">작성일 :</th>
+									<td id="adminReplyDate">-</td>
+								</tr>
+								<tr>
+									<th width="150px">내용 :</th>
+									<td id="adminReplyContent">아직 답변이 없습니다.</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+						
 					<div id="requestDelete-footer" class="modal-footer">
 						<button type="button" onclick="deleteRequest();" class="btn btn-danger">요청 취소</button>
 					</div>
@@ -447,20 +466,34 @@ h3 {
 						requestNo : requestNo,
 						userNo : "${user.userNo}"
 					},
-					success : function(req){
-						$("#outputRno").text(req.requestNo);
-						$("#outputRtitle").text(req.requestTitle);
-						$("#outputRwriter").text(req.requestWriter);
-						$("#outputRdate").text(req.requestDate);
-						$("#outputRcontent").text(req.requestContent);
+					success : function(map){
 						
-						$("#outputRcheck input").remove();
-						
-						if(req.checkStatus == 'Y'){
-							$("#outputRcheck").append($("<input type='checkBox' checked disabled>"));
-						}
-						else{
-							$("#outputRcheck").append($("<input type='checkBox' disabled>"));
+						for(var key in map){
+							
+							var req = map[key];
+							
+							if(req.requestNo != null){
+								$("#outputRno").text(req.requestNo);
+								$("#outputRtitle").text(req.requestTitle);
+								$("#outputRwriter").text(req.requestWriter);
+								$("#outputRdate").text(req.requestDate);
+								$("#outputRcontent").text(req.requestContent);
+								
+								$("#outputRcheck input").remove();
+								
+								if(req.checkStatus == 'Y'){
+									$("#outputRcheck").append($("<input type='checkBox' checked disabled>"));
+								}
+								else{
+									$("#outputRcheck").append($("<input type='checkBox' disabled>"));
+								}
+							}
+							
+							if(req.answerWriter != null){
+								$("#adminReplyWriter").text(req.answerWriter);
+								$("#adminReplyDate").text(req.answerDate);
+								$("#adminReplyContent").text(req.answerContent);
+							}
 						}
 						
 						$("#outputRModal").modal("show");

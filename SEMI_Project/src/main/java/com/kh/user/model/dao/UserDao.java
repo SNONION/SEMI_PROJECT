@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
@@ -397,5 +398,33 @@ public class UserDao {
 		}
 		
 		return result;
+	}
+
+	public Answer selectAnswer(Connection con, int requestNo) {
+		
+		Answer answer = null;
+		String select = pro.getProperty("selectAnswer");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, requestNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				answer = new Answer(rset.getString("ANS_CONTENT"),
+									rset.getString("ANS_NAME"),
+									rset.getDate("ANSWER_DATE"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return answer;
 	}	
 }
