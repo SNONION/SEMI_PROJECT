@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	
+	<entry key="listCount">
+	
+		SELECT COUNT(*) COUNT
+		FROM TB_PRODUCT
+		WHERE STATUS = 'Y'	
+	
+	</entry>
+
+
+	<entry key="selectList">
+	
+		SELECT *
+		FROM 	(SELECT ROWNUM RNUM,A.*
+		        FROM(SELECT 
+		                   PRO_NO
+		                  ,SHOP_FILE_NO
+		                  ,PRO_NAME
+		                  ,PRO_MENUAL
+		                  ,PRICE
+		        FROM TB_PRODUCT P	        
+		        WHERE P.STATUS = 'Y'
+		        ORDER BY P.PRO_NO DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	
+	</entry>
+
+	
+	<entry key="selectProduct">
+	
+		SELECT PRO_NO
+			   ,FILE_NO
+			   ,PRO_NAME
+			   ,PRO_MENUAL
+	      	   ,PRICE
+			   ,STATUS
+		FROM TB_PRODUCT P
+		LEFT JOIN TB_SHOPMEDIAFILE ON (SHOP_FILE_NO=FILE_NO)
+		WHERE PRO_NO = ?
+		AND P.STATUS = 'Y'
+	
+	</entry>
+	
+	
+	
+	<entry key="selectShopMediaFile">
+		
+	SELECT *
+	FROM TB_SHOPMEDIAFILE
+	WHERE FILE_NO = ? 
+	
+	</entry>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</properties>

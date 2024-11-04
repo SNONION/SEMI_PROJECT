@@ -3,7 +3,6 @@ package com.kh.shop.model.service;
 import java.sql.Connection;
 import java.util.ArrayList;
 
-
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.dao.ShopDao;

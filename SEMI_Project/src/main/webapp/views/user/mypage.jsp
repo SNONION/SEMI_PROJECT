@@ -114,6 +114,7 @@ h3 {
 							},
 							success : function(alertMsg){
 								alert(alertMsg);	
+								window.location.reload();
 							},
 							error : function(){
 								alert("요청 오류");	
@@ -123,10 +124,7 @@ h3 {
 				}
 				else{
 					if(confirm("상점페이지로 이동하시겠습니까?")){
-						
-						// 상점페이지로 이동하는 기능 구현
-						alert("아직 구현되지 않은 기능입니다 \n <mypage.jsp 128번줄부터 기능구현>");
-						
+						location.href="/semi/list.sh?currentPage=1";
 					}
 				}
 			});
@@ -183,6 +181,7 @@ h3 {
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
+							window.location.reload();
 						},
 						error : function(){
 							alert("요청 오류");
@@ -351,6 +350,7 @@ h3 {
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
+							window.location.reload();
 							
 						},
 						error : function(){
@@ -427,7 +427,7 @@ h3 {
 			<button type="button" class="btn btn-outline-danger">회원 탈퇴</button>
 		</div>
 	</div>
-
+	
 	<script>
 		$("#wList-tbody").on("click","tr", function(){
 			
@@ -519,8 +519,7 @@ h3 {
 				},
 				success : function(alertMsg){
 					alert(alertMsg);
-					$("#requestTitle").text("");
-					$("#requestContent").text("");
+					window.location.reload();
 				},
 				error : function(){
 					alert("요청 오류");

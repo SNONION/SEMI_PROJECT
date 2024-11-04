@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
+
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.vo.Product;
@@ -32,8 +33,6 @@ public class ShopDao {
 	}
 
 	public int listCount(Connection con) {
-		PreparedStatement pstmt = null;
-		ResultSet rset = null; 
 		
 		int listCount = 0; // 조회된 게시글 개수 담을 변수
 		
@@ -62,9 +61,6 @@ public class ShopDao {
 	}
 
 	public ArrayList<Product> selectProduct(Connection con, PageInfo pi) {
-
-		PreparedStatement pstmt = null;		
-		ResultSet rset = null;
 		
 		//빈 리스트 준비
 		ArrayList<Product> list = new ArrayList<>();
@@ -73,10 +69,10 @@ public class ShopDao {
 		
 		
 		//시작번호 : 현재 페이지-1 * 게시글 보여줄 수 + 1
-		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit()+1;
+		int startRow = (pi.getCurrentPage()-1) * pi.getwListLimit()+1;
 		
 		//끝번호 : 현재페이지 수 * 게시글 보여줄 수
-		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
+		int endRow = pi.getCurrentPage() * pi.getwListLimit();
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -116,7 +112,6 @@ public class ShopDao {
 	public int insertProduct(Connection con, Product p) {
 
 		int result = 0;
-		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertProduct");
 		
 		
@@ -157,8 +152,6 @@ public class ShopDao {
 	public int selectProduct(Connection con) {
 		
 		int boardNo = 0;
-		ResultSet rset = null;
-		PreparedStatement pstmt = null;
 		
 		String sql = pro.getProperty("selectProduct");
 		
@@ -189,7 +182,6 @@ public class ShopDao {
 	public int insertShopMediaFile(Connection con, ShopMediaFile smf) {
 
 		int result = 0;
-		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertShopMediaFile");
 		
 		try {
@@ -215,9 +207,6 @@ public class ShopDao {
 	}
 
 	public Product selectProduct(Connection con, int bno) {
-		
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
 		
 		String sql = pro.getProperty("selectProduct");
 		
@@ -256,8 +245,6 @@ public class ShopDao {
 
 	public ShopMediaFile selectShopMediaFile(Connection con, int bno) {
 		
-		ResultSet rset =null;
-		PreparedStatement pstmt = null;
 		ShopMediaFile smf = null;
 		String sql = pro.getProperty("selectAttachment");
 		
