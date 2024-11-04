@@ -22,7 +22,7 @@ public class UnionBoardDao {
 	
 	public UnionBoardDao() {
 		
-		String filePath = (RequestDao.class).getResource("/resources/driver/driver.properties").getPath();
+		String filePath = (UnionBoardDao.class).getResource("/resources/mappers/unionBoard-mapper.xml").getPath();
 		
 		try {
 			pro.loadFromXML(new FileInputStream(filePath));
@@ -44,7 +44,10 @@ public class UnionBoardDao {
 		     try {
 				pstmt = conn.prepareStatement(sql);
 				
+				
+				
 				rset = pstmt.executeQuery();
+				
 				
 				if(rset.next()) {
 					
@@ -63,60 +66,59 @@ public class UnionBoardDao {
 			}
 		
 		
-		
 		return listCount;
 	}
+	
+	
+	
+	//게시글 목록 조회 (DAO 부분)
+		public ArrayList<UnionBoard> selectList(Connection conn, PageInfo pi) {
+			
+			
+			 
+			 ArrayList<UnionBoard> list = new ArrayList<>();
+			 
+			 
+			 String sql = pro.getProperty("selectList");
+			 
+			 
+			 
+			 int startRow = (pi.getCurrentPage()-1) * pi.getUnionBoardLimit() +1;
+			 
+			 
+			 int endRow = pi.getCurrentPage() * pi.getUnionBoardLimit();
+			 
+			 
+			 
+			    try {
+					pstmt = conn.prepareStatement(sql);
+					
+					pstmt.setInt(1, startRow);
+					pstmt.setInt(2, endRow);
+					
+					rset = pstmt.executeQuery();
+					
+				
+				} catch (SQLException e) {
+					
+					e.printStackTrace();
+				} finally {
+					
+					
+					JDBCTemplate.close(rset);
+					JDBCTemplate.close(pstmt);
+				}
+			
+			
+			return list;
+		}
 
 
-	//게시글 목록 조회
-	public ArrayList<UnionBoard> selectList(Connection conn, PageInfo pi) {
-		
-		
-		
-		 
-		 
-		 ArrayList<UnionBoard> list = new ArrayList<>();
-		 
-		 
-		 String sql = pro.getProperty("selectList");
-		 
-		 
-		 
-		 int startRow = (pi.getCurrentPage()-1) * pi.getUnionBoardLimit() +1;
-		 
-		 
-		 int endRow = pi.getCurrentPage() * pi.getUnionBoardLimit();
-		 
-		 
-		 
-		    try {
-				pstmt = conn.prepareStatement(sql);
-				
-				pstmt.setInt(1, startRow);
-				pstmt.setInt(2, endRow);
-				
-				rset = pstmt.executeQuery();
-				
-			
-				
-			
-								
-				
-				
-				
-			} catch (SQLException e) {
-				
-				e.printStackTrace();
-			} finally {
-				
-				
-				JDBCTemplate.close(rset);
-				JDBCTemplate.close(pstmt);
-			}
-		
-		
-		return list;
-	}
+
+
+
+
+
 	
 	
 	//게시글 목록 조회 메소드

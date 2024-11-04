@@ -5,8 +5,9 @@
 	<entry key="listCount">
 	
 	    SELECT COUNT(*) COUNT
-	    FROM UNIONBOARD
+	    FROM TB_UNIONBOARD
 	    WHERE STATUS = 'Y'
+	    
 	
 	
 	</entry>

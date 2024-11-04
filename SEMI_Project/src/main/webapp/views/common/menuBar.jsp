@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html>
@@ -137,8 +138,7 @@ a:hover {
 				<tr>
 					<th><a href="" id="home">HOME</a></th>
 					<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
-					<th><a href="" id="board">BOARD</a></th>
-					
+				<th><a href="/semi/UnionBoard.do?currentPage=1">BOARD</a></th>
 					<th><a data-toggle="modal" data-target="#loginModal">LOGIN</a></th>
 					<th><a data-toggle="modal" data-target="#signInModal">SIGNIN</a></th>
 				</tr>
@@ -169,6 +169,16 @@ a:hover {
 			});
 		};
 	</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </body>
 </html>
