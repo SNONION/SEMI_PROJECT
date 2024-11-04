@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 import com.kh.common.JDBCTemplate;
-import com.kh.shop.controller.PageInfo;
+import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.vo.Product;
 import com.kh.shop.model.vo.ShopMediaFile;
 
