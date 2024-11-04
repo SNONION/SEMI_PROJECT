@@ -141,9 +141,9 @@ a:hover {
 			<table class="menu-table">
 				<tr>
 					<th><a href="/semi" id="home">HOME</a></th>
+					<th><a href="/semi/list.sh?currentPage=1" id="home">SHOP</a></th>
 					<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
 					<th><a href="" id="board">BOARD</a></th>
-					
 					<th><a data-toggle="modal" data-target="#loginModal">LOGIN</a></th>
 					<th><a data-toggle="modal" data-target="#signInModal">SIGNIN</a></th>
 				</tr>

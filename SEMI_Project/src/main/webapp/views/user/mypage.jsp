@@ -124,10 +124,7 @@ h3 {
 				}
 				else{
 					if(confirm("상점페이지로 이동하시겠습니까?")){
-						
-						// 상점페이지로 이동하는 기능 구현
-						alert("아직 구현되지 않은 기능입니다 \n <mypage.jsp 128번줄부터 기능구현>");
-						
+						location.href="/semi/list.sh?currentPage=1";
 					}
 				}
 			});
