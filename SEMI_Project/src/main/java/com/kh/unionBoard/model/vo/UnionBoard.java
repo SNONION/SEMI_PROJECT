@@ -6,9 +6,9 @@ public class UnionBoard {
 
     private int boardNo;
 	private String categoryName;
-	private String BoardTitle;
-	private String BoardContent;
-	private String BoardWriter;
+	private String boardTitle;
+	private String boardContent;
+	private String boardWriter;
 	private int count;
 	private Date createDate;
 	private Date modifyDate;
@@ -23,9 +23,9 @@ public class UnionBoard {
 		super();
 		this.boardNo = boardNo;
 		this.categoryName = categoryName;
-		BoardTitle = boardTitle;
-		BoardContent = boardContent;
-		BoardWriter = boardWriter;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.boardWriter = boardWriter;
 		this.count = count;
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
@@ -49,27 +49,27 @@ public class UnionBoard {
 	}
 
 	public String getBoardTitle() {
-		return BoardTitle;
+		return boardTitle;
 	}
 
 	public void setBoardTitle(String boardTitle) {
-		BoardTitle = boardTitle;
+		this.boardTitle = boardTitle;
 	}
 
 	public String getBoardContent() {
-		return BoardContent;
+		return boardContent;
 	}
 
 	public void setBoardContent(String boardContent) {
-		BoardContent = boardContent;
+		this.boardContent = boardContent;
 	}
 
 	public String getBoardWriter() {
-		return BoardWriter;
+		return boardWriter;
 	}
 
 	public void setBoardWriter(String boardWriter) {
-		BoardWriter = boardWriter;
+		this.boardWriter = boardWriter;
 	}
 
 	public int getCount() {
@@ -106,9 +106,9 @@ public class UnionBoard {
 
 	@Override
 	public String toString() {
-		return "TB_UnionBoard [boardNo=" + boardNo + ", categoryName=" + categoryName + ", BoardTitle=" + BoardTitle
-				+ ", BoardContent=" + BoardContent + ", BoardWriter=" + BoardWriter + ", count=" + count
+		return "UnionBoard [boardNo=" + boardNo + ", categoryName=" + categoryName + ", boardTitle=" + boardTitle
+				+ ", boardContent=" + boardContent + ", boardWriter=" + boardWriter + ", count=" + count
 				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", status=" + status + "]";
 	}
-	
+
 }

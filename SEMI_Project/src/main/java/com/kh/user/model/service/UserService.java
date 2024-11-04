@@ -2,6 +2,7 @@ package com.kh.user.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
@@ -194,6 +195,68 @@ public class UserService {
 		JDBCTemplate.close(con);
 		
 		return answer;
+	}
+
+	public int updateUserInfo(UserInfo user) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateUserInfo(con, user);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int checkNickname(String nickname) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.checkNickname(con, nickname);
+		
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updatePwd(HashMap<String, String> map) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updatePwd(con, map);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int deleteUser(String userId) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.deleteUser(con, userId);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
 	}
 
 }

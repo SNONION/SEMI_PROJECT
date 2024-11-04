@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
 
 import com.kh.common.JDBCTemplate;
@@ -426,5 +427,102 @@ public class UserDao {
 		}
 		
 		return answer;
+	}
+
+	public int updateUserInfo(Connection con, UserInfo user) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateUserInfo");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setString(1, user.getUserName());
+			pstmt.setString(2, user.getNickname());
+			pstmt.setString(3, user.getGender());
+			pstmt.setString(4, user.getPhone());
+			pstmt.setString(5, user.getEmail());
+			pstmt.setString(6, user.getAddress());
+			pstmt.setString(7, user.getUserId());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int checkNickname(Connection con, String nickname) {
+		
+		int result = 0;
+		String select = pro.getProperty("checkNickname");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, nickname);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = 1;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updatePwd(Connection con, HashMap<String, String> map) {
+		
+		int result = 0;
+		String update = pro.getProperty("updatePwd");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setString(1, map.get("newPwd"));
+			pstmt.setString(2, map.get("userId"));
+			pstmt.setString(3, map.get("userPwd"));
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int deleteUser(Connection con, String userId) {
+		
+		int result = 0;
+		String delete = pro.getProperty("deleteUser");
+		
+		try {
+			pstmt = con.prepareStatement(delete);
+			
+			pstmt.setString(1, userId);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
 	}	
 }
