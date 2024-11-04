@@ -4,6 +4,7 @@
 
 <%
 	String contextPath = request.getContextPath();
+	String alertMsg = (String)session.getAttribute("alertMsg");
 %>
 
 <!DOCTYPE html>
@@ -158,6 +159,14 @@ a:hover {
 	
 	<!-- 메뉴바 영역 (로그인, 회원가입 스크립트 작성 영역) -->
 	<script>
+		var msg = "<%=alertMsg%>";
+		
+		if(msg != "null"){
+			alert(msg);
+			
+			<%session.removeAttribute("alertMsg");%>
+		}
+	
 		function myPage(){
 			
 			$("<form>", {method:"post",action:"/semi/mypage.us"

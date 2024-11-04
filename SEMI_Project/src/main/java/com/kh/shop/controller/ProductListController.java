@@ -73,8 +73,6 @@ public class ProductListController extends HttpServlet {
 				//상품 목록 조회
 				ArrayList<Product> list = new ShopService().selectProduct(pi);
 				
-				System.out.println(list);
-				
 				//조회된 게시글 목록과 페이징바 정보객체를 위임시 전달하기
 				request.setAttribute("list", list);
 				request.setAttribute("pi", pi);

@@ -134,4 +134,37 @@
 		WHERE   RQ_NO = ?
 	</entry>
 	
+	<entry key="updateUserInfo">
+		UPDATE  TB_USERINFO
+		SET     USER_NAME = ?,
+		        NICKNAME = ?,
+		        GENDER = ?,
+		        PHONE = ?,
+		        EMAIL = ?,
+		        ADDRESS = ?,
+		        MODIFY_DATE = SYSDATE
+		WHERE   USER_ID = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
+	<entry key="checkNickname">
+		SELECT  NICKNAME
+		FROM    TB_USERINFO
+		WHERE   NICKNAME = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
+	<entry key="updatePwd">
+		UPDATE  TB_USERINFO
+		SET     USER_PWD = ?
+		WHERE   USER_ID = ?
+		AND     USER_PWD = ?
+	</entry>
+	
+	<entry key="deleteUser">
+		UPDATE  TB_USERINFO
+		SET     STATUS = 'N'
+		WHERE   USER_ID = ? 
+	</entry>
+	
 </properties>

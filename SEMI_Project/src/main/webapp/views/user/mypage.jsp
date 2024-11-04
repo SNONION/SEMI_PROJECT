@@ -100,7 +100,7 @@ h3 {
 				</tbody>
 			</table>
 		</div>
-		
+
 		<script>
 			$("#iList-tbody").on("click","tr",function(){
 				
@@ -157,16 +157,17 @@ h3 {
 							</tr>
 						</table>
 					</div>
-				
+
 					<!-- 운동기록 삭제 버튼 구역 -->
 					<div id="workoutListDelete-footer" class="modal-footer">
-						<button type="button" onclick="deleteWorkout();" class="btn btn-danger">삭제</button>
+						<button type="button" onclick="deleteWorkout();"
+							class="btn btn-danger">삭제</button>
 					</div>
-				
+
 				</div>
 			</div>
 		</div>
-		
+
 		<script>
 			function deleteWorkout(){
 				
@@ -311,7 +312,7 @@ h3 {
 						</table>
 
 						<br>
-					
+
 						<div class="adminReply-area">
 							<table border="1">
 								<tr>
@@ -329,14 +330,15 @@ h3 {
 							</table>
 						</div>
 					</div>
-						
+
 					<div id="requestDelete-footer" class="modal-footer">
-						<button type="button" onclick="deleteRequest();" class="btn btn-danger">요청 취소</button>
+						<button type="button" onclick="deleteRequest();"
+							class="btn btn-danger">요청 취소</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<script>
 			function deleteRequest(){
 				var requestNo = $("#outputRno").text();
@@ -415,20 +417,107 @@ h3 {
 				</c:forEach>
 			</div>
 		</div>
-		
-		<br><br><br>
+
+		<br> <br> <br>
 		<div class="updateUser-area" align="center">
-			<button type="button" class="btn btn-outline-warning">회원정보 변경</button>
-			<button type="button" class="btn btn-outline-warning">비밀번호 변경</button>
+			<button type="button" onclick="updateUserInfo();"
+				class="btn btn-outline-warning">회원정보 변경</button>
+			<button type="button"
+				class="btn btn-outline-warning" data-toggle="modal" data-target="#pwdModal">비밀번호 변경</button>
+		</div>
+
+		<!-- 비밀번호 변경 모달창 -->
+		<div class="modal" id="pwdModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!-- 비밀번호 변경 머리글 -->
+					<div class="modal-header">
+						<h4 class="modal-title">비밀번호 변경</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<!-- 비밀번호 변경 본문 -->
+					<form action="/semi/updatePwd.us" method="post">
+						<input type="hidden" name="userId" value="${user.userId}">
+						<div class="modal-body" align="center">
+							<table>
+								<tr>
+									<th><label for="requestTitle">기존 비밀변호</label></th>
+								</tr>
+								<tr>
+									<td><input type="password" name="userPwd" id="userPwd" required></td>
+								</tr>
+								<tr>
+									<th><label for="requestTitle">비밀변호 변경</label></th>
+								</tr>
+								<tr>
+									<td><input type="password" name="newPwd" id="newPwd" required></td>
+								</tr>
+								<tr>
+									<th><label for="requestContent">비밀번호 확인</label></th>
+								</tr>
+								<tr>
+									<td><input type="password" name="checkPwd" id="checkPwd" required></td>
+								</tr>
+							</table>
+						</div>
+
+						<!-- 비밀번호 변경 버튼구역 -->
+						<div id="pwd-footer" class="modal-footer">
+							<button type="submit" onclick="return checkchangePwd();" class="btn btn-danger">변경</button>
+						</div>
+					</form>
+				</div>
+			</div>
 		</div>
 		
-		<br><br>
+		<script>
+			function checkchangePwd(){
+				var userPwd = $("#userPwd").val();
+				var newPwd = $("#newPwd").val();
+				var checkPwd = $("#checkPwd").val();
+				
+				if(userPwd != null && newPwd != null && checkPwd != null){
+					if(newPwd == checkPwd){
+						return true;
+					}
+					else{
+						alert("비밀번호가 일치하지 않습니다.");
+						$("#checkPwd").val("");
+						return false;
+					}
+				}
+				else{
+					alert("빈칸을 모두 입력해주세요.");
+				}
+			};
+		</script>
+
+		<br> <br>
 		<div class="deleteUser-area" align="center">
-			<button type="button" class="btn btn-outline-danger">회원 탈퇴</button>
+			<button type="button" onclick="deleteUser();" class="btn btn-outline-danger">회원 탈퇴</button>
 		</div>
 	</div>
-	
+
 	<script>
+		function deleteUser(){
+			
+			if(confirm("정말 삭제하시겠습니까?")){
+				if(prompt("'회원삭제'를 입력해주세요.") == "회원삭제"){
+					
+					$("<form>", {method:"post",action:"/semi/deleteUser.us"
+					}).append($("<input>", {type:"hidden",name:"userId",value:"${user.userId}"
+						})).appendTo($("body")).submit();
+				}
+			}
+		};
+	
+		function updateUserInfo(){
+			
+			location.href="/semi/updateUserInfoPage.us?userId=${user.userId}"; // 로그인 기능 구현 후 변경
+		};
+	
 		$("#wList-tbody").on("click","tr", function(){
 			
 			if(${not empty wList}){
@@ -594,6 +683,13 @@ h3 {
 	</script>
 
 
-<br><br><br><br><br><br><br><br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 </body>
 </html>

@@ -23,6 +23,18 @@ public class UserInfo {
 		super();
 	}
 
+	public UserInfo(String userId, String userName, String nickname, String gender, String phone, String email,
+			String address) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.nickname = nickname;
+		this.gender = gender;
+		this.phone = phone;
+		this.email = email;
+		this.address = address;
+	}
+
 	public UserInfo(int userNo, String userId, String userName, String nickname, String gender, String phone,
 			String email, String address, String gradeName, int point, Date enrollDate, Date modifyDate) {
 		super();
