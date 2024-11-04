@@ -5,9 +5,12 @@ public class Product {
     private int proNo;
 	private int shopFileNo;
 	private String proName;
-	private String proMenual;
+	private String proMenual; 
 	private int price;
 	private String status;
+	
+	private int boardNo;
+
 	
 	public Product() {
 		super();
@@ -21,6 +24,28 @@ public class Product {
 		this.proMenual = proMenual;
 		this.price = price;
 		this.status = status;
+	}
+	
+	
+	public Product(int proNo, int shopFileNo, String proName, String proMenual, int price) {
+		super();
+		this.proNo = proNo;
+		this.shopFileNo = shopFileNo;
+		this.proName = proName;
+		this.proMenual = proMenual;
+		this.price = price;
+	}
+
+
+	
+
+
+	public int getBoardNo() {
+		return boardNo;
+	}
+
+	public void setBoardNo(int boardNo) {
+		this.boardNo = boardNo;
 	}
 
 	public int getProNo() {
@@ -76,5 +101,7 @@ public class Product {
 		return "Product [proNo=" + proNo + ", shopFileNo=" + shopFileNo + ", proName=" + proName + ", proMenual="
 				+ proMenual + ", price=" + price + ", status=" + status + "]";
 	}
+
+
     
 }
