@@ -351,6 +351,7 @@ h3 {
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
+							
 						},
 						error : function(){
 							console.log("요청 오류")
