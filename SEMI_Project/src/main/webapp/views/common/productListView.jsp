@@ -43,6 +43,14 @@
 			</div>		
 		
 		</c:if>
+		
+		<c:if test="${loginUser != null}">
+		
+			<div align="center">
+				<button class="btn btn-info" onclick="location.href='${contextPath}/update.sh'">상품 구매</button>
+			</div>		
+		
+		</c:if>
 
 			 
 		<script>
@@ -58,7 +66,17 @@
 				
 			});
 		
-		</script>			
+		</script>	
+		
+		
+		<script>
+		$(function(){
+			$(".thumbnail").click(function(){
+				var bno = $(this).children().first().val();
+				location.href='${contextPath}/update.sh?bno=' + bno; // 구매 페이지로 이동
+			});
+		});
+		</script>		
 	
 		<div class="list-area">
 		

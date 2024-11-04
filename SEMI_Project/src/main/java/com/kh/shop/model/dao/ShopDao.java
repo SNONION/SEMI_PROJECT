@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
+
+
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.vo.Product;
@@ -32,8 +34,6 @@ public class ShopDao {
 	}
 
 	public int listCount(Connection con) {
-		PreparedStatement pstmt = null;
-		ResultSet rset = null; 
 		
 		int listCount = 0; // 조회된 게시글 개수 담을 변수
 		
@@ -62,9 +62,6 @@ public class ShopDao {
 	}
 
 	public ArrayList<Product> selectProduct(Connection con, PageInfo pi) {
-
-		PreparedStatement pstmt = null;		
-		ResultSet rset = null;
 		
 		//빈 리스트 준비
 		ArrayList<Product> list = new ArrayList<>();
@@ -73,10 +70,10 @@ public class ShopDao {
 		
 		
 		//시작번호 : 현재 페이지-1 * 게시글 보여줄 수 + 1
-		int startRow = (pi.getCurrentPage()-1) * pi.getBoardLimit()+1;
+		int startRow = (pi.getCurrentPage()-1) * pi.getwListLimit()+1;
 		
 		//끝번호 : 현재페이지 수 * 게시글 보여줄 수
-		int endRow = pi.getCurrentPage() * pi.getBoardLimit();
+		int endRow = pi.getCurrentPage() * pi.getwListLimit();
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -116,17 +113,8 @@ public class ShopDao {
 	public int insertProduct(Connection con, Product p) {
 
 		int result = 0;
-		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertProduct");
-		
-		
-//		PRO_NO
-//		SHOP_FILE_NO
-//		PRO_NAME
-//		PRO_MENUAL
-//		PRICE
-//		STATUS
-		
+
 		try {
 			pstmt = con.prepareStatement(sql);
 			
@@ -156,12 +144,9 @@ public class ShopDao {
 
 	public int selectProduct(Connection con) {
 		
-		int boardNo = 0;
-		ResultSet rset = null;
-		PreparedStatement pstmt = null;
+		int proNo = 0;
 		
-		String sql = pro.getProperty("selectProduct");
-		
+		String sql = pro.getProperty("selectProduct");		
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -170,7 +155,7 @@ public class ShopDao {
 			
 		if(rset.next()) {
 			
-			boardNo = rset.getInt("BNO");
+			proNo = rset.getInt("pno");
 		}
 			
 			
@@ -181,15 +166,13 @@ public class ShopDao {
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
-		
-		
-		return boardNo;
+				
+		return proNo;
 	}
 
 	public int insertShopMediaFile(Connection con, ShopMediaFile smf) {
 
 		int result = 0;
-		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertShopMediaFile");
 		
 		try {
@@ -200,24 +183,19 @@ public class ShopDao {
 			pstmt.setString(3, smf.getChangeName());
 			pstmt.setString(4, smf.getFilePath());
 
-			result = pstmt.executeUpdate();					
-			
+			result = pstmt.executeUpdate();				
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			JDBCTemplate.close(pstmt);
-		}
-				
+		}				
 		
 		return result;
 	}
 
-	public Product selectProduct(Connection con, int bno) {
-		
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
+	public Product selectProduct(Connection con, int pno) {
 		
 		String sql = pro.getProperty("selectProduct");
 		
@@ -226,12 +204,10 @@ public class ShopDao {
 		try {
 			pstmt = con.prepareStatement(sql);
 			
-			pstmt.setInt(1, bno);
+			pstmt.setInt(1, pno);
 			
 			rset = pstmt.executeQuery();
-
-			
-			
+						
 			//조회가 된다면 1개만 조회될테니 단순 조건처리
 			if(rset.next()) {
 				p = new Product(rset.getInt("PRO_NO")
@@ -248,49 +224,88 @@ public class ShopDao {
 		}finally{
 			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
-		}
-						
+		}						
 		
 		return p;
 	}
 
-	public ShopMediaFile selectShopMediaFile(Connection con, int bno) {
+	public ArrayList<Product> selectProductList(Connection con, int proNo) {
 		
-		ResultSet rset =null;
 		PreparedStatement pstmt = null;
-		ShopMediaFile smf = null;
-		String sql = pro.getProperty("selectAttachment");
+		ResultSet rset = null;
+		
+		ArrayList<Product> pList = new ArrayList<>();
+		
+		String sql = pro.getProperty("selectProductList");
 		
 		try {
-			pstmt =con.prepareStatement(sql);
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, proNo);
 			
-			pstmt.setInt(1, bno);
-			
-			rset = pstmt.executeQuery();
-			
-			//일반 게시글에 첨부파일은 하나만 등록될 수 있기 때문에 if 문으로 처리
-			if(rset.next()) {
-				smf= new ShopMediaFile(rset.getInt("FILE_NO"),
-									rset.getString("FILE_NAME")
-									,rset.getString("FILE_PATH"));
-				
-			}
-			
+			rset = pstmt.executeQuery();			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
-			
-		}
+			JDBCTemplate.close(rset);
+		}			
 		
-				
-		return smf;
-
-		
-		
+		return pList;		
 
 	}
+	
+	
+	public int increaseCount(Connection con, int proNo) {
+		
+		 int result = 0;
+	     PreparedStatement pstmt = null;
+	     
+	     String sql = pro.getProperty("increaseCount");
+	     
+	     try {
+			pstmt = con.prepareStatement(sql);			
+			
+			pstmt.setInt(1, proNo);			
+			
+			result = pstmt.executeUpdate();			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		 		 
+		 return result;
+	}
+
+	public boolean purchaseProduct(Product order, Connection con) {
+		
+		int result = 0;		
+        PreparedStatement pstmt = null;        
+        
+        String sql = pro.getProperty("purchaseProduct");       
+
+        try {
+            
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, order.getBoardNo());
+            pstmt.setInt(2, order.getQuantity());
+
+            result = pstmt.executeUpdate();
+            return result>0; // 성공 시 true 반환
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // 실패 시 false 반환
+        } finally {
+            JDBCTemplate.close(pstmt); // 자원 해제
+            
+        }
+    }
+
+
+	
 }

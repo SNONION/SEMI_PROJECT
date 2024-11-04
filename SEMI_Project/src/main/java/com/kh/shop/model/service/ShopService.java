@@ -2,8 +2,6 @@ package com.kh.shop.model.service;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-
-
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.dao.ShopDao;
@@ -91,55 +89,109 @@ public class ShopService {
 				JDBCTemplate.close(con);
 				return boardNo; //등록처리하지 않고 되돌리기 boardNo 제대로 추출안됐으면 0으로 돌아옴
 						
-		}
-		
-		
-		
+		}			
 		
 	}
 
 
-	public Product selectProduct(int bno) {
+	public Product selectProduct(int pno) {
 	
 		Connection con = JDBCTemplate.getConnection();
 		
-		Product p = new ShopDao().selectProduct(con,bno);
+		Product p = new ShopDao().selectProduct(con,pno);
 		
 		//조회구문은 트랙잭션 처리 필요없음
 		
 		JDBCTemplate.close(con);
 
-		return p;
-		
+		return p;		
 		
 
 	}
 
-	public ShopMediaFile selectShopMediaFile(int bno) {
-		
+
+	public int increaseCount(int proNo) {
+
 		Connection con = JDBCTemplate.getConnection();
 		
-		ShopMediaFile smf = new ShopDao().selectShopMediaFile(con,bno);
+		int result = new ShopDao().increaseCount(con,proNo);
+		
+		if(result>0) {
+			JDBCTemplate.commit(con);
+		}else {
+			JDBCTemplate.rollback(con);
+		}
 		
 		JDBCTemplate.close(con);
 		
-		return smf;
-		
-		
-
+		return result;		
 	}
 
+	public ArrayList<Product> selectProductList(int proNo) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<Product> pList = new ShopDao().selectProductList(conn,proNo);
+		
+		JDBCTemplate.close(conn);
+		
+		return pList;
+	}
+
+
+	public Product purchaseProduct(int boardNo, int quantity) {
+		
+		Connection con = JDBCTemplate.getConnection();
+	    // Product 객체를 생성하고 필요한 속성 설정
+	    Product order = new Product();
+	    order.setBoardNo(boardNo);
+	    order.setQuantity(quantity);
+	    
+	    // DAO 메소드를 호출하여 DB에 주문 정보를 저장합니다.
+	    ShopDao shopDao = new ShopDao();
+	    boolean isSuccess = shopDao.purchaseProduct(order,con);
+
+	    // 주문이 성공적으로 처리되면 order 객체를 반환
+	    if (isSuccess) {
+	        return order; // 성공적으로 저장된 order 객체 반환
+	    } else {
+	        return null; // 실패 시 null 반환
+	    }
+	}
+
+	public boolean purchaseProduct(Product order) {
+		
+		Connection con = JDBCTemplate.getConnection();
+	    // Product 객체를 생성하고 필요한 속성 설정
+	  
+	    // DAO 메소드를 호출하여 DB에 주문 정보를 저장합니다.
+		ShopDao shopDao = new ShopDao();
+	    boolean isSuccess = shopDao.purchaseProduct(order,con);
+
+	    if (isSuccess) {
+	        JDBCTemplate.commit(con); // 성공 시 커밋
+	    } else {
+	        JDBCTemplate.rollback(con); // 실패 시 롤백
+	    }
+	    
+	    // 자원 해제
+	    JDBCTemplate.close(con);
+	    
+	    return isSuccess; // 성공 여부 반환
+	}
+
+	public ShopMediaFile selectShopMediaFile(int bno) {
+
+
+		
+		return null;
+	}
+	
+	}
 	
 	
 
-
-
-
-
-
-
-	
-	
 	
 
-}
+
+

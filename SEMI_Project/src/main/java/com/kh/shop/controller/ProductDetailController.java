@@ -1,6 +1,7 @@
 package com.kh.shop.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,19 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kh.shop.model.service.ShopService;
 import com.kh.shop.model.vo.Product;
-import com.kh.shop.model.vo.ShopMediaFile;
+
 
 /**
- * Servlet implementation class ProductUpdateController
+ * Servlet implementation class ProductDetailView
  */
-@WebServlet("/update.sh")
-public class ProductUpdateController extends HttpServlet {
+@WebServlet("/detail.sh")
+public class ProductDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductUpdateController() {
+    public ProductDetailController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,28 +33,32 @@ public class ProductUpdateController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		int proNo = Integer.parseInt(request.getParameter("pno"));
 		
+		ShopService service = new ShopService();
 		
+		//일반 게시판에서 조회수 증가 작성한 메소드 이용
+		int result = new ShopService().increaseCount(proNo);
 		
-				int bno = Integer.parseInt(request.getParameter("bno"));
-				//수정페이지로 보내야하는 데이터
-				//게시글 정보,카테고리 목록, 첨부파일 정보
-				
-				ShopService service = new ShopService();
-				
-				Product p = service.selectProduct(bno);
-				
-				ShopMediaFile smf = service.selectShopMediaFile(bno);
-				
-				//ArrayList<Category> cList = service.selectCategory();
-				
-				request.setAttribute("p", p);
-				request.setAttribute("smf", smf);
-				//request.setAttribute("cList", cList);
-				
-				request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
-		
-		
+		if(result>0) {
+			//리스트 정보 조회
+			Product p = service.selectProduct(proNo);
+			
+			//첨부파일 정보
+			ArrayList<Product> pList = service.selectProductList(proNo);
+			
+			request.setAttribute("p", p);
+			request.setAttribute("pList", pList);
+			
+			request.getRequestDispatcher("/views/common/productDetailView.jsp").forward(request, response);
+			
+		}else {
+			
+			request.setAttribute("errorMsg", "사진 게시글 조회 실패");
+			
+			request.getRequestDispatcher("/views/common/errorPage.jsp").forward(request, response);
+		}
 	}
 
 	/**
