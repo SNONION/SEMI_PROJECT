@@ -114,6 +114,7 @@ h3 {
 							},
 							success : function(alertMsg){
 								alert(alertMsg);	
+								window.location.reload();
 							},
 							error : function(){
 								alert("요청 오류");	
@@ -183,6 +184,7 @@ h3 {
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
+							window.location.reload();
 						},
 						error : function(){
 							alert("요청 오류");
@@ -351,6 +353,7 @@ h3 {
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
+							window.location.reload();
 							
 						},
 						error : function(){
@@ -427,7 +430,7 @@ h3 {
 			<button type="button" class="btn btn-outline-danger">회원 탈퇴</button>
 		</div>
 	</div>
-
+	
 	<script>
 		$("#wList-tbody").on("click","tr", function(){
 			
@@ -519,8 +522,7 @@ h3 {
 				},
 				success : function(alertMsg){
 					alert(alertMsg);
-					$("#requestTitle").text("");
-					$("#requestContent").text("");
+					window.location.reload();
 				},
 				error : function(){
 					alert("요청 오류");

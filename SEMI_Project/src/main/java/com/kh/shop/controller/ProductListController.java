@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.service.ShopService;
 import com.kh.shop.model.vo.Product;
 

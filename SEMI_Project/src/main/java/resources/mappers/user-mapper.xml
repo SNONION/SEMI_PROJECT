@@ -76,6 +76,7 @@
 		SELECT  COUNT(*) COUNT
 		FROM    TB_REQUEST
 		WHERE   RQ_WRITER = ?
+		AND		STATUS = 'Y'
 	</entry>
 	
 	<entry key="countMyItemList">
