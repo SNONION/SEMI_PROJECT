@@ -100,7 +100,7 @@ public class ProductInsertController extends HttpServlet {
 			}				
 						
 			session.setAttribute("alertMsg", alertMsg);
-			response.sendRedirect(request.getContextPath()+"/list.bo?currentPage=1");//경로 확인필요
+			response.sendRedirect(request.getContextPath()+"/list.sh?currentPage=1");//경로 확인필요
 			
 		}
 		
