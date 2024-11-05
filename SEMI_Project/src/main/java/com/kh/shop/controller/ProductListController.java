@@ -67,8 +67,7 @@ public class ProductListController extends HttpServlet {
 				
 				//페이징바에 필요한 데이터 7개를 담아줄 수 있는 VO객체 정의하기
 				PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit, maxPage, startPage, endPage);
-				
-
+								
 				
 				//상품 목록 조회
 				ArrayList<Product> list = new ShopService().selectProduct(pi);

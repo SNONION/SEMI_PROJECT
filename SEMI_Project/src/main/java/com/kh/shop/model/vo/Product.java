@@ -10,7 +10,7 @@ public class Product {
 	private String status;
 	
 	private int boardNo;
-
+	private int quantity;
 	
 	public Product() {
 		super();
@@ -39,6 +39,23 @@ public class Product {
 
 	
 
+
+	public Product(int proNo, String proName, String proMenual, int price, String status) {
+		super();
+		this.proNo = proNo;
+		this.proName = proName;
+		this.proMenual = proMenual;
+		this.price = price;
+		this.status = status;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 	public int getBoardNo() {
 		return boardNo;
