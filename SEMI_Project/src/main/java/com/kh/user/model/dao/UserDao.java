@@ -675,5 +675,80 @@ public class UserDao {
 		}
 		
 		return result;
+	}
+
+	public int insertUserInfo(Connection con, UserInfo user) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertUserInfo");
+		
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setString(1, user.getUserId());
+			pstmt.setString(2, user.getUserPwd());
+			pstmt.setString(3, user.getUserName());
+			pstmt.setString(4, user.getNickname());
+			pstmt.setString(5, user.getGender());
+			pstmt.setString(6, user.getPhone());
+			pstmt.setString(7, user.getEmail());
+			pstmt.setString(8, user.getAddress());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int selectUserNo(Connection con, String inputId) {
+		
+		int result = 0;
+		String select = pro.getProperty("selectUserNo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, inputId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = rset.getInt("USER_NO");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int insertLoginInfo(Connection con, int userNo) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertLoginInfo");
+		
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
 	}	
 }

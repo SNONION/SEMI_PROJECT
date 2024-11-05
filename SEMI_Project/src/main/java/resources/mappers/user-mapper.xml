@@ -214,4 +214,29 @@
 		AND     STATUS = 'Y'
 	</entry>
 	
+	<entry key="insertUserInfo">
+		INSERT INTO TB_USERINFO(USER_NO,
+		                        USER_ID,
+		                        USER_PWD,
+		                        USER_NAME,
+		                        NICKNAME,
+		                        GENDER,
+		                        PHONE,
+		                        EMAIL,
+		                        ADDRESS,
+		                        POINT)
+		VALUES(SEQ_UNO.NEXTVAL,?,?,?,?,?,?,?,?,1)
+	</entry>
+	
+	<entry key="selectUserNo">
+		SELECT  USER_NO
+		FROM    TB_USERINFO
+		WHERE   USER_ID = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertLoginInfo">
+		INSERT INTO TB_LOGINCOUNT(USER_NO) VALUES(?)
+	</entry>
+	
 </properties>
