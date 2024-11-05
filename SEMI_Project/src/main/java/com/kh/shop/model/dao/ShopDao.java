@@ -8,11 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
-
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/dsfgdfgdfg
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.vo.Product;
