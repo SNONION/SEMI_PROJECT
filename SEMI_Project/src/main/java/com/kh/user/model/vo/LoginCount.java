@@ -12,6 +12,13 @@ public class LoginCount {
 	public LoginCount() {
 		super();
 	}
+	
+	public LoginCount(int loginCount, int loginEvent, Date loginDate) {
+		super();
+		this.loginCount = loginCount;
+		this.loginEvent = loginEvent;
+		this.loginDate = loginDate;
+	}
 
 	public LoginCount(int userNo, int loginCount, int loginEvent, Date loginDate) {
 		super();

@@ -48,14 +48,15 @@ public class MyPageController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
+		HttpSession session = request.getSession();
 		UserService service = new UserService();
 		
 		// 로그인 기능 추가 후 session.getParameter로 받아오기
-		String userId = request.getParameter("userId");
+		UserInfo loginUser = (UserInfo)session.getAttribute("loginUser");
 		
-		if(!userId.equals(null)) {
+		if(loginUser != null) {
 			// 회원 정보를 가져옴
-			UserInfo user = service.selectMyPage(userId);
+			UserInfo user = service.selectMyPage(loginUser.getUserId());
 			
 			int loginCount = service.selectLoginCount(user.getUserNo());
 			
@@ -122,7 +123,6 @@ public class MyPageController extends HttpServlet {
 		}
 		else {
 			String alertMsg = "로그인 후 이용가능한 서비스 입니다.";
-			HttpSession session = request.getSession();
 			session.setAttribute("alertMsg", alertMsg);
 			request.getRequestDispatcher("/").forward(request, response);
 		}

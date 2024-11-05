@@ -14,6 +14,7 @@ import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
+import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
 import com.kh.user.model.vo.WorkoutList;
@@ -520,6 +521,156 @@ public class UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public UserInfo loginUser(Connection con, String userId, String userPwd) {
+		
+		UserInfo user = null;
+		String select = pro.getProperty("loginUser");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, userId);
+			pstmt.setString(2, userPwd);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				user = new UserInfo(rset.getInt("USER_NO"),
+									rset.getString("USER_ID"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return user;
+	}
+
+	public LoginCount LoginCountInfo(Connection con, int userNo) {
+		
+		LoginCount lc = null;
+		String select = pro.getProperty("LoginCountInfo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				lc = new LoginCount(rset.getInt("LOGIN_COUNT"),
+									rset.getInt("LOGIN_EVENT"),
+									rset.getDate("LOGIN_DATE"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return lc;
+	}
+
+	public int updateAllLoginCount(Connection con, int userNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateAllLoginCount");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updateOnlyLoginCount(Connection con, int userNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateOnlyLoginCount");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int checkUserId(Connection con, String userId) {
+		
+		int result = 0;
+		String select = pro.getProperty("checkUserId");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, userId);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = 1;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int checkUserNickname(Connection con, String nickname) {
+		
+		int result = 0;
+		String select = pro.getProperty("checkUserNickname");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, nickname);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = 1;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
 			JDBCTemplate.close(pstmt);
 		}
 		

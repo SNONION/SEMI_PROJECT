@@ -43,6 +43,9 @@ label {
 						<td><input type="button" onclick="checkNickname();" class="btn btn-outline-warning btn-sm" value="중복확인"></td>
 					</tr>
 					<tr>
+						<td><div id="checkNicknameBox">8~15자로 특수기호 없이 입력</div>
+					</tr>
+					<tr>
 						<th></th>
 						<td>
 							<input type=radio id="male" name="gender" value="MALE">
@@ -79,26 +82,33 @@ label {
 	
 	<script>
 		function checkNickname(){
+			var nickname = $("#nickname").val();
+			var nickRegExp = /^[0-9a-zA-Z가-힣]{1,15}$/;
 			
-			$.ajax({
-				url : "/semi/checkNickname.us",
-				data : {
-					nickname : $("#nickname").val()
-				},
-				success : function(msg){
-					if(msg == "NNNNN"){
-						alert("이미 사용중인 넥네임 입니다.");
-						$("#userInfoUpdate").attr("disabled",true);
+			if(nickRegExp.test(nickname)){
+				$.ajax({
+					url : "/semi/checkNickname.us",
+					data : {
+						nickname : $("#nickname").val()
+					},
+					success : function(msg){
+						if(msg == "NNNNN"){
+							$("#checkNicknameBox").text("이미 사용중인 넥네임 입니다.");
+							$("#userInfoUpdate").attr("disabled",true);
+						}
+						else{
+							$("#checkNicknameBox").text("사용가능한 넥네임 입니다.");
+							$("#userInfoUpdate").attr("disabled",false);
+						}
+					},
+					error : function(){
+						alert("요청 오류");
 					}
-					else{
-						alert("사용가능한 넥네임 입니다.");
-						$("#userInfoUpdate").attr("disabled",false);
-					}
-				},
-				error : function(){
-					alert("요청 오류");
-				}
-			});
+				});
+			}
+			else{
+				$("#checkNicknameBox").text("형식 -> 8~15자로 특수기호 없이 입력");
+			}
 		};
 	
 		$(function(){

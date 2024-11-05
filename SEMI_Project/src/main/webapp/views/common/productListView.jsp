@@ -36,7 +36,7 @@
 		<h2 align="center">상품 게시판</h2>
 		<br>
 		
-		<c:if test="${loginUser != null && loginUser.role == 'ADMIN'}">
+		<c:if test="${loginUser != null && loginUser.userId == 'admin01'}">
 		
 			<div align="center">
 				<button class="btn btn-info" onclick="location.href='${contextPath}/insert.sh'">상품 게시</button>

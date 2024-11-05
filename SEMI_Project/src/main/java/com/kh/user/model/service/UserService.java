@@ -9,6 +9,7 @@ import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.user.model.dao.UserDao;
+import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
 import com.kh.user.model.vo.WorkoutList;
@@ -254,6 +255,84 @@ public class UserService {
 		else {
 			JDBCTemplate.rollback(con);
 		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public UserInfo loginUser(String userId, String userPwd) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		UserInfo user = dao.loginUser(con, userId, userPwd);
+		
+		JDBCTemplate.close(con);
+		
+		return user;
+	}
+
+	public LoginCount LoginCountInfo(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		LoginCount lc = dao.LoginCountInfo(con, userNo);
+		
+		JDBCTemplate.close(con);
+		
+		return lc;
+	}
+
+	public int updateAllLoginCount(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateAllLoginCount(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updateOnlyLoginCount(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateOnlyLoginCount(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int checkUserId(String userId) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.checkUserId(con, userId);
+		
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int checkUserNickname(String nickname) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.checkUserNickname(con, nickname);
+		
 		JDBCTemplate.close(con);
 		
 		return result;

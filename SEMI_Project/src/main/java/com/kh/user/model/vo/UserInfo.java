@@ -23,6 +23,12 @@ public class UserInfo {
 		super();
 	}
 
+	public UserInfo(int userNo, String userId) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+	}
+
 	public UserInfo(String userId, String userName, String nickname, String gender, String phone, String email,
 			String address) {
 		super();
