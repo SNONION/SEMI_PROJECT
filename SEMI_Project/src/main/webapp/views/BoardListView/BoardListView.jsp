@@ -67,7 +67,7 @@
 					<th width='200'>게시물 제목</th>
 					<th width='100'>게시판 작성자</th>
 					<th width='50'>조회수</th>
-					<th width='70'>작성일</th>
+					<th width='60'>작성일</th>
 					<th width='100'>추천자</th>
 
 				</tr>

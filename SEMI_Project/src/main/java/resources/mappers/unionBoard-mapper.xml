@@ -15,7 +15,7 @@
 	
 	<entry key="selectList">
 	
-	<!-- 조회할 데이터 : 게시판 번호 카테고리명 글제목 글내용  -->
+	<!-- 조회할 데이터 종류 : 게시판 번호 카테고리명 글제목 글내용  -->
 	                     
 		SELECT *
 		FROM (SELECT ROWNUM RNUM,A.*

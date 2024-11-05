@@ -30,7 +30,7 @@ public class UnionBoardService{
 	}
 	
 	
-   //게시글 목록 조회 메소드
+   //게시글 목록 조회 메소 드
 	
 	public ArrayList<UnionBoard> selectList(PageInfo pi) {
 		

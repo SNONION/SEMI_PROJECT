@@ -33,7 +33,7 @@ public class UnionBoardDao {
 	}
 
 	
-	   //총 게시글 개수 조회메소드
+	   //총 게시글 개수 조회메소 드
 	public int listCount(Connection conn) {
 		
 		 int listCount = 0;

@@ -35,7 +35,7 @@ public class UnionListController extends HttpServlet {
 		
 		//페이징 처리 (사용자에게 보여줄 게시글 정보들)
 		
-		//준비물
+		//준비물들
 		
 		int wListCount; //총 게시글 숫자들
 		int currentPage;

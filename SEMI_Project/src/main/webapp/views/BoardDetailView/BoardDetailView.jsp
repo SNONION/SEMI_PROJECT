@@ -28,7 +28,7 @@
     
       <tr>
       
-       <th width="80">카테고리</th>
+       <th width="70">카테고리</th>
        <td width="60">${b.categoryNo }</td>
        <th width="70">제목</th>
        <td width="350">${b.boardTitle }</td>
