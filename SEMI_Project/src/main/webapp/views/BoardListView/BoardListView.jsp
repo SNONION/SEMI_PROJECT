@@ -45,7 +45,7 @@
 
 
 
-		<h2 align="center">게시판</h2>
+		<h2 align="center">게시</h2>
 
 		<br> <br> <br>
 
@@ -63,7 +63,7 @@
 				<tr>
 
 					<th width='60'>게시판 번호</th>
-					<th width='70'>카테고리</th>
+					<th width='80'>카테고리</th>
 					<th width='200'>게시물 제목</th>
 					<th width='100'>게시판 작성자</th>
 					<th width='50'>조회수</th>

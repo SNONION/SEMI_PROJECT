@@ -37,7 +37,7 @@ public class UnionListController extends HttpServlet {
 		
 		//준비물
 		
-		int wListCount; //총 게시글 숫자
+		int wListCount; //총 게시글 숫자들
 		int currentPage;
 		int pageLimit;
 		int wListLimit;
