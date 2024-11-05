@@ -338,4 +338,49 @@ public class UserService {
 		return result;
 	}
 
+	public int insertUserInfo(UserInfo user) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.insertUserInfo(con, user);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int selectUserNo(String inputId) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.selectUserNo(con, inputId);
+		
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int insertLoginInfo(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.insertLoginInfo(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
 }

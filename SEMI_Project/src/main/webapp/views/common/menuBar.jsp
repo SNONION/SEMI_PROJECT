@@ -92,13 +92,13 @@ a:hover {
 					<div class="login-form" align="center">
 						<table>
 							<tr>
-								<th><label for="userId">ID</label></th>
-								<td><input type="text" name="userId" id="userId" value="ID"></td>
+								<th><label for="userId"></label></th>
+								<td><input type="text" name="userId" id="userId" placeholder="헬씨ID(아이디)"></td>
 							</tr>
 							<tr>
-								<th><label for="userPwd">PW</label></th>
+								<th><label for="userPwd"></label></th>
 								<td><input type="text" name="userPwd" id="userPwd"
-									value="PW"></td>
+									placeholder="비밀번호"></td>
 							</tr>
 						</table>
 					</div>
@@ -140,7 +140,7 @@ a:hover {
 								<tr>
 									<th></th>
 									<td>
-										<div id="checkIdBox" style="font-size: 8px;">8~15자로 특수기호
+										<div id="checkIdBox" style="font-size: 8px;">6~15자로 특수기호
 											없이 입력</div>
 									</td>
 								</tr>
@@ -156,7 +156,7 @@ a:hover {
 								</tr>
 								<tr>
 									<th></th>
-									<td><div id="checkPwdnameBox" style="font-size: 8px;">8~15자까지
+									<td><div id="checkPwdnameBox" style="font-size: 8px;">4~15자까지
 											가능(첫글자 특수기호 가능)</div>
 									<td>
 								</tr>
@@ -185,8 +185,8 @@ a:hover {
 										value="MALE"> <label for="male">MALE</label> <input
 										type="radio" name="gender" id="female" value="FEMALE">
 										<label for="female">FEMAL</label> <input type="radio"
-										name="gender" id="none" value="NONE" checked> <label
-										for="none">NONE</label></td>
+										name="gender" id="other" value="OTHER" checked> <label
+										for="other">OTHER</label></td>
 								</tr>
 								<tr>
 									<th><label for="phone">핸드폰 번호</label></th>
@@ -241,7 +241,7 @@ a:hover {
 			var email = $("#email").val();
 			var address = $("#address").val();
 			
-			var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{8,15}$/;
+			var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
 			
 			if(pwRegExp.test(userPwd)){
 				if(userPwd == doubleCheckPwd){
@@ -261,7 +261,7 @@ a:hover {
 	
 		function idCheckBtn(){
 			var inputId = $("#inputId").val();
-			var idRegExp = /^[0-9a-zA-Z]{8,15}$/;
+			var idRegExp = /^[0-9a-zA-Z]{6,15}$/;
 			
 			if(idRegExp.test(inputId)){
 				if(inputId != ""){
