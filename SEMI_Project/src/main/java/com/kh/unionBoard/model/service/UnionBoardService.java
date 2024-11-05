@@ -47,9 +47,26 @@ public class UnionBoardService{
 	}
 	
 	
+	//조회수 증가 메소드
 	
-	
-	
+	public int increaseCount(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		int result = new UnionBoardDao().increaseCount(conn,bno);
+		
+		if(result>0) {
+			
+			JDBCTemplate.commit(conn);
+		}else {
+			JDBCTemplate.rollback(conn);
+		}
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return result;
+	}
 	
 	
 }

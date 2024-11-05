@@ -18,11 +18,13 @@ public class UnionBoard {
 		super();
 	}
 
-	public UnionBoard(int boardNo, String categoryName, String boardTitle, int count, Date createDate) {
+	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardContent, int count,
+			Date createDate) {
 		super();
 		this.boardNo = boardNo;
 		this.categoryName = categoryName;
 		BoardTitle = boardTitle;
+		BoardContent = boardContent;
 		this.count = count;
 		this.createDate = createDate;
 	}

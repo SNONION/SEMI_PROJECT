@@ -37,30 +37,31 @@ public class UnionListController extends HttpServlet {
 		
 		//준비물
 		
-		int listCount; //총 게시글 숫자
+		int wListCount; //총 게시글 숫자
 		int currentPage;
 		int pageLimit;
-		int unionBoardLimit;
+		int wListLimit;
 		
 		int maxPage;
 		int startPage;
 		int endPage;
 		
 		
-		listCount = new UnionBoardService().listCount();
+		wListCount = new UnionBoardService().listCount();
 		
 		
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		
+		System.out.println(Integer.parseInt(request.getParameter("currentPage")));
 		
 		
 		pageLimit = 10;
-		unionBoardLimit = 10;
+		wListLimit = 10;
 		
 		
 		
 		
-		maxPage = (int)Math.ceil((double)listCount/unionBoardLimit);
+		maxPage = (int)Math.ceil((double)wListCount/wListLimit);
 		
 		
 		
@@ -79,7 +80,7 @@ public class UnionListController extends HttpServlet {
 		
 		
 		
-		PageInfo pi = new PageInfo(listCount,currentPage,pageLimit,unionBoardLimit,maxPage,startPage,endPage);
+		PageInfo pi = new PageInfo(wListCount,currentPage,pageLimit,wListLimit,maxPage,startPage,endPage);
 		
 		
 		ArrayList<UnionBoard> list = new UnionBoardService().selectList(pi);
@@ -90,7 +91,7 @@ public class UnionListController extends HttpServlet {
 		request.setAttribute("pi", pi);
 		
 		
-		request.getRequestDispatcher("/views/Unionboard/BoardListView.jsp").forward(request, response);
+		request.getRequestDispatcher("/views/BoardListView/BoardListView.jsp").forward(request, response);
 	}
 
 	/**

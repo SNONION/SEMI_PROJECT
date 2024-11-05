@@ -75,7 +75,6 @@ public class UnionBoardDao {
 		public ArrayList<UnionBoard> selectList(Connection conn, PageInfo pi) {
 			
 			
-			 
 			 ArrayList<UnionBoard> list = new ArrayList<>();
 			 
 			 
@@ -83,10 +82,10 @@ public class UnionBoardDao {
 			 
 			 
 			 
-			 int startRow = (pi.getCurrentPage()-1) * pi.getUnionBoardLimit() +1;
+			 int startRow = (pi.getCurrentPage()-1) * pi.getPageLimit() +1;
 			 
 			 
-			 int endRow = pi.getCurrentPage() * pi.getUnionBoardLimit();
+			 int endRow = pi.getCurrentPage() * pi.getPageLimit();
 			 
 			 
 			 
@@ -98,6 +97,20 @@ public class UnionBoardDao {
 					
 					rset = pstmt.executeQuery();
 					
+					//목록을 조회
+					
+					while(rset.next()) {
+						
+						list.add(new UnionBoard(rset.getInt("BOARD_NO"),
+								           rset.getString("CATEGORY_NAME"),
+								           rset.getString("BOARD_TITLE"),
+								           rset.getString("BOARD_CONTENT"),
+								           rset.getInt("COUNT"),
+								           rset.getDate("CREATE_DATE")));
+								           
+						
+					}
+										
 				
 				} catch (SQLException e) {
 					
@@ -114,19 +127,35 @@ public class UnionBoardDao {
 		}
 
 
-
-
-
-
-
+	
+	//조회수 증가 메소드
+	
+   public int increaseCount(Connection conn, int bno) {
+	   
+	  
+	   int result = 0;
+	   
+	   String sql = pro.getProperty("increaseCount");
+	   
+	   
+	      try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+	   
+	   return result;
+	   
+   }
 	
 	
-	//게시글 목록 조회 메소드
-	
-	
-	
-	
-	
-	
-	
+   
 }
