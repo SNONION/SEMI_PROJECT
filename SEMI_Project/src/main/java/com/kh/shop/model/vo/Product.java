@@ -40,6 +40,15 @@ public class Product {
 	
 
 
+	public Product(int proNo, String proName, String proMenual, int price, String status) {
+		super();
+		this.proNo = proNo;
+		this.proName = proName;
+		this.proMenual = proMenual;
+		this.price = price;
+		this.status = status;
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}

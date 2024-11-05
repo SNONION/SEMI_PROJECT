@@ -11,12 +11,10 @@
 <body>
 
 <%
-    // 요청 파라미터로부터 boardNo와 quantity를 가져옵니다.
-    String boardNoStr = request.getParameter("boardNo");
+     
     int quantity = Integer.parseInt(request.getParameter("quantity"));
     
-    // boardNo를 int로 변환
-    int boardNo = Integer.parseInt(boardNoStr);
+    int boardNo = Integer.parseInt(request.getParameter("boardNo"));
 
     // Service를 사용하여 주문 처리
     ShopService shopService = new ShopService();

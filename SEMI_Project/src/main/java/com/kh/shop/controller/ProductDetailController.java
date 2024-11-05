@@ -17,7 +17,7 @@ import com.kh.shop.model.vo.Product;
 /**
  * Servlet implementation class ProductDetailView
  */
-@WebServlet("/detail.sh")
+@WebServlet("/detailList.sh")
 public class ProductDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -51,11 +51,11 @@ public class ProductDetailController extends HttpServlet {
 			request.setAttribute("p", p);
 			request.setAttribute("pList", pList);
 			
-			request.getRequestDispatcher("/views/common/productDetailView.jsp").forward(request, response);
+			request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
 			
 		}else {
 			
-			request.setAttribute("errorMsg", "사진 게시글 조회 실패");
+			request.setAttribute("errorMsg", "게시글 조회 실패");
 			
 			request.getRequestDispatcher("/views/common/errorPage.jsp").forward(request, response);
 		}
