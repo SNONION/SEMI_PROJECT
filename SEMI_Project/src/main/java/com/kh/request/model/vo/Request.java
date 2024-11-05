@@ -1,22 +1,41 @@
 package com.kh.request.model.vo;
 
-import java.sql.Date;
-
 public class Request {
 
     private int requestNo;
 	private String requestTitle;
 	private String requestContent;
 	private String requestWriter; // 작성자 닉네임으로 받아옴
-	private Date requestDate;
+	private String requestDate;
 	private String checkStatus; // 관리자 확인 여부
 	private String stauts;
 	
 	public Request() {
 		super();
 	}
+	
+	public Request(String requestTitle, String requestContent, String requestWriter, String requestDate,
+			String checkStatus) {
+		super();
+		this.requestTitle = requestTitle;
+		this.requestContent = requestContent;
+		this.requestWriter = requestWriter;
+		this.requestDate = requestDate;
+		this.checkStatus = checkStatus;
+	}
 
-	public Request(int requestNo, String requestTitle, String requestContent, String requestWriter, Date requestDate,
+	public Request(int requestNo, String requestTitle, String requestContent, String requestWriter, String requestDate,
+			String checkStatus) {
+		super();
+		this.requestNo = requestNo;
+		this.requestTitle = requestTitle;
+		this.requestContent = requestContent;
+		this.requestWriter = requestWriter;
+		this.requestDate = requestDate;
+		this.checkStatus = checkStatus;
+	}
+
+	public Request(int requestNo, String requestTitle, String requestContent, String requestWriter, String requestDate,
 			String checkStatus, String stauts) {
 		super();
 		this.requestNo = requestNo;
@@ -60,11 +79,11 @@ public class Request {
 		this.requestWriter = requestWriter;
 	}
 
-	public Date getRequestDate() {
+	public String getRequestDate() {
 		return requestDate;
 	}
 
-	public void setRequestDate(Date requestDate) {
+	public void setRequestDate(String requestDate) {
 		this.requestDate = requestDate;
 	}
 

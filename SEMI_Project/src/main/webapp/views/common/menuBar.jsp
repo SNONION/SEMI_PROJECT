@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<%
+	String contextPath = request.getContextPath();
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +32,8 @@ body {
 }
 
 .outer{
-	width: 100%;
+	width: 1000px;
+	margin: auto;
 }
 
 .img-area img{
@@ -135,7 +140,7 @@ a:hover {
 		<div class="menubar">
 			<table class="menu-table">
 				<tr>
-					<th><a href="" id="home">HOME</a></th>
+					<th><a href="/semi" id="home">HOME</a></th>
 					<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
 					<th><a href="" id="board">BOARD</a></th>
 					
@@ -151,22 +156,14 @@ a:hover {
 		</div>
 	</div>
 	
-	<!-- 메뉴바 영역 (로그인, 회원가입 스크립트 작성 영역 -->
+	<!-- 메뉴바 영역 (로그인, 회원가입 스크립트 작성 영역) -->
 	<script>
 		function myPage(){
 			
-			$.ajax({
-				url : "myPage.us",
-				data : {
-					userId : "${loginUser.userId}"
-				},
-				success : function(result){
-					
-				},
-				error : function(){
-					console.log("에러")
-				}
-			});
+			$("<form>", {method:"post",action:"/semi/mypage.us"
+			}).append($("<input>", {type:"hidden",name:"userId",value:"admin01" // 로그인 기능이 구현되면 el표기법으로 사용자 아이디 받아옴
+				})).appendTo($("body")).submit();
+			
 		};
 	</script>
 

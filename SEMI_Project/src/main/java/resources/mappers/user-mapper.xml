@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<entry key="selectMyPage">
+		SELECT  USER_NO,
+		        USER_ID,
+		        USER_NAME,
+		        NICKNAME,
+		        GENDER,
+		        PHONE,
+		        EMAIL,
+		        ADDRESS,
+		        GRADE_NAME,
+		        POINT,
+		        ENROLL_DATE,
+		        MODIFY_DATE
+		FROM    TB_USERINFO
+		JOIN    TB_GRADE USING(GRADE_NO)
+		WHERE   USER_ID = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectWorkoutList">
+		SELECT  *
+		FROM    (SELECT  ROWNUM RNUM, A.*
+		         FROM    (SELECT  WORKOUT_TITLE,
+		                          WORKOUT_CONTENT,
+		                          TO_CHAR(WORKOUT_DATE, 'YYYY-MM-DD') WORKOUT_DATE
+		                  FROM    TB_WORKOUTLIST
+		                  WHERE   USER_NO = ?
+		                  ORDER BY WORKOUT_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectMyItems">
+		SELECT  PRO_NO,
+			    PRO_NAME,
+                COUNT(PRO_NAME) PRO_COUNT
+        FROM    TB_MYITEMS
+        JOIN    TB_PRODUCT USING(PRO_NO)
+        WHERE   BUYER_NO = ?
+        GROUP BY PRO_NAME, PRO_NO
+	</entry>
+	
+	<entry key="selectRequest">
+		SELECT  *
+		FROM    (SELECT  ROWNUM RNUM, A.*
+		         FROM    (SELECT  RQ_NO,
+		                          RQ_TITLE,
+		                          RQ_CONTENT,
+		                          USER_NAME,
+		                          TO_CHAR(RQ_DATE, 'YYYY-MM-DD') RQ_DATE,
+		                          CHECK_STATUS
+		                  FROM    TB_REQUEST R
+		                  JOIN    TB_USERINFO ON(RQ_WRITER = USER_NO)
+		                  WHERE   RQ_WRITER = ?
+		                  AND	  R.STATUS = 'Y'
+		                  ORDER BY RQ_NO DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="countWorkoutList">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_WORKOUTLIST
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="selectLoginCount">
+		SELECT  LOGIN_COUNT
+		FROM    TB_LOGINCOUNT
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="countRequestList">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_REQUEST
+		WHERE   RQ_WRITER = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="countMyItemList">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_MYITEMS
+		WHERE   BUYER_NO = ?
+	</entry>
+	
+	<entry key="insertRequest">
+		INSERT INTO TB_REQUEST(RQ_NO,
+		                       RQ_TITLE,
+		                       RQ_CONTENT,
+		                       RQ_WRITER) 
+		VALUES(SEQ_RQNO.NEXTVAL,?,?,?)
+	</entry>
+	
+	<entry key="requestList">
+		SELECT  RQ_TITLE,
+		        RQ_CONTENT,
+		        NICKNAME,
+		        RQ_DATE,
+		        CHECK_STATUS
+		FROM    TB_REQUEST
+		JOIN    TB_USERINFO ON(USER_NO = RQ_WRITER)
+		WHERE   RQ_NO = ?
+		AND     RQ_WRITER = ?
+	</entry>
+	
+	<entry key="RequestDelete">
+	UPDATE  TB_REQUEST
+	SET     STATUS = 'N'
+	WHERE   RQ_NO = ?
+	AND     RQ_WRITER = ?
+	</entry>
+	
+	<entry key="deleteItems">
+		DELETE FROM TB_MYITEMS
+		WHERE 	PRO_NO = ?
+		AND 	BUYER_NO = ?
+		AND 	ROWNUM = 1
+	</entry>
+	
+	<entry key="deleteWorkout">
+		DELETE FROM TB_WORKOUTLIST
+		WHERE   USER_NO = ?
+		AND     WORKOUT_TITLE = ?
+		AND     WORKOUT_CONTENT = ?
+	</entry>
+	
+	<entry key="selectAnswer">
+		SELECT  ANS_CONTENT,
+		        ANS_NAME,
+		        ANSWER_DATE
+		FROM    TB_ANSWER
+		WHERE   RQ_NO = ?
+	</entry>
+	
+	<entry key="selectSoldProduct">
+		SELECT  PRO_NO,
+			    PRO_NAME,
+                COUNT(PRO_NAME) PRO_COUNT
+        FROM    TB_MYITEMS
+        JOIN    TB_PRODUCT USING(PRO_NO)
+        GROUP BY PRO_NAME, PRO_NO
+	</entry>
+</properties>
