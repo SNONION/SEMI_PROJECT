@@ -53,7 +53,7 @@ h3 {
 						<td>${user.point}</td>
 						<c:choose>
 							<c:when test="${loginCount != 0}">
-								<td>${oginCount}</td>
+								<td>${loginCount}</td>
 							</c:when>
 							<c:otherwise>
 								<td>-</td>

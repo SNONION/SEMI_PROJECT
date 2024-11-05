@@ -167,4 +167,51 @@
 		WHERE   USER_ID = ? 
 	</entry>
 	
+	<entry key="loginUser">
+		SELECT  USER_NO,
+		        USER_ID
+		FROM    TB_USERINFO
+		WHERE   USER_ID = ?
+		AND     USER_PWD = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="LoginCountInfo">
+		SELECT  LOGIN_COUNT,
+		        LOGIN_EVENT,
+		        LOGIN_DATE
+		FROM    TB_LOGINCOUNT
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="updateAllLoginCount">
+		UPDATE  TB_LOGINCOUNT
+		SET     LOGIN_COUNT = LOGIN_COUNT + 1,
+		        LOGIN_EVENT = LOGIN_EVENT + 1,
+		        LOGIN_DATE = SYSDATE
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="updateOnlyLoginCount">
+		UPDATE  TB_LOGINCOUNT
+		SET     LOGIN_COUNT = LOGIN_COUNT + 1,
+		        LOGIN_EVENT = 1,
+		        LOGIN_DATE = SYSDATE
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="checkUserId">
+		SELECT  *
+		FROM    TB_USERINFO
+		WHERE   USER_ID = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="checkUserNickname">
+		SELECT  *
+		FROM    TB_USERINFO
+		WHERE   NICKNAME = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
 </properties>
