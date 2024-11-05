@@ -47,21 +47,31 @@
 	
 	
 	
-	<entry key="selectShopMediaFile">
+	<entry key="selectProductList">
 		
-	SELECT *
-	FROM TB_SHOPMEDIAFILE
-	WHERE FILE_NO = ? 
+	SELECT * 
+	FROM TB_PRODUCT
+	WHERE PRO_NO = ?
+	
+	</entry>	
+	
+	<entry key="increaseCount">
+		
+		UPDATE TB_PRODUCT
+		SET COUNT = COUNT + 1
+		WHERE PRO_NO = ?
+		AND STATUS = 'Y'
 	
 	</entry>
 	
+	<entry key="purchaseProduct">
+		
+		INSERT 
+		INTO TB_MYITEMS (BOARD_NO
+						,QUANTITY)
+				VALUES(?,?)
+		
 	
-	
-	
-	
-	
-	
-	
-	
+	</entry>
 
 </properties>
