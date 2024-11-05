@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +36,7 @@
 	
 	<%--글작성 버튼은 로그인한 회원일 경우 보일 수 있도록 조건처리 --%>
 	
-	<c:if test="${not empty loginUser}">
+	<c:if test="${not empty loginUser && loginUser.userId == 'admin01'}">
 		<div align="center">
 			<a href="${contextPath }/detailList.sh" class="btn btn-info">상품 게시</a>		
 		</div>	
@@ -52,12 +53,9 @@
 				<th width='100'>가격</th>		
 				
 			</tr>
-		
-<<<<<<< HEAD
-		<c:if test="${loginUser != null && loginUser.userId == 'admin01'}">
-=======
+
 		</thead>
->>>>>>> refs/remotes/origin/dsfgdfgdfg
+
 		
 		<tbody>
 				
@@ -99,8 +97,7 @@
 	
 		<br> <br>
 		
-		<div align="center" class="paging-area">
-	
+		<div align="center" class="paging-area">	
 			
 			<c:if test="${pi.currentPage != 1 }">
 				<button onclick="location.href='list.sh?currentPage=${pi.currentPage-1}'">이전</button>
