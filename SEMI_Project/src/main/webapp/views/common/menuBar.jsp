@@ -249,10 +249,12 @@ a:hover {
 				}
 				else{
 					$("#checkPwdnameBox").text("비밀번호가 일치하지 않습니다.");
+					return false;
 				}
 			}
 			else{
 				$("#checkPwdnameBox").text("형식 -> 8~15자까지 가능(첫글자 특수기호 가능)");
+				return false;
 			}
 
 		};
@@ -271,7 +273,7 @@ a:hover {
 						success : function(imsg){
 							if(imsg == 'NNNNN'){
 								$("#checkIdBox").text("이미 사용중인 아이디입니다.");
-								$("#enroll").attr("disabled", true)
+								$("#enroll").attr("disabled", true);
 							}
 							else{
 								$("#checkIdBox").text("사용 가능한 아이디입니다.");
@@ -305,11 +307,16 @@ a:hover {
 						success : function(nmsg){
 							if(nmsg == 'NNNNN'){
 								$("#checkNicknameBox").text("이미 사용중인 닉네임입니다.");
-								$("#enroll").attr("disabled", true)
+								$("#enroll").attr("disabled", true);
 							}
 							else{
-								$("#checkNicknameBox").text("사용 가능한 닉네임입니다.");
-								$("#enroll").attr("disabled", false)
+								if($("#checkIdBox").text() == "사용 가능한 아이디입니다."){
+									$("#checkNicknameBox").text("사용 가능한 닉네임입니다.");
+									$("#enroll").attr("disabled", false);
+								}
+								else{
+									$("#checkNicknameBox").text("아이디 먼저 중복확인 해주세요.");
+								}
 							}
 						},
 						error : function(){
@@ -333,7 +340,7 @@ a:hover {
 			<table class="menu-table">
 				<tr>
 					<th><a href="/semi" id="home">HOME</a></th>
-					<th><a href="/semi/list.sh?currentPage=1" id="home">SHOP</a></th>
+					<th><a onclick="shopPage();" id="home">SHOP</a></th>
 					<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
 					<th><a href="" id="board">BOARD</a></th>
 
@@ -365,17 +372,21 @@ a:hover {
 			alert(msg);
 	<%session.removeAttribute("alertMsg");%>
 		}
+		
+		function shopPage(){
+			
+			$("<form>", {
+				method : "post",
+				action : "/semi/list.sh?currentPage=1"
+			}).appendTo($("body")).submit();
+		};
 
 		function myPage() {
 
 			$("<form>", {
 				method : "post",
 				action : "/semi/mypage.us"
-			}).append($("<input>", {
-				type : "hidden",
-				name : "userId",
-				value : "${loginUser.userId}"
-			})).appendTo($("body")).submit();
+			}).appendTo($("body")).submit();
 
 		};
 	</script>

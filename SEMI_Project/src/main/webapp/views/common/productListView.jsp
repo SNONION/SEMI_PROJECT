@@ -52,13 +52,6 @@
 				<th width='100'>가격</th>		
 				
 			</tr>
-		
-<<<<<<< HEAD
-		<c:if test="${loginUser != null && loginUser.userId == 'admin01'}">
-=======
-		</thead>
->>>>>>> refs/remotes/origin/dsfgdfgdfg
-		
 		<tbody>
 				
 		<c:choose>
