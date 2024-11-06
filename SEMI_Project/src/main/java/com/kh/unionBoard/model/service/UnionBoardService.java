@@ -14,7 +14,7 @@ import com.kh.unionBoard.model.vo.UnionBoard;
 public class UnionBoardService{
 	
 	
-	//총 게시글 개수 조회
+	//총 게시글 개수 조회메소드
 
 	public int listCount() {
 		

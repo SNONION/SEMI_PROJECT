@@ -2,6 +2,7 @@ package com.kh.unionBoard.model.vo;
 
 import java.sql.Date;
 
+//UnionBoard
 public class UnionBoard{
 
     private int boardNo;

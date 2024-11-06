@@ -1,5 +1,7 @@
 package com.kh.common.model.vo;
 
+
+//pageInfo
 public class PageInfo {
 
 	private int wListCount;

@@ -157,7 +157,7 @@ public class UnionBoardDao {
 	   
    }
 
-//게시글 상세조회 메소드
+//게시글 상세조회 메소드명
 public UnionBoard selectBoard(Connection conn, int bno) {
 	
 	
