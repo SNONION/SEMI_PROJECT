@@ -7,14 +7,9 @@
 <title>Insert title here</title>
 
 <style>
-	#enroll-form input, #enroll-form textarea{
+	#enroll-area input, #enroll-area textarea{
 		width : 100%;
 		box-sizing : border-box;	
-	}
-
-	#enroll-form td>img{
-		width : 100%;
-		height : 100%;
 	}
 
 </style>

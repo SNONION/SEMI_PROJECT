@@ -54,9 +54,9 @@
 				
 			</tr>
 
+
 		</thead>
 
-		
 		<tbody>
 				
 		<c:choose>

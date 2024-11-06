@@ -38,7 +38,7 @@ public class ProductDetailController extends HttpServlet {
 		
 		ShopService service = new ShopService();
 		
-		//일반 게시판에서 조회수 증가 작성한 메소드 이용
+		//상품 게시판에서 조회수 증가 작성한 메소드 이용
 		int result = new ShopService().increaseCount(proNo);
 		
 		if(result>0) {
@@ -51,7 +51,7 @@ public class ProductDetailController extends HttpServlet {
 			request.setAttribute("p", p);
 			request.setAttribute("pList", pList);
 			
-			request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
+			request.getRequestDispatcher("/views/common/productDetailView.jsp").forward(request, response);
 			
 		}else {
 			
