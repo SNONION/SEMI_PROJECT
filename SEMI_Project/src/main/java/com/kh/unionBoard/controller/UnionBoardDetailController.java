@@ -28,10 +28,12 @@ public class UnionBoardDetailController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    //get방식
+    //get방식으로
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		int bno = Integer.parseInt(request.getParameter("bno"));
+		
+		
 		
 		
 		UnionBoardService service = new UnionBoardService();

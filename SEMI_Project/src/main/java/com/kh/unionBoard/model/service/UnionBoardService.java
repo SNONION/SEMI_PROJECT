@@ -38,7 +38,7 @@ public class UnionBoardService{
 	
 	
 	
-	//조회수 증가 메소드
+	//조회수 증 가 메소드
 	
 	public int increaseCount(int bno) {
 		

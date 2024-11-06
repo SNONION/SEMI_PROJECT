@@ -49,7 +49,7 @@ public class UnionListController extends HttpServlet {
 		
 		wListCount = new UnionBoardService().listCount();
 		
-		//현재 페이지 정보나타냄
+		//현재 페이지 정보나타
 		
 		 currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		 
