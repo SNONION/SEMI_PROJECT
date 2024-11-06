@@ -29,6 +29,9 @@ public class UnionBoard{
 		this.createDate = createDate;
 	}
 
+
+	
+
 	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardContent, String boardWriter,
 			int count, Date createDate, Date modifyDate, String status) {
 		super();

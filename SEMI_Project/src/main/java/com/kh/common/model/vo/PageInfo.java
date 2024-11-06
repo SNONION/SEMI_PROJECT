@@ -1,42 +1,38 @@
 package com.kh.common.model.vo;
 
 public class PageInfo {
-	
-	private int listCount;
+
+	private int wListCount;
 	private int currentPage;
 	private int pageLimit;
-	private int unionBoardLimit;
+	private int wListLimit;
+	
 	private int maxPage;
 	private int startPage;
 	private int endPage;
 	
 	public PageInfo() {
-		
 		super();
-		
-		
-		
-		
 	}
 
-	public PageInfo(int listCount, int currentPage, int pageLimit, int unionBoardLimit, int maxPage, int startPage,
+	public PageInfo(int wListCount, int currentPage, int pageLimit, int wListLimit, int maxPage, int startPage,
 			int endPage) {
 		super();
-		this.listCount = listCount;
+		this.wListCount = wListCount;
 		this.currentPage = currentPage;
 		this.pageLimit = pageLimit;
-		this.unionBoardLimit = unionBoardLimit;
+		this.wListLimit = wListLimit;
 		this.maxPage = maxPage;
 		this.startPage = startPage;
 		this.endPage = endPage;
 	}
 
-	public int getListCount() {
-		return listCount;
+	public int getwListCount() {
+		return wListCount;
 	}
 
-	public void setListCount(int listCount) {
-		this.listCount = listCount;
+	public void setwListCount(int wListCount) {
+		this.wListCount = wListCount;
 	}
 
 	public int getCurrentPage() {
@@ -55,12 +51,12 @@ public class PageInfo {
 		this.pageLimit = pageLimit;
 	}
 
-	public int getUnionBoardLimit() {
-		return unionBoardLimit;
+	public int getwListLimit() {
+		return wListLimit;
 	}
 
-	public void setUnionBoardLimit(int unionBoardLimit) {
-		this.unionBoardLimit = unionBoardLimit;
+	public void setwListLimit(int wListLimit) {
+		this.wListLimit = wListLimit;
 	}
 
 	public int getMaxPage() {
@@ -89,12 +85,9 @@ public class PageInfo {
 
 	@Override
 	public String toString() {
-		return "PageInfo [listCount=" + listCount + ", currentPage=" + currentPage + ", pageLimit=" + pageLimit
-				+ ", unionBoardLimit=" + unionBoardLimit + ", maxPage=" + maxPage + ", startPage=" + startPage
-				+ ", endPage=" + endPage + "]";
+		return "PageInfo [wListCount=" + wListCount + ", currentPage=" + currentPage + ", pageLimit=" + pageLimit
+				+ ", wListLimit=" + wListLimit + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
+				+ endPage + "]";
 	}
-	
-	
-	
 
 }

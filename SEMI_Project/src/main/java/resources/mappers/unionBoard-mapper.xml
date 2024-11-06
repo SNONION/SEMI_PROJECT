@@ -37,7 +37,38 @@
 
 	</entry>
 	
+	<entry key="increaseCount">
 	
+	   UPDATE UNION BOARD
+	   SET COUNT = COUNT + 1
+	   WHERE BOARD_NO = ?
+	   AND STATUS = 'Y'
+	   	 
+	</entry>
+	
+	
+    <entry key="selectBoard">
+    
+    
+             SELECT BOARD_NO
+              ,CATEGORY_NAME
+		      ,BOARD_TITLE
+		      ,BOARD_CONTENT
+              ,USER_NAME
+		      ,CREATE_DATE
+		      FROM TB_UNIONBOARD TB
+		     JOIN  TB_USERINFO ON (BOARD_WRITER=USER_NO)  
+             JOIN  TB_CATEGORY USING (CATEGORY_NO)
+		    WHERE BOARD_NO = 2
+		    AND TB.STATUS = 'Y'
+		     
+    
+    
+    
+    
+    
+    
+    </entry>
 	
 	
 

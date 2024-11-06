@@ -12,6 +12,7 @@ import java.util.Properties;
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.dao.RequestDao;
+
 import com.kh.unionBoard.model.vo.UnionBoard;
 
 public class UnionBoardDao {
@@ -33,7 +34,7 @@ public class UnionBoardDao {
 	}
 
 	
-	   //총 게시글 개수 조회메소 드
+	   //총 게시글 개수 조회메소드
 	public int listCount(Connection conn) {
 		
 		 int listCount = 0;
@@ -155,7 +156,52 @@ public class UnionBoardDao {
 	   return result;
 	   
    }
+
+//게시글 상세조회 메소드
+public UnionBoard selectBoard(Connection conn, int bno) {
 	
 	
+	  String sql = pro.getProperty("selectBoard");
+	  
+	  
+	  UnionBoard b = null;
+	  
+	  
+	    try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1,bno);
+			
+			rset = pstmt.executeQuery();
+			
+			
+			if(rset.next()) {
+				
+				b = new UnionBoard(rset.getInt("BOARD_NO"),
+						           rset.getString("CATEGORY_NAME"),
+						           rset.getString("BOARD_TITLE"),
+						           rset.getString("BOARD_CONTENT"),
+				                   rset.getInt("COUNT"),
+				                   rset.getDate("CREATE_DATE")
+				                   );
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+	    
+	    return b;
+	  
+	  
+	  //목록 조회
+	    
+	  
+	
+   }
    
 }

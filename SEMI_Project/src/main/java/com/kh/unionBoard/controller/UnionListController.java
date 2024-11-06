@@ -49,10 +49,16 @@ public class UnionListController extends HttpServlet {
 		
 		wListCount = new UnionBoardService().listCount();
 		
+		//현재 페이지 정보
 		
-		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		 currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		 
+		
 		
 		System.out.println(Integer.parseInt(request.getParameter("currentPage")));
+		
+		
+		
 		
 		
 		pageLimit = 10;

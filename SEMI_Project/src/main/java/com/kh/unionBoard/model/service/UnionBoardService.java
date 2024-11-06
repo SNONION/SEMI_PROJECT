@@ -1,11 +1,14 @@
 package com.kh.unionBoard.model.service;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.dao.UnionBoardDao;
+import com.kh.unionBoard.model.vo.Category;
 import com.kh.unionBoard.model.vo.UnionBoard;
 
 public class UnionBoardService{
@@ -32,19 +35,7 @@ public class UnionBoardService{
 	
    //게시글 목록 조회 메소 드
 	
-	public ArrayList<UnionBoard> selectList(PageInfo pi) {
-		
-		
-		Connection conn = JDBCTemplate.getConnection();
-		
-		ArrayList<UnionBoard> list = new UnionBoardDao().selectList(conn,pi);
-		
-		
-		
-		JDBCTemplate.close(conn);
-		
-		return list;
-	}
+	
 	
 	
 	//조회수 증가 메소드
@@ -66,6 +57,38 @@ public class UnionBoardService{
 		
 		
 		return result;
+	}
+
+
+	public UnionBoard selectBoard(int bno) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		UnionBoard b = new UnionBoardDao().selectBoard(conn,bno);
+		
+		
+		JDBCTemplate.close(conn);
+		
+		
+		return b;
+	
+	
+	}
+
+
+	public ArrayList<UnionBoard> selectList(PageInfo pi) {
+		
+		Connection conn = JDBCTemplate.getConnection();
+		
+		ArrayList<UnionBoard> list = new UnionBoardDao().selectList(conn,pi);
+		
+		
+		JDBCTemplate.close(conn);
+
+		return list;
+		
+		
+		
 	}
 	
 	
