@@ -676,4 +676,55 @@ public class UserDao {
 		
 		return result;
 	}	
+	
+	public int insertLoginInfo(Connection con, int userNo) {
+			
+			int result = 0;
+			String insert = pro.getProperty("insertLoginInfo");	
+			
+			try {
+				pstmt = con.prepareStatement(insert);
+				
+				pstmt.setInt(1, userNo);
+				
+				result = pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				JDBCTemplate.close(pstmt);
+		}
+			return result;
+			
+			
+					
+					
+					
+													  
+			
+
+													  
+													  
+													  
+													 
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
