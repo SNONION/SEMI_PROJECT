@@ -11,17 +11,17 @@
 <style>
 #rList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 
 #iList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 
 #wList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 </style>
 </head>

@@ -7,8 +7,11 @@
 <title>Insert title here</title>
 
 <style>
+
 h5 {
-	color: white;
+	color: blue;
+	
+	
 }
 </style>
 
@@ -32,7 +35,7 @@ h5 {
 			<div class="container">
 				<table class="table table-dark table-striped">
 					<tr align="center">
-						<th width="120px">${ub.categoryName}</th>
+						<th width="100px">${ub.categoryName}</th>
 						<th width="600px">${ub.boardTitle}</th>
 						<th width="150px">${ub.boardWriter}</th>
 						<td width="120px">${ub.createDate}</td>
@@ -200,6 +203,11 @@ h5 {
 				}
 			});
 		};
+		
+		
+		
+		
+		
 	</script>
 
 	<br>

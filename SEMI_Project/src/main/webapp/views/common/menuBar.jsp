@@ -61,7 +61,7 @@ a:hover {
 }
 
 .menubar {
-	color: orange;
+	color: blue;
 }
 
 .menu-table {
@@ -88,11 +88,23 @@ a:hover {
 				<div class="modal-header">
 					<h4 class="modal-title">로그인</h4>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<div class="btn-group">
+  <button type="button" class="btn btn-primary">ID</button>
+  <button type="button" class="btn btn-primary">PASSWORD</button>
+  <button type="button" class="btn btn-primary">LOGIN</button>
+</div>
+					
 				</div>
 
 				<form action="/semi/loginUserInfo.us" method="post"
 					class="login-form">
 					<!-- 로그인 구역 -->
+					
+		
+					
+					
+					
+					
 					<div class="login-form" align="center">
 						<table>
 							<tr>
@@ -109,7 +121,9 @@ a:hover {
 
 					<!-- 로그인 버튼 구역 -->
 					<div id="login-footer" class="modal-footer">
-						<button type="submit" class="btn btn-danger">login</button>
+					<span class="spinner-border spinner-border-sm"></span>
+						<input type="submit" class="btn btn-success" value="login">
+						
 					</div>
 				</form>
 			</div>
@@ -118,6 +132,60 @@ a:hover {
 
 
 	<!-- 회원가입 모달창 -->
+	
+	<button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#mydiv">
+   HELL'S CURL A.K.A HELL C
+   
+   </button>
+	
+  <div class="modal" id="mydiv">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body" align="center">
+          
+          <table class="table table-bordered"></table>
+               <tr>
+                <td><h2>이 사이트에 방문하신 여러분을 환영합니다</h1></td>
+                
+               </tr>
+
+
+          </table>
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	<div class="modal" id="signInModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -139,8 +207,10 @@ a:hover {
 										required></td>
 									<td><button type="button" id="idCheck"
 											onclick="idCheckBtn();"
-											class="btn btn-outline-warning btn-sm">중복확인</button></td>
-								</tr>
+											class="btn btn-info">중복확인</button></td>
+											
+											
+								</tr>        
 								<tr>
 									<th></th>
 									<td>
@@ -175,7 +245,7 @@ a:hover {
 										required></td>
 									<td><button type="button" id="nicknameCheck"
 											onclick="nicknameCheckBtn();"
-											class="btn btn-outline-warning btn-sm">중복확인</button></td>
+											class="btn btn-info">중복확인</button></td>
 								</tr>
 								<tr>
 									<th></th>
