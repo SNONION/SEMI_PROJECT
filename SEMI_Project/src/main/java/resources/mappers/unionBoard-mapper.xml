@@ -2,8 +2,131 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 
-	<entry key="">
+	<entry key="selectListCount">
+		SELECT  COUNT(*) LIST_COUNT
+		FROM    TB_UNIONBOARD
+		WHERE  STATUS = 'Y'
+	</entry>
 	
+	<entry key="selectBoardList">
+		SELECT  *
+		FROM    (SELECT   ROWNUM RNUM, A.*
+		         FROM     (SELECT  BOARD_NO,
+		                           CATEGORY_NAME,
+		                           BOARD_TITLE,
+		                           NICKNAME,
+		                           COUNT,
+		                           TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE
+		                   FROM    TB_UNIONBOARD B
+		                   JOIN    TB_CATEGORY C USING(CATEGORY_NO)
+		                   JOIN    TB_USERINFO U ON(B.BOARD_WRITER = U.USER_NO)
+		                   WHERE   B.STATUS = 'Y'
+		                   ORDER BY CREATE_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectRecomCount">
+		SELECT   COUNT(*) RECOM_COUNT
+		FROM    TB_RECOMMEND
+		WHERE   BOARD_NO = ?
+	</entry>
+	
+	<entry key="cateBoardCount">
+		SELECT  COUNT(*) BOARD_COUNT
+		FROM    TB_UNIONBOARD
+		WHERE   CATEGORY_NO = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectCateBoardList">
+		SELECT  *
+		FROM    (SELECT   ROWNUM RNUM, A.*
+		         FROM     (SELECT  BOARD_NO,
+		                           CATEGORY_NAME,
+		                           BOARD_TITLE,
+		                           NICKNAME,
+		                           COUNT,
+		                           TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE
+		                   FROM    TB_UNIONBOARD B
+		                   JOIN    TB_CATEGORY C USING(CATEGORY_NO)
+		                   JOIN    TB_USERINFO U ON(B.BOARD_WRITER = U.USER_NO)
+		                   WHERE   B.STATUS = 'Y'
+                           AND     CATEGORY_NO = ?
+		                   ORDER BY CREATE_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectDetailBoard">
+		SELECT  BOARD_NO,
+		        CATEGORY_NAME,
+		        BOARD_TITLE,
+		        BOARD_CONTENT,
+		        NICKNAME,
+		        COUNT,
+		        TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE
+		FROM    TB_UNIONBOARD
+		JOIN    TB_USERINFO ON(BOARD_WRITER = USER_NO)
+		JOIN    TB_CATEGORY USING(CATEGORY_NO)
+		WHERE   BOARD_NO = ?
+	</entry>
+	
+	<entry key="selectImgFile">
+		SELECT  FILE_TYPE,
+		        ORIGINFILE_NAME,
+		        CHANGEFILE_NAME,
+		        FILE_PATH,
+		        UPLOAD_DATE
+		FROM    TB_MEDIAFILE
+		WHERE   REF_BOARD_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectCategory">
+		SELECT  CATEGORY_NO,
+				CATEGORY_NAME
+		FROM    TB_CATEGORY
+	</entry>
+	
+	<entry key="updateClickCount">
+		UPDATE  TB_UNIONBOARD
+		SET     COUNT = COUNT + 1
+		WHERE   BOARD_NO = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertRecomCount">
+		INSERT INTO TB_RECOMMEND VALUES (?,?)
+	</entry>
+	
+	<entry key="checkDupRecom">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_RECOMMEND
+		WHERE   USER_NO = ?
+		AND     BOARD_NO = ?
+	</entry>
+	
+	<entry key="deleteRecomCount">
+		DELETE FROM TB_RECOMMEND
+		WHERE   USER_NO = ?
+		AND     BOARD_NO = ?
+	</entry>
+	
+	<entry key="selectReply">
+		SELECT  NICKNAME,
+		        REPLY_CONTENT,
+		        TO_CHAR(REPLY_DATE, 'YYYY-MM-DD') REPLY_DATE
+		FROM    TB_REPLY R
+		JOIN    TB_USERINFO USING(USER_NO)
+		WHERE   REF_BOARD_NO = ?
+		AND     R.STATUS = 'Y'
+		ORDER BY REPLY_DATE DESC
+	</entry>
+	
+	<entry key="insertReply">
+		INSERT INTO TB_REPLY(USER_NO,
+		                     REF_BOARD_NO,
+		                     REPLY_CONTENT)
+		VALUES(?,?,?)
 	</entry>
 
 </properties>

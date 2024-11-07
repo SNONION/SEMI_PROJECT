@@ -37,6 +37,10 @@ body {
 	margin: auto;
 }
 
+h3 {
+	color: orange;
+}
+
 .img-area img {
 	width: 100%;
 }
@@ -339,17 +343,16 @@ a:hover {
 		<div class="menubar">
 			<table class="menu-table">
 				<tr>
-					<th><a href="/semi" id="home">HOME</a></th>
-					<th><a onclick="shopPage();" id="home">SHOP</a></th>
-					<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
-					<th><a href="" id="board">BOARD</a></th>
-
+					<th><a onclick="backToMain();" id="home">HOME</a></th>
 					<c:choose>
-						<c:when test="${loginUser == null}">
+						<c:when test="${empty loginUser}">
 							<th><a data-toggle="modal" data-target="#loginModal">LOGIN</a></th>
 							<th><a data-toggle="modal" data-target="#signInModal">SIGNIN</a></th>
 						</c:when>
 						<c:otherwise>
+							<th><a onclick="shopPage();" id="home">SHOP</a></th>
+							<th><a onclick="myPage();" id="mypage">MYPAGE</a></th>
+							<th><a onclick="unionBoardPage();" id="board">BOARD</a></th>
 							<th><a href="/semi/LogoutUserInfo.us">LOGOUT</a></th>
 						</c:otherwise>
 					</c:choose>
@@ -372,6 +375,15 @@ a:hover {
 			alert(msg);
 	<%session.removeAttribute("alertMsg");%>
 		}
+		
+		function backToMain(){
+			location.href="/semi";
+		}
+		
+		function unionBoardPage(){
+			
+			location.href="/semi/unionBoardListView.un?currentPage=1";
+		};
 		
 		function shopPage(){
 			

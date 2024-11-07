@@ -83,8 +83,8 @@ public class ProductListController extends HttpServlet {
 			request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
 		}
 		else {
-			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스입니다.");
-			request.getRequestDispatcher("/").forward(request, response);
+			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스 입니다.");
+			response.sendRedirect(request.getContextPath());
 		}
 	}
 

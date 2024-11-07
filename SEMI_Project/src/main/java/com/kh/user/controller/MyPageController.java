@@ -121,9 +121,8 @@ public class MyPageController extends HttpServlet {
 			request.getRequestDispatcher("/views/user/mypage.jsp").forward(request, response);
 		}
 		else {
-			String alertMsg = "로그인 후 이용가능한 서비스 입니다.";
-			session.setAttribute("alertMsg", alertMsg);
-			request.getRequestDispatcher("/").forward(request, response);
+			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스 입니다.");
+			response.sendRedirect(request.getContextPath());
 		}
 	}
 

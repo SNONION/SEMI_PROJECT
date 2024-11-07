@@ -10,16 +10,40 @@ public class UnionBoard {
 	private String boardContent;
 	private String boardWriter;
 	private int count;
-	private Date createDate;
+	private String createDate;
 	private Date modifyDate;
 	private String status;
+	private int recommend;
 	
 	public UnionBoard() {
 		super();
 	}
 
+	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardWriter,
+			int count, String createDate) {
+		super();
+		this.boardNo = boardNo;
+		this.categoryName = categoryName;
+		this.boardTitle = boardTitle;
+		this.boardWriter = boardWriter;
+		this.count = count;
+		this.createDate = createDate;
+	}
+
 	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardContent, String boardWriter,
-			int count, Date createDate, Date modifyDate, String status) {
+			int count, String createDate) {
+		super();
+		this.boardNo = boardNo;
+		this.categoryName = categoryName;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.boardWriter = boardWriter;
+		this.count = count;
+		this.createDate = createDate;
+	}
+
+	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardContent, String boardWriter,
+			int count, String createDate, Date modifyDate, String status) {
 		super();
 		this.boardNo = boardNo;
 		this.categoryName = categoryName;
@@ -80,11 +104,11 @@ public class UnionBoard {
 		this.count = count;
 	}
 
-	public Date getCreateDate() {
+	public String getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
 
@@ -103,12 +127,21 @@ public class UnionBoard {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public int getRecommend() {
+		return recommend;
+	}
+
+	public void setRecommend(int recommend) {
+		this.recommend = recommend;
+	}
 
 	@Override
 	public String toString() {
 		return "UnionBoard [boardNo=" + boardNo + ", categoryName=" + categoryName + ", boardTitle=" + boardTitle
 				+ ", boardContent=" + boardContent + ", boardWriter=" + boardWriter + ", count=" + count
-				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", status=" + status + "]";
+				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", status=" + status + ", recommend="
+				+ recommend + "]";
 	}
 
 }

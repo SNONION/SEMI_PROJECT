@@ -9,10 +9,6 @@
 <title>Insert title here</title>
 
 <style>
-h3 {
-	color: orange;
-}
-
 #rList-tbody tr:hover {
 	cursor: pointer;
 	background-color: gray;
@@ -537,10 +533,8 @@ h3 {
 			}
 			else{
 				if(confirm("운동을 기록하시겠습니까?")){
-					// 게시판 -> 글 작성으로 이동
-					
-					alert("아직 구현되지 않은 기능입니다.\n <mypage.jsp 426번줄부터 시작>")
-					
+					var userNo = "${user.userNo}"
+					location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
 				}
 			}
 		});
