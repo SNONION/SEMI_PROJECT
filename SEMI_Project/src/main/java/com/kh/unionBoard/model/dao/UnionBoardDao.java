@@ -128,8 +128,7 @@ public class UnionBoardDao {
 		}
 
 
-	
-	//조회수 증가 메소드
+	//조회수 증가 메소 드
 	
    public int increaseCount(Connection conn, int bno) {
 	   
