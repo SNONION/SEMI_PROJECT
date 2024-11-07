@@ -383,4 +383,15 @@ public class UserService {
 		return result;
 	}
 
+	public String selectNickname(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		String nickname = dao.selectNickname(con, userNo);
+		
+		JDBCTemplate.close(con);
+		
+		return nickname;
+	}
+
 }

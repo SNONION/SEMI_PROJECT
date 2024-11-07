@@ -239,4 +239,11 @@
 		INSERT INTO TB_LOGINCOUNT(USER_NO) VALUES(?)
 	</entry>
 	
+	<entry key="selectNickname">
+		SELECT	NICKNAME
+		FROM	TB_USERINFO
+		WHERE	USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
 </properties>

@@ -750,5 +750,31 @@ public class UserDao {
 		}
 		
 		return result;
+	}
+
+	public String selectNickname(Connection con, int userNo) {
+		
+		String nickname = null;
+		String select = pro.getProperty("selectNickname");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				nickname = rset.getString("NICKNAME");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return nickname;
 	}	
 }
