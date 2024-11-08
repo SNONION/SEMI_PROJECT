@@ -128,5 +128,99 @@
 		                     REPLY_CONTENT)
 		VALUES(?,?,?)
 	</entry>
+	
+	<entry key="selectTitleKeyBoard">
+		SELECT  *
+		FROM    (SELECT   ROWNUM RNUM, A.*
+		         FROM     (SELECT  BOARD_NO,
+		                           CATEGORY_NAME,
+		                           BOARD_TITLE,
+		                           NICKNAME,
+		                           COUNT,
+		                           TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE
+		                   FROM    TB_UNIONBOARD B
+		                   JOIN    TB_CATEGORY C USING(CATEGORY_NO)
+		                   JOIN    TB_USERINFO U ON(B.BOARD_WRITER = U.USER_NO)
+		                   WHERE   BOARD_TITLE LIKE ?
+		                   AND     B.STATUS = 'Y'
+		                   ORDER BY CREATE_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectKeyBoardCount">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_UNIONBOARD
+		WHERE   BOARD_TITLE LIKE ?
+		AND STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectCateKeyBoardCount">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_UNIONBOARD
+		WHERE   BOARD_TITLE LIKE ?
+		AND		CATEGORY_NO = ?
+		AND   	STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectCateTitleKeyBoard">
+		SELECT  *
+		FROM    (SELECT   ROWNUM RNUM, A.*
+		         FROM     (SELECT  BOARD_NO,
+		                           CATEGORY_NAME,
+		                           BOARD_TITLE,
+		                           NICKNAME,
+		                           COUNT,
+		                           TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') CREATE_DATE
+		                   FROM    TB_UNIONBOARD B
+		                   JOIN    TB_CATEGORY C USING(CATEGORY_NO)
+		                   JOIN    TB_USERINFO U ON(B.BOARD_WRITER = U.USER_NO)
+		                   WHERE   BOARD_TITLE LIKE ?
+		                   AND     CATEGORY_NO = ?
+		                   AND     B.STATUS = 'Y'
+		                   ORDER BY CREATE_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectBoardNo">
+		SELECT	SEQ_BNO.NEXTVAL BOARD_NO
+		FROM	DUAL
+	</entry>
+	
+	<entry key="insertBoard">
+		INSERT INTO TB_UNIONBOARD(BOARD_NO,
+		                          CATEGORY_NO,
+		                          BOARD_TITLE,
+		                          BOARD_CONTENT,
+		                          BOARD_WRITER)
+		VALUES(?,?,?,?,?)
+	</entry>
+
+	<entry key="insertMedia">
+		INSERT INTO TB_MEDIAFILE(FILE_NO,
+		                         FILE_TYPE,
+		                         ORIGINFILE_NAME,
+		                         CHANGEFILE_NAME,
+		                         REF_BOARD_NO,
+		                         FILE_PATH)
+		VALUES(SEQ_FNO.NEXTVAL,?,?,?,?,?)
+	</entry>
+	
+	<entry key="selectMediaFile">
+		SELECT  FILE_TYPE,
+		        ORIGINFILE_NAME,
+		        CHANGEFILE_NAME,
+		        FILE_PATH
+		FROM    TB_MEDIAFILE
+		WHERE   REF_BOARD_NO = ?
+		AND     STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertWorkout">
+		INSERT INTO TB_WORKOUTLIST(USER_NO,
+		                           WORKOUT_TITLE,
+		                           WORKOUT_CONTENT,
+		                           WORKOUT_NO) 
+		VALUES(?,?,?,SEQ_WORKNO.NEXTVAL)
+	</entry>
 
 </properties>

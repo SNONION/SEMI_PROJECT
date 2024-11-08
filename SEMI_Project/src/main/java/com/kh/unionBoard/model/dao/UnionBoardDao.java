@@ -417,4 +417,267 @@ public class UnionBoardDao {
 		return result;
 	}
 
+	public ArrayList<UnionBoard> selectTitleKeyBoard(Connection con, String keyword, PageInfo p) {
+		
+		ArrayList<UnionBoard> bList = new ArrayList<>();
+		String select = pro.getProperty("selectTitleKeyBoard");
+		
+		String key = "%" + keyword + "%";
+		
+		// 시작번호 : (현재 페이지 - 1 * 한 페이지에 보여줄 게시글 수) + 1
+		int startRow = ((p.getCurrentPage() - 1) * p.getwListLimit()) + 1;
+		
+		// 끝번호 : 현재 페이지 수 * 게시글 보여줄 수
+		int endRow = p.getCurrentPage() * p.getwListLimit();
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, key);
+			pstmt.setInt(2, startRow);
+			pstmt.setInt(3, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				bList.add(new UnionBoard(rset.getInt("BOARD_NO"),
+									     rset.getString("CATEGORY_NAME"),
+									     rset.getString("BOARD_TITLE"),
+									     rset.getString("NICKNAME"),
+									     rset.getInt("COUNT"),
+									     rset.getString("CREATE_DATE")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return bList;
+	}
+
+	public int selectKeyBoardCount(Connection con, String keyword) {
+		
+		int count = 0;
+		String select = pro.getProperty("selectKeyBoardCount");
+		
+		String key = "%" + keyword + "%";
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, key);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count = rset.getInt("COUNT");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return count;
+	}
+
+	public int selectCateKeyBoardCount(Connection con, String keyword, int cateNo) {
+		
+		int count = 0;
+		String select = pro.getProperty("selectCateKeyBoardCount");
+		
+		String key = "%" + keyword + "%";
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, key);
+			pstmt.setInt(2, cateNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count = rset.getInt("COUNT");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return count;
+	}
+
+	public ArrayList<UnionBoard> selectCateTitleKeyBoard(Connection con, String keyword, int cateNo, PageInfo p) {
+		
+		ArrayList<UnionBoard> bList = new ArrayList<>();
+		String select = pro.getProperty("selectCateTitleKeyBoard");
+		
+		String key = "%" + keyword + "%";
+		
+		// 시작번호 : (현재 페이지 - 1 * 한 페이지에 보여줄 게시글 수) + 1
+		int startRow = ((p.getCurrentPage() - 1) * p.getwListLimit()) + 1;
+		
+		// 끝번호 : 현재 페이지 수 * 게시글 보여줄 수
+		int endRow = p.getCurrentPage() * p.getwListLimit();
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, key);
+			pstmt.setInt(2, cateNo);
+			pstmt.setInt(3, startRow);
+			pstmt.setInt(4, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				bList.add(new UnionBoard(rset.getInt("BOARD_NO"),
+									     rset.getString("CATEGORY_NAME"),
+									     rset.getString("BOARD_TITLE"),
+									     rset.getString("NICKNAME"),
+									     rset.getInt("COUNT"),
+									     rset.getString("CREATE_DATE")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return bList;
+	}
+
+	public int insertBoard(Connection con, int boardNo, UnionBoard ub) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertBoard");
+
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setInt(1, boardNo);
+			pstmt.setInt(2, Integer.parseInt(ub.getCategoryName()));
+			pstmt.setString(3, ub.getBoardTitle());
+			pstmt.setString(4, ub.getBoardContent());
+			pstmt.setInt(5, Integer.parseInt(ub.getBoardWriter()));
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int selectBoardNo(Connection con) {
+		
+		int boardNo = 0;
+		String select = pro.getProperty("selectBoardNo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				boardNo = rset.getInt("BOARD_NO");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return boardNo;
+	}
+
+	public int insertMedia(Connection con, int boardNo, MediaFile file) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertMedia");
+		
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setString(1,file.getFileType());
+			pstmt.setString(2,file.getOriginFileName());
+			pstmt.setString(3,file.getChangeFileName());
+			pstmt.setInt(4,boardNo);
+			pstmt.setString(5, file.getFilePath());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public ArrayList<MediaFile> selectMediaFile(Connection con, int boardNo) {
+		
+		ArrayList<MediaFile> mList = new ArrayList<>();
+		String select = pro.getProperty("selectMediaFile");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, boardNo);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				mList.add(new MediaFile(rset.getString("FILE_TYPE"),
+										rset.getString("ORIGINFILE_NAME"),
+										rset.getString("CHANGEFILE_NAME"),
+										rset.getString("FILE_PATH")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return mList;
+	}
+
+	public int insertWorkout(Connection con, UnionBoard ub) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertWorkout");
+		
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setInt(1, Integer.parseInt(ub.getBoardWriter()));
+			pstmt.setString(2, ub.getBoardTitle());
+			pstmt.setString(3, ub.getBoardContent());
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
 }

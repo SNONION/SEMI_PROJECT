@@ -151,6 +151,9 @@
 							<tr>
 								<th id="workoutContent"></th>
 							</tr>
+							<tr style="display:none;">
+								<th id="workoutNo"></th>
+							</tr>
 						</table>
 					</div>
 
@@ -171,20 +174,28 @@
 					
 					$.ajax({
 						url : "/semi/deleteWorkout.us",
+						method : "post",
 						data : {
-							workoutTitle : $("#workoutTitle").text(),
-							workoutContent : $("#workoutContent").text(),
+							workoutNo : $("#workoutNo").text(),
 							userNo : "${user.userNo}"
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
-							window.location.reload();
+							workoutListGet();
 						},
 						error : function(){
 							alert("요청 오류");
 						}
 					});
 				}
+			};
+			
+			function workoutListGet(){
+				
+				$("<form>", {
+					method : "post",
+					action : "/semi/mypage.us"
+				}).appendTo($("body")).submit();
 			};
 		</script>
 
@@ -193,7 +204,11 @@
 				<thead>
 					<tr align="center">
 						<th width="800px">TITLE</th>
-						<th width="200px">DATE</th>
+						<th width="120px">DATE</th>
+						<th width="120px">
+							<button type="button" onclick="workoutEnrollBtn();"
+								class="btn btn-outline-secondary btn-sm" style="margin-left:20px;">글작성</button>
+						</th>
 					</tr>
 				</thead>
 				<tbody id="wList-tbody">
@@ -201,15 +216,16 @@
 						<c:when test="${empty wList}">
 							<tr align="center">
 								<td>기록된 운동을 찾을 수 없습니다.</td>
-								<td>-</td>
+								<td colspan="2">-</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="i" items="${wList}">
 								<tr align="center">
 									<td style="display: none;">${i.workoutContent}</td>
+									<td style="display: none;">${i.workoutNo}</td>
 									<td>${i.workoutTitle}</td>
-									<td>${i.workoutDate}</td>
+									<td colspan="2">${i.workoutDate}</td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -518,13 +534,11 @@
 			
 			if(${not empty wList}){
 				var workoutContent = $(this).children().first().text();
-				var workoutTitle = $(this).children().first().next().text();
-				var workoutDate = $(this).children().first().next().next().text();
+				var workoutNo = $(this).children().first().next().text();
+				var workoutTitle = $(this).children().first().next().next().text();
+				var workoutDate = $(this).children().first().next().next().next().text();
 				
-				console.log(workoutContent);
-				console.log(workoutTitle);
-				console.log(workoutDate);
-				
+				$("#workoutNo").text(workoutNo);
 				$("#workoutContent").text(workoutContent);
 				$("#workoutTitle").text(workoutTitle);
 				$("#workoutDate").text(workoutDate);
@@ -534,10 +548,15 @@
 			else{
 				if(confirm("운동을 기록하시겠습니까?")){
 					var userNo = "${user.userNo}"
-					location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
+					location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
 				}
 			}
 		});
+		
+		function workoutEnrollBtn(){
+			var userNo = "${user.userNo}"
+			location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
+		}
 	
 		$("#rList-tbody").on("click", "tr", function() {
 			var requestNo = $(this).children().first().text();

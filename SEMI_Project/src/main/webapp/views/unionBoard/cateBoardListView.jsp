@@ -18,16 +18,6 @@
 	<%@ include file="/views/common/menuBar.jsp"%>
 
 	<div class="outer">
-		<div class="container" align="center">
-			<br> <br>
-			<h3>Board</h3>
-			<br>
-		</div>
-		
-		<div class="writeBtn-area" align="center">
-			<input type="hidden" name=userNo value="${loginUser.userNo}">
-			<button type="button" onclick="writeBoard();" class="btn btn-outline-secondary btn-sm">글작성</button>
-		</div>
 		<br> <br>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<ul class="navbar-nav mr-auto">
@@ -50,10 +40,16 @@
 					<button type="button" onclick="goToReq();" class="btn btn-dark">문의</button>
 				</li>
 			</ul>
-			<form class="form-inline" action="/semi">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+			<form class="form-inline" action="/semi/searchKeyword.un?currentPage=1" method="post">
+				<input type="hidden" name="categoryNo" value="${cateNo}">
+				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search">
 				<button class="btn btn-success" type="submit">Search</button>
 			</form>
+			<div class="writeBtn-area" align="center">
+				<input type="hidden" name=userNo value="${loginUser.userNo}">
+				<button type="button" onclick="writeBoard();"
+					class="btn btn-outline-secondary" style="margin-left:20px;">글작성</button>
+			</div>
 		</nav>
 
 
@@ -104,8 +100,8 @@
 				<tbody id="cate-area">
 					<c:choose>
 						<c:when test="${empty list}">
-							<tr>
-								<td>게시물이 없습니다.</td>
+							<tr align="center">
+								<td colspan="7">게시물이 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
@@ -136,7 +132,11 @@
 		$("#cate-area").on("click","tr",function(){
 			var boardNo = $(this).children().first().text();
 			
-			location.href="/semi/boardDetailView.un?boardNo=" + boardNo;
+			if(boardNo != '게시물이 없습니다.'){
+				var userNo = $("input[name=userNo]").val();
+				
+				location.href="/semi/boardDetailView.un?boardNo=" + boardNo + "&userNo=" + userNo;
+			}
 		});
 	
 		$(".pageBtn-area button").click(function(){

@@ -97,7 +97,8 @@ public class UserDao {
 			while(rset.next()) {
 				wList.add(new WorkoutList(rset.getString("WORKOUT_TITLE"),
 										  rset.getString("WORKOUT_CONTENT"),
-										  rset.getString("WORKOUT_DATE")));
+										  rset.getString("WORKOUT_DATE"),
+										  rset.getInt("WORKOUT_NO")));
 			}
 			
 		} catch (SQLException e) {
@@ -387,9 +388,8 @@ public class UserDao {
 		try {
 			pstmt = con.prepareStatement(delete);
 			
-			pstmt.setInt(1, workout.getUserNo());
-			pstmt.setString(2, workout.getWorkoutTitle());
-			pstmt.setString(3, workout.getWorkoutContent());
+			pstmt.setInt(1, workout.getWorkoutNo());
+			pstmt.setInt(2, workout.getUserNo());
 			
 			result = pstmt.executeUpdate();
 			

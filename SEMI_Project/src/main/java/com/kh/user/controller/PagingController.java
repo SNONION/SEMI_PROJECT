@@ -51,6 +51,55 @@ public class PagingController extends HttpServlet {
 		response.setContentType("json/application;charset=UTF-8");
 		Gson gson = new Gson();
 		
+		if(type.equals("keywordBoard")) {
+			
+			String keyword = request.getParameter("keyword");
+			
+			int listCount; // 총 게시글 갯수를 담아줄 변수
+			int pageLimit; // 페이지 하단에 보여질 페이징바 최대 갯수
+			int listLimit; // 한 페이지에 보여질 게시글 개수
+			int maxPage; // 가장 마지막 페이지는 몇번째 페이지 인지 (총 페이지 갯수)
+			int startPage; // 페이지 하단에 보여질 페이징바 시작 수
+			int endPage; // 페이지 하단에 보여질 페이징바 끝 수
+			int cateNo = 0;
+			
+			if(request.getParameter("cateNo") != null) {
+				cateNo = Integer.parseInt(request.getParameter("cateNo"));
+				listCount = new UnionBoardService().selectCateKeyBoardCount(keyword, cateNo);
+			}
+			else {
+				listCount = new UnionBoardService().selectKeyBoardCount(keyword);
+			}
+			
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			pageLimit = 10;
+			listLimit = 15;
+			maxPage = (int)Math.ceil(((double)listCount/listLimit));
+			startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+			endPage = (startPage + pageLimit) - 1;
+			
+			if(maxPage < endPage) {
+				endPage = maxPage;
+			}
+			
+			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
+			ArrayList<UnionBoard> bList = null;
+			
+			if(cateNo != 0) {
+				bList = new UnionBoardService().selectCateTitleKeyBoard(keyword, cateNo, p);	
+			}
+			else {
+				bList = new UnionBoardService().selectTitleKeyBoard(keyword, p);	
+			}
+			
+			for(UnionBoard u : bList) {
+				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+				u.setRecommend(recommend);
+			}
+			
+			gson.toJson(bList, response.getWriter());
+		}
+		
 		if(type.equals("workout")) {
 			
 			int wListCount; // 운동기록 총 게시글 갯수를 담아줄 변수

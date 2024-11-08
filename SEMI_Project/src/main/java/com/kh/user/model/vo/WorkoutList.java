@@ -6,6 +6,7 @@ public class WorkoutList {
 	private String workoutTitle;
 	private String workoutContent;
 	private String workoutDate;
+	private int workoutNo;
 	
 	public WorkoutList() {
 		super();
@@ -16,6 +17,14 @@ public class WorkoutList {
 		UserNo = userNo;
 		this.workoutTitle = workoutTitle;
 		this.workoutContent = workoutContent;
+	}
+	
+	public WorkoutList(String workoutTitle, String workoutContent, String workoutDate, int workoutNo) {
+		super();
+		this.workoutTitle = workoutTitle;
+		this.workoutContent = workoutContent;
+		this.workoutDate = workoutDate;
+		this.workoutNo = workoutNo;
 	}
 
 	public WorkoutList(String workoutTitle, String workoutContent, String workoutDate) {
@@ -65,10 +74,19 @@ public class WorkoutList {
 		this.workoutDate = workoutDate;
 	}
 
+	public int getWorkoutNo() {
+		return workoutNo;
+	}
+
+	public void setWorkoutNo(int workoutNo) {
+		this.workoutNo = workoutNo;
+	}
+
 	@Override
 	public String toString() {
-		return "TB_WorkoutList [UserNo=" + UserNo + ", workoutTitle=" + workoutTitle + ", workoutContent="
-				+ workoutContent + ", workoutDate=" + workoutDate + "]";
+		return "WorkoutList [UserNo=" + UserNo + ", workoutTitle=" + workoutTitle + ", workoutContent=" + workoutContent
+				+ ", workoutDate=" + workoutDate + ", workoutNo=" + workoutNo + "]";
 	}
+
 	
 }

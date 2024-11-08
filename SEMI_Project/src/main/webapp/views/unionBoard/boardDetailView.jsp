@@ -40,15 +40,25 @@ h5 {
 						<th width="150px">${ub.boardWriter}</th>
 						<td width="120px">${ub.createDate}</td>
 					</tr>
+					<c:choose>
+						<c:when test="${empty mediaList}">
+							<tr align="center">
+								<td>${noFile}</td>
+							</tr>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="media" items="${mediaList}">
+								<tr align="center">
+									<td colspan="4"><img
+										src="/semi${media.filePath}${media.changeFileName}"
+										width='50%' height='50%' style='margin-left: 20px'></td>
+								</tr>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
 					<tr>
-						<th><br>
-						<br>
-						<br> <img src="${file.filePath}${file.changeFileName}" width="100%"></th>
-					</tr>
-					<tr>
-						<th colspan="4">
-							<br> <br> <br> ${ub.boardContent} <br> <br> <br>
-						</th>
+						<th colspan="4"><br> <br> <br>
+							${ub.boardContent} <br> <br> <br></th>
 					</tr>
 					<tr align="right">
 						<th colspan="4">
