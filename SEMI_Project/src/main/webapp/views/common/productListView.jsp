@@ -38,7 +38,7 @@
 	
 	<c:if test="${not empty loginUser && loginUser.userId == 'admin01'}">
 		<div align="center">
-			<a href="${contextPath }/detailList.sh" class="btn btn-info">상품 게시</a>		
+			<a href="/update.sh" class="btn btn-info">상품 게시</a>		
 		</div>	
 	</c:if>
 	
@@ -86,9 +86,9 @@
 			$(function(){
 				$(".list-area>tbody>tr").click(function(){
 					
-					var bno = $(this).children().first().text();
+					var proNo = $(this).children().first().text();
 					
-					location.href="/detailList.sh?bno="+bno;
+					location.href="/detail.sh?proNo="+proNo; //bno -> proNo
 					
 				});
 			});
@@ -124,10 +124,11 @@
 		
 		</div>
 		
+		<!-- 
 		<c:if test="${not empty loginUser}">
 	    <button onclick="location.href='purchase.sh?boardNo=${p.boardNo}'">상품 구매하기</button>
 		</c:if>
-			
+			 -->
 		
 
 

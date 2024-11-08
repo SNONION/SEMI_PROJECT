@@ -304,6 +304,35 @@ public class ShopDao {
         }
     }
 
+	public int totalCount(Connection con) {
+	    PreparedStatement pstmt = null;
+	    ResultSet rset = null;
+	    int totalCount = 0;  // 여기서 totalCount를 계산해야 하므로 초기값을 설정합니다.
+
+	    String sql = pro.getProperty("totalCount");  // 상품 테이블에서 총 개수 조회 SQL
+
+	    try {
+	        pstmt = con.prepareStatement(sql);
+	        rset = pstmt.executeQuery();
+
+	        if (rset.next()) {
+	            totalCount = rset.getInt(1);  // 첫 번째 컬럼의 값을 가져옴
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+
+	    return totalCount;  // 총 상품 개수 반환
+		
+		
+		
+		
+}
+}
+
 
 	
-}
+

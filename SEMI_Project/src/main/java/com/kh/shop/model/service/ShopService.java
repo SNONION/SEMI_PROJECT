@@ -186,11 +186,34 @@ public class ShopService {
 		
 		return null;
 	}
+
 	
 	
-	
-	
+	public int totalCount() {
+	    Connection con = JDBCTemplate.getConnection();
+	    
+	    int result = new ShopDao().totalCount(con);  // ShopDao에서 totalCount 호출
+
+	    JDBCTemplate.close(con);  // Connection 자원 해제
+	    
+	    return result;  // 총 상품 개수를 반환
 	}
+
+	
+	
+	public ArrayList<Product> productList(int startPage, int endPage) {
+
+
+		
+		return null;
+	}
+	       
+	}
+	
+	
+	
+	
+	
 	
 	
 

@@ -81,8 +81,19 @@
 				VALUES(?,?)
 		
 	
+
 	</entry>	
 	
+
+
+<entry key="totalCount">
+		
+		SELECT COUNT(*)
+		FROM TB_PRODUCT
+		
+	
+
+	</entry>
 
 
 </properties>

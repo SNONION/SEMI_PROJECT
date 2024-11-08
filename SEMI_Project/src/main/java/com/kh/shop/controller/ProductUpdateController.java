@@ -35,15 +35,15 @@ public class ProductUpdateController extends HttpServlet {
 		
 		
 		
-				int bno = Integer.parseInt(request.getParameter("bno"));
+				int boardNo = Integer.parseInt(request.getParameter("bno"));
 				//수정페이지로 보내야하는 데이터
 				//게시글 정보,카테고리 목록, 첨부파일 정보
 				
 				ShopService service = new ShopService();
 				
-				Product p = service.selectProduct(bno);
+				Product p = service.selectProduct(boardNo);
 				
-				ShopMediaFile smf = service.selectShopMediaFile(bno);
+				ShopMediaFile smf = service.selectShopMediaFile(boardNo);
 				
 				//ArrayList<Category> cList = service.selectCategory();
 				

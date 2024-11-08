@@ -19,7 +19,7 @@ import com.kh.user.model.vo.UserInfo;
 /**
  * Servlet implementation class ProductListController
  */
-@WebServlet("/list.sh") //listView.pr
+@WebServlet("/list.sh") 
 public class ProductListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -58,7 +58,7 @@ public class ProductListController extends HttpServlet {
 			
 			//페이지 하단에 보여질 페이징 바 개수
 			pageLimit = 10;
-			boardLimit = 10;						
+			boardLimit = 10;
 			
 			maxPage = (int) Math.ceil((double)listCount/boardLimit);					
 			
@@ -76,18 +76,20 @@ public class ProductListController extends HttpServlet {
 							
 			
 			//상품 목록 조회
-			ArrayList<Product> list = new ShopService().selectProduct(pi);
+			ArrayList<Product> pList = new ShopService().selectProduct(pi);
 			
 			//조회된 게시글 목록과 페이징바 정보객체를 위임시 전달하기
-			request.setAttribute("list", list);
+			request.setAttribute("pList", pList);
 			request.setAttribute("pi", pi);
 			request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
+		}else {
+			request.setAttribute("errorMsg", "로그인 필요");
+			
 		}
-		else {
-			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스입니다.");
-			request.getRequestDispatcher("/").forward(request, response);
+		
+		
 		}
-	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

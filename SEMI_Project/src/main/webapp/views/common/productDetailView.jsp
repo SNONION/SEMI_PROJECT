@@ -77,7 +77,7 @@
 
 <%@ include file="/views/common/menuBar.jsp" %>
 
-<form action="${contextPath}/detailList.sh" method="get" id="detail-form" enctype="multipart/form-data">
+<form action="/detail.sh" method="get" id="detail-form" > <!-- enctype="multipart/form-data" -->
 
     <!-- 모달을 여는 버튼 -->
     <button type="button" id="openModalBtn" class="btn btn-primary">
@@ -97,7 +97,7 @@
             <div class="modal-body">
                 <h3>Item Title</h3>
                 <p>상품에 대한 설명이 여기에 들어갑니다.</p>
-                <img src="https://via.placeholder.com/300" alt="상품 이미지" class="modal-image">
+                <img src="" alt="상품 이미지" class="modal-image">
             </div>
         </div>
     </div>
