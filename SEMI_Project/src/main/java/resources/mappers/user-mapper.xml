@@ -26,7 +26,8 @@
 		FROM    (SELECT  ROWNUM RNUM, A.*
 		         FROM    (SELECT  WORKOUT_TITLE,
 		                          WORKOUT_CONTENT,
-		                          TO_CHAR(WORKOUT_DATE, 'YYYY-MM-DD') WORKOUT_DATE
+		                          TO_CHAR(WORKOUT_DATE, 'YYYY-MM-DD') WORKOUT_DATE,
+		                          WORKOUT_NO
 		                  FROM    TB_WORKOUTLIST
 		                  WHERE   USER_NO = ?
 		                  ORDER BY WORKOUT_DATE DESC) A)
@@ -121,9 +122,8 @@
 	
 	<entry key="deleteWorkout">
 		DELETE FROM TB_WORKOUTLIST
-		WHERE   USER_NO = ?
-		AND     WORKOUT_TITLE = ?
-		AND     WORKOUT_CONTENT = ?
+		WHERE   WORKOUT_NO = ?
+		AND		USER_NO = ?
 	</entry>
 	
 	<entry key="selectAnswer">

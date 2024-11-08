@@ -22,6 +22,23 @@
 	<%@ include file="/views/common/menuBar.jsp"%>
 
 	<div class="outer">
+		<div class="container" align="center">
+			<br> <br>
+			<c:choose>
+				<c:when test="${empty bList}">
+					<h3>${cateName} - "${keyword}" 관련된 내용이 없습니다.</h3>
+				</c:when>
+				<c:otherwise>
+					<h3>${cateName} - "${keyword}" 관련 검색 내용입니다.</h3>
+				</c:otherwise>
+			</c:choose>
+			<br>
+		</div>
+		
+		<div class="writeBtn-area" align="center">
+			<input type="hidden" name=userNo value="${loginUser.userNo}">
+			<button type="button" onclick="writeBoard();" class="btn btn-outline-secondary btn-sm">글작성</button>
+		</div>
 		<br> <br>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<ul class="navbar-nav mr-auto">
@@ -45,14 +62,10 @@
 				</li>
 			</ul>
 			<form class="form-inline" action="/semi/searchKeyword.un?currentPage=1" method="post">
+				
 				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search">
 				<button class="btn btn-success" type="submit">Search</button>
 			</form>
-			<div class="writeBtn-area" align="center">
-				<input type="hidden" name=userNo value="${loginUser.userNo}">
-				<button type="button" onclick="writeBoard();"
-					class="btn btn-outline-secondary" style="margin-left:20px;">글작성</button>
-			</div>
 		</nav>
 
 		<script>
@@ -131,7 +144,6 @@
 	</div>
 
 	<script>
-	
 		$("#board-area").on("click","tr",function(){
 			var boardNo = $(this).children().first().text();
 			
@@ -141,13 +153,15 @@
 				location.href="/semi/boardDetailView.un?boardNo=" + boardNo + "&userNo=" + userNo;
 			}
 		});
-		
+	
 		$(".pageBtn-area button").click(function(){
 			
 			$.ajax({
 				url : "/semi/paging.us",
 				data : {
-					type : "unionBoard",
+					type : "keywordBoard",
+					keyword : "${keyword}",
+					cateNo : "${cateNo}",
 					currentPage : $(this).text()
 				},
 				success : function(bList){

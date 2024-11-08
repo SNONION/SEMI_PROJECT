@@ -1,6 +1,8 @@
-package com.kh.user.controller;
+package com.kh.unionBoard.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,19 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.user.model.service.UserService;
-import com.kh.user.model.vo.WorkoutList;
 
 /**
- * Servlet implementation class WorkoutDeleteController
+ * Servlet implementation class workoutEnrollFormController
  */
-@WebServlet("/deleteWorkout.us")
-public class WorkoutDeleteController extends HttpServlet {
+@WebServlet("/workoutEnrollForm.un")
+public class WorkoutEnrollFormController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public WorkoutDeleteController() {
+    public WorkoutEnrollFormController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,26 +32,15 @@ public class WorkoutDeleteController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int workoutNo = Integer.parseInt(request.getParameter("workoutNo"));
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		
-		WorkoutList workout = new WorkoutList();
-		workout.setUserNo(userNo);
-		workout.setWorkoutNo(workoutNo);
+		String nickname = new UserService().selectNickname(userNo);
+		String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		
-		int result = new UserService().deleteWorkout(workout);
-		
-		String alertMsg = "";
-		
-		if(result > 0) {
-			alertMsg = "운동기록이 삭제되었습니다.";
-		}
-		else {
-			alertMsg = "요청 오류";
-		}
-		
-		response.setContentType("text/html;charset=UTF-8");
-		response.getWriter().print(alertMsg);
+		request.setAttribute("nickname", nickname);
+		request.setAttribute("date", date);
+		request.setAttribute("userNo", userNo);
+		request.getRequestDispatcher("/views/unionBoard/workoutEnrollFormView.jsp").forward(request, response);
 	}
 
 	/**

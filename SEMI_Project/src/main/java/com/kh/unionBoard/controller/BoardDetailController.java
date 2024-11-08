@@ -53,11 +53,11 @@ public class BoardDetailController extends HttpServlet {
 			request.setAttribute("userNo", userNo);
 			request.setAttribute("nickname", nickname);
 			request.setAttribute("ub", ub);
-			MediaFile file = new UnionBoardService().selectImgFile(boardNo);
+			ArrayList<MediaFile> mediaList = service.selectMediaFile(boardNo);
 			
 			// 게시판 정보가 있지만 사진은 있는 경우
-			if(file != null) {
-				request.setAttribute("file", file);
+			if(mediaList != null) {
+				request.setAttribute("mediaList", mediaList);
 			}
 			// 게시판 정보와 사진이 둘다 없는 경우
 			else {
