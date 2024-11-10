@@ -776,5 +776,49 @@ public class UserDao {
 		}
 		
 		return nickname;
-	}	
+	}
+
+	public int pointUpEvent(Connection con, int userNo, int point) {
+		
+		int result = 0;
+		String update = pro.getProperty("pointUpEvent");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, point);
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int loginEventRollback(Connection con, int userNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("loginEventRollback");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
 }

@@ -1,5 +1,6 @@
+<%@page import="com.kh.unionBoard.model.vo.UnionBoard"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,8 +24,9 @@
 				class="btn btn-outline-secondary">뒤로가기</button>
 		</div>
 		<br> <br>
-		<form action="/semi/insertBoard.un" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="userNo" value="${userNo}">
+		<form action="/semi/update.un" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="boardNo" value="${boardNo}">
+			<input type="hidden" name="userNo" value="${loginUser.userNo}">
 			<div class="detail-area">
 				<div class="container">
 					<table class="table table-dark table-striped">
@@ -38,20 +40,34 @@
 													<c:when test="${c.categoryNo eq 10}">
 														<!-- 공지 작성 권한 -->
 														<c:if test="${userNo == 1}">
-															<option value="${c.categoryNo}">${c.categoryName}</option>
+															<c:choose>
+																<c:when test="${ub.categoryName == c.categoryName}">
+																	<option value="${c.categoryNo}" selected>${c.categoryName}</option>
+																</c:when>
+																<c:otherwise>
+																	<option value="${c.categoryNo}">${c.categoryName}</option>
+																</c:otherwise>
+															</c:choose>
 														</c:if>
 													</c:when>
-													<c:otherwise>
-														<option value="${c.categoryNo}">${c.categoryName}</option>
+													<c:otherwise>												
+														<c:choose>
+															<c:when test="${ub.categoryName == c.categoryName}">
+																<option value="${c.categoryNo}" selected>${c.categoryName}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${c.categoryNo}">${c.categoryName}</option>
+															</c:otherwise>
+														</c:choose>
 													</c:otherwise>
 												</c:choose>
 											</c:forEach>
 										</select>
 									</div>
-									<input type="text" name="boardTitle" id="boardTitle" class="form-control">
+									<input type="text" name="boardTitle" id="boardTitle" value="${ub.boardTitle}" class="form-control">
 								</div>
 							</th>
-							<th width="150px">${nickname}</th>
+							<th width="150px">${ub.boardWriter}</th>
 							<th width="150px">${date}</th>
 						</tr>
 						<tr style="display:none;" id="file-area">
@@ -64,21 +80,25 @@
 						</tr>
 						<tr id="plusImg-btnarea">
 							<td colspan="3">
-								<button type="button" id="imgPlusBtn" onclick="plusImgArea();" class="btn btn-outline-secondary"> 이미지추가 </button>
+								<button type="button" id="imgPlusBtn" onclick="plusImgArea();" class="btn btn-outline-secondary">기존 이미지 제거</button>
 							</td>
 						</tr>
 						<tr id="img-area">
-							
+							<td>
+								<c:forEach var="file" items="${mediaList}">
+									<img src="/semi${file.filePath}${file.changeFileName}" width='100' height='100' style='margin-left:10px'>
+								</c:forEach>
+							</td>
 						</tr>
 						<tr>
 							<th colspan="4"><textarea name="boardContent"
-									id="boardContent" cols="125" rows="5" placeholder="내용을 입력해주세요." required></textarea> <br>
+									id="boardContent" cols="125" rows="5" placeholder="내용을 입력해주세요." required>${ub.boardContent}</textarea> <br>
 							</th>
 						</tr>
 						<tr align="right">
 							<th colspan="4">
 								<button type="submit"
-									class="btn btn-outline-warning btn-sm">작성하기</button>
+									class="btn btn-outline-warning btn-sm">수정하기</button>
 							</th>
 						</tr>
 					</table>
@@ -88,11 +108,17 @@
 	</div>
 
 	<script>
+	
 		// 버튼을 눌르면 이미지 부분을 클릭하면 파일을 넣을 수 있도록 설정
 		function plusImgArea(){
 			
+			
+			
+			$("#img-area td").remove();
+			
 			var td = $("<td>");
 			
+			td.append($("<input>").attr("type","hidden").attr("name","newImg").val("newImg"));
 			td.append($("<img id='contentImg0' width='100' height='100' style='margin-left:20px'>"))
 			td.append($("<img id='contentImg1' width='100' height='100' style='margin-left:20px'>"))
 			td.append($("<img id='contentImg2' width='100' height='100' style='margin-left:20px'>"))
@@ -176,28 +202,7 @@
 			}
 		};
 	</script>
-
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
 	
-	<div align="center">
-	
-	
-	
-	</div>
-	
-	
-	
-	
-	
-	
+<br><br><br><br><br><br><br><br>
 </body>
 </html>

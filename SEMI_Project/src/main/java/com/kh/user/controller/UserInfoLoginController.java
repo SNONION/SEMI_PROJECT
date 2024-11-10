@@ -43,16 +43,18 @@ public class UserInfoLoginController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		UserService service = new UserService();
+		
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
 		
-		UserInfo loginUser = new UserService().loginUser(userId,userPwd);
+		UserInfo loginUser = service.loginUser(userId,userPwd);
 		
 		HttpSession session = request.getSession();
 		
 		if(loginUser != null) {
-			LoginCount lc = new UserService().LoginCountInfo(loginUser.getUserNo());
-			
+			LoginCount lc = service.LoginCountInfo(loginUser.getUserNo());
+				
 			// 편의를 위해 날짜 형식변경
 			String sqlDate = new SimpleDateFormat("yyyyMMdd").format(lc.getLoginDate()); 
 			String javaDate = new SimpleDateFormat("yyyyMMdd").format(new Date()); 
@@ -66,20 +68,44 @@ public class UserInfoLoginController extends HttpServlet {
 			
 			if(date == 1) {
 				// 출력할 필요가 없으니 따로 변수에 담을 필요가 없다.
-				new UserService().updateAllLoginCount(loginUser.getUserNo());
+				service.updateAllLoginCount(loginUser.getUserNo());
 			}
 			else if(date > 1){
-				new UserService().updateOnlyLoginCount(loginUser.getUserNo());
+				service.updateOnlyLoginCount(loginUser.getUserNo());
+			}
+			
+			int loginEvent = lc.getLoginEvent();
+			int point = 0;
+			String alertMsg = "";
+			
+			if(loginEvent == 7 || loginEvent == 14 || loginEvent == 21) {
+				point = 15;
+				service.pointUpEvent(loginUser.getUserNo(), point); 
+			}
+			
+			if(loginEvent == 30) {
+				point = 30;
+				service.pointUpEvent(loginUser.getUserNo(), point);
+				service.loginEventRollback(loginUser.getUserNo());
 			}
 			
 			session.setAttribute("loginUser", loginUser);
-			session.setAttribute("alertMsg", "환영합니다.");
+			
+			if(point == 0) {
+				session.setAttribute("alertMsg", "환영합니다.");
+			}
+			else if(point > 0) {
+				alertMsg = loginEvent + "일 연속 출석으로 [" + point + "point]가 지급되었습니다." ;
+				session.setAttribute("alertMsg", alertMsg);
+			}
+			
+			request.getRequestDispatcher("/unionBoardListView.un?currentPage=1").forward(request, response);
 			
 		}else {
 			session.setAttribute("alertMsg", "일치하는 회원 정보가 없습니다.");
+			response.sendRedirect(request.getContextPath());
 		}
 
-		response.sendRedirect(request.getContextPath());
 	}
 
 }

@@ -16,16 +16,16 @@ import com.kh.unionBoard.model.vo.UnionBoard;
 import com.kh.user.model.vo.UserInfo;
 
 /**
- * Servlet implementation class UnionBoardListController
+ * Servlet implementation class PopularBoardController
  */
-@WebServlet("/unionBoardListView.un")
-public class UnionBoardListController extends HttpServlet {
+@WebServlet("/popularBoardListView.un")
+public class PopularBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UnionBoardListController() {
+    public PopularBoardController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -48,7 +48,7 @@ public class UnionBoardListController extends HttpServlet {
 			int endPage; // 페이지 하단에 보여질 페이징바 끝 수
 			
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
-			listCount = new UnionBoardService().selectListCount();
+			listCount = new UnionBoardService().popularBoardListCount();
 			pageLimit = 10;
 			listLimit = 15;
 			maxPage = (int)Math.ceil(((double)listCount/listLimit));
@@ -61,18 +61,11 @@ public class UnionBoardListController extends HttpServlet {
 			
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			
-			ArrayList<UnionBoard> bList = new UnionBoardService().selectBoardList(p);
-			
-			for(UnionBoard u : bList) {
-				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
-				int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
-				u.setReplyCount(replyCount);
-				u.setRecommend(recommend);
-			}
+			ArrayList<UnionBoard> pList = new UnionBoardService().selectPopularBoardList(p);
 			
 			request.setAttribute("p", p);
-			request.setAttribute("bList", bList);
-			request.getRequestDispatcher("/views/unionBoard/unionBoardListView.jsp").forward(request, response);
+			request.setAttribute("pList", pList);
+			request.getRequestDispatcher("/views/unionBoard/popularBoardListView.jsp").forward(request, response);
 		}
 		else {
 			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스입니다.");

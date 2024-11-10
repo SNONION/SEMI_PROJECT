@@ -25,6 +25,9 @@
 					<button type="button" onclick="goToUnion();" class="btn btn-dark">통합</button>
 				</li>
 				<li class="nav-item">
+					<button type="button" onclick="goTopopul();" class="btn btn-dark">인기</button>
+				</li>
+				<li class="nav-item">
 					<button type="button" onclick="goToFree();" class="btn btn-dark">자유</button>
 				</li>
 				<li class="nav-item">
@@ -57,6 +60,11 @@
 			function writeBoard(){
 				var userNo = $("input[name=userNo]").val();
 				location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
+			};
+			
+			function goTopopul(){
+				
+				location.href="/semi/popularBoardListView.un?currentPage=1&type=popular"
 			};
 			
 			function goToUnion(){
@@ -109,7 +117,12 @@
 								<tr>
 									<td>${l.boardNo}</td>
 									<td>${l.categoryName}</td>
-									<td>${l.boardTitle}</td>
+									<td>
+										<c:if test="${l.recommend >= 2}">
+											<i class="fas fa-star"></i>&nbsp;
+										</c:if>
+										${l.boardTitle}[${l.replyCount}]
+									</td>
 									<td>${l.boardWriter}</td>
 									<td>${l.createDate}</td>
 									<td>${l.count}</td>
@@ -155,10 +168,16 @@
 					for(var cate of list){
 						
 						var tr = $("<tr>");
+						var td = $("<td>");
+						
+						if (cate.recommend >= 2) {
+						    td.append('<i class="fas fa-star"></i>&nbsp;');
+						}
 						
 						tr.append($("<td>").text(cate.boardNo));
 						tr.append($("<td>").text(cate.categoryName));
-						tr.append($("<td>").text(cate.boardTitle));
+						td.append(cate.boardTitle+ " [" + cate.replyCount + "]");
+						tr.append(td);
 						tr.append($("<td>").text(cate.boardWriter));
 						tr.append($("<td>").text(cate.createDate));
 						tr.append($("<td>").text(cate.count));

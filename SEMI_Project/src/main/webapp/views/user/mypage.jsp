@@ -250,7 +250,7 @@
 
 					<!-- 문의 머리글 -->
 					<div class="modal-header">
-						<h4 class="modal-title">문의사항</h4>
+						<h4 class="modal-title">관리자에게 문의하기</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -472,6 +472,12 @@
 								<tr>
 									<td><input type="password" name="checkPwd" id="checkPwd" required></td>
 								</tr>
+								<tr>
+									<td style="font-size:10px;"><br>4~15자까지 가능(첫글자 특수기호 가능)</td>
+								</tr>
+								<tr id="checkText-area">
+								
+								</tr>
 							</table>
 						</div>
 
@@ -490,12 +496,22 @@
 				var newPwd = $("#newPwd").val();
 				var checkPwd = $("#checkPwd").val();
 				
+				var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
+				
 				if(userPwd != null && newPwd != null && checkPwd != null){
 					if(newPwd == checkPwd){
-						return true;
+						if(pwRegExp.test(newPwd)){
+							return true;
+						}
+						else{
+							$("#checkText-area").append($("<td style='font-size:10px;'>").text("비밀번호 형식에 맞게 입력해주세요."));
+							$("#newPwd").val("");
+							$("#checkPwd").val("");
+							return false;
+						}
 					}
 					else{
-						alert("비밀번호가 일치하지 않습니다.");
+						$("#checkText-area").append($("<td>").text("비밀번호가 일치하지 않습니다."));
 						$("#checkPwd").val("");
 						return false;
 					}
@@ -539,7 +555,7 @@
 				var workoutDate = $(this).children().first().next().next().next().text();
 				
 				$("#workoutNo").text(workoutNo);
-				$("#workoutContent").text(workoutContent);
+				$("#workoutContent").html(workoutContent);
 				$("#workoutTitle").text(workoutTitle);
 				$("#workoutDate").text(workoutDate);
 				

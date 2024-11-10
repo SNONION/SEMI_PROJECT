@@ -165,11 +165,11 @@ public class UnionBoardService {
 		return result;
 	}
 
-	public ArrayList<Reply> selectReply(int boardNo) {
+	public ArrayList<Reply> selectReply(int boardNo, PageInfo p2) {
 		
 		Connection con = JDBCTemplate.getConnection();
 		
-		ArrayList<Reply> replyList = dao.selectReply(con, boardNo);
+		ArrayList<Reply> replyList = dao.selectReply(con, boardNo, p2);
 		
 		JDBCTemplate.close(con);
 		
@@ -304,6 +304,162 @@ public class UnionBoardService {
 		JDBCTemplate.close(con);
 		
 		return result;
+	}
+
+	public int selectReplyCount(int boardNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int count = dao.selectReplyCount(con, boardNo);
+		
+		JDBCTemplate.close(con);
+		
+		return count;
+	}
+
+	public int deleteMyReply(int replyNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.deleteMyReply(con, replyNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int deleteBoard(int boardNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result1 = dao.deleteBoard(con, boardNo);
+		
+		int result2 = 1;
+		if(result1 > 0) {
+			
+			int check = dao.checkMedia(con, boardNo);
+			
+			if(check > 0) {
+				result2 = dao.deleteMedia(con, boardNo);
+			}
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		
+		int result = result1 * result2;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updateBoard(UnionBoard ub, ArrayList<MediaFile> mList) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result1 = dao.updateBoard(con, ub);
+		
+		int result2 = 1;
+		if(result1 > 0) {
+			
+			// 새로 들어온 이미지가 있고 기존에 이미지 파일이 있었던 경우
+			if(mList != null) {
+				dao.deleteMedia(con, ub.getBoardNo()); // 기존 파일들 삭제 후
+				
+				for(MediaFile file : mList) { // 새로 들어온 파일 삽입
+					result2 = dao.insertMedia(con, ub.getBoardNo(), file);
+				}
+			}
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		
+		int result = result1 * result2;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updateBoard(UnionBoard ub) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateBoard(con, ub);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int popularBoardListCount() {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int count = dao.popularBoardListCount(con);
+		
+		JDBCTemplate.close(con);
+		
+		return count;
+	}
+
+	public ArrayList<UnionBoard> selectPopularBoardList(PageInfo p) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<UnionBoard> bList = dao.selectPopularBoardList(con, p);
+		
+		JDBCTemplate.close(con);
+		
+		return bList;
+	}
+
+	public ArrayList<UnionBoard> selectPopularTitleKeyBoard(String keyword, PageInfo p) {
+		
+		Connection con =JDBCTemplate.getConnection();
+		
+		ArrayList<UnionBoard> pList = dao.selectPopularTitleKeyBoard(con, keyword, p);
+		
+		JDBCTemplate.close(con);
+		
+		return pList;
+	}
+
+	public int selectPopularKeyBoardCount(String keyword) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int count = dao.selectPopularKeyBoardCount(con, keyword);
+		
+		JDBCTemplate.close(con);
+		
+		return count;
 	}
 
 }

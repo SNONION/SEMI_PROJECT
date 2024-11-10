@@ -54,7 +54,13 @@ public class BoardKeySearchController extends HttpServlet {
 		
 		if(request.getParameter("categoryNo") != null) {
 			cateNo = Integer.parseInt(request.getParameter("categoryNo"));
-			listCount = new UnionBoardService().selectCateKeyBoardCount(keyword, cateNo);
+			
+			if(cateNo != 999) {
+				listCount = new UnionBoardService().selectCateKeyBoardCount(keyword, cateNo);
+			}
+			else {
+				listCount = new UnionBoardService().selectPopularKeyBoardCount(keyword);
+			}
 		}
 		else {
 			listCount = new UnionBoardService().selectKeyBoardCount(keyword);
@@ -75,26 +81,35 @@ public class BoardKeySearchController extends HttpServlet {
 		ArrayList<UnionBoard> bList = null;
 		
 		if(cateNo != 0) {
-			bList = new UnionBoardService().selectCateTitleKeyBoard(keyword, cateNo, p);	
+			
 			String cateName = "";
 			
-			switch(cateNo) {		
-				case 20 :
-					cateName = "자유게시판";
-					break;
-				case 30 :
-					cateName = "식단게시판";
-					break;
-				case 40 :
-					cateName = "챌린지게시판";
-					break;
-				case 50 :
-					cateName = "전문가게시판";
-					break;
-				case 60 :
-					cateName = "문의게시판";
-					break;
+			if(cateNo != 999) {
+				bList = new UnionBoardService().selectCateTitleKeyBoard(keyword, cateNo, p);	
+				
+				switch(cateNo) {		
+					case 20 :
+						cateName = "자유게시판";
+						break;
+					case 30 :
+						cateName = "식단게시판";
+						break;
+					case 40 :
+						cateName = "챌린지게시판";
+						break;
+					case 50 :
+						cateName = "전문가게시판";
+						break;
+					case 60 :
+						cateName = "문의게시판";
+						break;
+				}
 			}
+			else {
+				cateName = "인기게시판";
+				bList = new UnionBoardService().selectPopularTitleKeyBoard(keyword, p);
+			}
+			
 			request.setAttribute("cateName", cateName);
 		}
 		else {
@@ -104,6 +119,8 @@ public class BoardKeySearchController extends HttpServlet {
 		
 		for(UnionBoard u : bList) {
 			int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+			int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+			u.setReplyCount(replyCount);
 			u.setRecommend(recommend);
 		}
 	
