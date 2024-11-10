@@ -9,19 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.unionBoard.model.service.UnionBoardService;
-import com.kh.unionBoard.model.vo.Reply;
 
 /**
- * Servlet implementation class ReplyInsertController
+ * Servlet implementation class ReplyDeleteController
  */
-@WebServlet("/replyInsert.un")
-public class ReplyInsertController extends HttpServlet {
+@WebServlet("/deleteReply.un")
+public class ReplyDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReplyInsertController() {
+    public ReplyDeleteController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,25 +29,10 @@ public class ReplyInsertController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String replyContent = request.getParameter("replyContent");
-		int userNo = Integer.parseInt(request.getParameter("userNo"));
-		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
-
-		Reply reply = new Reply();
-		reply.setUserNo(userNo);
-		reply.setRefBno(boardNo);
-		reply.setReplyContent(replyContent);
+		int replyNo = Integer.parseInt(request.getParameter("replyNo"));
 		
-		int result = new UnionBoardService().insertReply(reply);
+		int result = new UnionBoardService().deleteMyReply(replyNo);
 		
 		String msg = "";
 		
@@ -61,6 +45,14 @@ public class ReplyInsertController extends HttpServlet {
 		
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().print(msg);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

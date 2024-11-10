@@ -48,6 +48,7 @@
 				</li>
 			</ul>
 			<form class="form-inline" action="/semi/searchKeyword.un?currentPage=1" method="post">
+				<input type="hidden" name="categoryNo" value="999">
 				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search">
 				<button class="btn btn-success" type="submit">Search</button>
 			</form>
@@ -59,15 +60,10 @@
 		</nav>
 
 		<script>
-		
+			
 			function writeBoard(){
 				var userNo = $("input[name=userNo]").val();
 				location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
-			};
-			
-			function goTopopul(){
-				
-				location.href="/semi/popularBoardListView.un?currentPage=1&type=popular"
 			};
 		
 			function goToUnion(){
@@ -110,25 +106,25 @@
 				</thead>
 				<tbody id="board-area">
 					<c:choose>
-						<c:when test="${empty bList}">
+						<c:when test="${empty pList}">
 							<tr align="center">
 								<td colspan="7">게시물이 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
-							<c:forEach var="b" items="${bList}">
+							<c:forEach var="p" items="${pList}">
 								<tr>
-									<td>${b.boardNo}</td>
-									<td>${b.categoryName}</td>
-									<td>
-										<c:if test="${b.recommend >= 2}">
-											<i class="fas fa-star"></i>&nbsp;
-										</c:if>
-										${b.boardTitle}[${b.replyCount}]</td>
-									<td>${b.boardWriter}</td>
-									<td>${b.createDate}</td>
-									<td>${b.count}</td>
-									<td>${b.recommend}</td>
+									<c:if test="${p.recommend >= 2}">
+										<td>${p.boardNo}</td>
+										<td>${p.categoryName}</td>
+										<td>
+											<i class="fas fa-star"></i>
+											&nbsp;${p.boardTitle}[${p.replyCount}]</td>
+										<td>${p.boardWriter}</td>
+										<td>${p.createDate}</td>
+										<td>${p.count}</td>
+										<td>${p.recommend}</td>
+									</c:if>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -160,14 +156,14 @@
 			$.ajax({
 				url : "/semi/paging.us",
 				data : {
-					type : "unionBoard",
+					type : "popularBoard",
 					currentPage : $(this).text()
 				},
-				success : function(bList){
+				success : function(pList){
 					
 					$("#board-area tr").remove();
 					
-					for(var board of bList){
+					for(var board of pList){
 						
 						var tr = $("<tr>");
 						var td = $("<td>");
@@ -186,6 +182,7 @@
 						tr.append($("<td>").text(board.recommend));
 						
 						$("#board-area").append(tr);
+						
 					}
 				},
 				error : function(){
@@ -196,13 +193,6 @@
 	</script>
 
 
-
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+<br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

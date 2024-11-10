@@ -394,4 +394,36 @@ public class UserService {
 		return nickname;
 	}
 
+	public void pointUpEvent(int userNo, int point) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.pointUpEvent(con, userNo, point);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+	}
+
+	public void loginEventRollback(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.loginEventRollback(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+	}
+
 }

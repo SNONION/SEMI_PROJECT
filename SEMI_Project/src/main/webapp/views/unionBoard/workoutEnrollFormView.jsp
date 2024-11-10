@@ -31,7 +31,7 @@
 						<tr align="center">
 							<th width="700px">
 								<div class="input-group mb-3">
-									<input type="text" name="workoutTitle" id="workoutTitle" class="form-control" placeholder="운동 제목">
+									<input type="text" name="workoutTitle" id="workoutTitle" class="form-control" placeholder="운동 제목" required>
 								</div>
 							</th>
 							<th width="150px">${nickname}</th>

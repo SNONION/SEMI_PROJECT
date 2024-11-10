@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="/views/common/menuBar.jsp"%>
+	<%@ include file="/views/common/mainPage.jsp"%>
 
 	<!-- 
 		************ 작성 기준 ************

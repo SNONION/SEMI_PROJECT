@@ -34,16 +34,14 @@
 			</c:choose>
 			<br>
 		</div>
-		
-		<div class="writeBtn-area" align="center">
-			<input type="hidden" name=userNo value="${loginUser.userNo}">
-			<button type="button" onclick="writeBoard();" class="btn btn-outline-secondary btn-sm">글작성</button>
-		</div>
 		<br> <br>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
 					<button type="button" onclick="goToUnion();" class="btn btn-dark">통합</button>
+				</li>
+				<li class="nav-item">
+					<button type="button" onclick="goTopopul();" class="btn btn-dark">인기</button>
 				</li>
 				<li class="nav-item">
 					<button type="button" onclick="goToFree();" class="btn btn-dark">자유</button>
@@ -66,6 +64,11 @@
 				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search">
 				<button class="btn btn-success" type="submit">Search</button>
 			</form>
+			<div class="writeBtn-area" align="center">
+				<input type="hidden" name=userNo value="${loginUser.userNo}">
+				<button type="button" onclick="writeBoard();"
+					class="btn btn-outline-secondary btn-sm" style="margin-left:20px;">글작성</button>
+			</div>
 		</nav>
 
 		<script>
@@ -74,6 +77,11 @@
 				location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
 			};
 		
+			function goTopopul(){
+				
+				location.href="/semi/popularBoardListView.un?currentPage=1&type=popular"
+			};
+			
 			function goToUnion(){
 				location.href="/semi/unionBoardListView.un?currentPage=1";
 			};
@@ -124,7 +132,12 @@
 								<tr>
 									<td>${b.boardNo}</td>
 									<td>${b.categoryName}</td>
-									<td>${b.boardTitle}</td>
+									<td>
+										<c:if test="${b.recommend >= 2}">
+											<i class="fas fa-star"></i>&nbsp;
+										</c:if>
+										${b.boardTitle}&nbsp;[${b.replyCount}]
+									</td>
 									<td>${b.boardWriter}</td>
 									<td>${b.createDate}</td>
 									<td>${b.count}</td>
@@ -171,10 +184,16 @@
 					for(var board of bList){
 						
 						var tr = $("<tr>");
+						var td = $("<td>");
+						
+						if (board.recommend >= 2) {
+						    td.append('<i class="fas fa-star"></i>&nbsp;');
+						}
 						
 						tr.append($("<td>").text(board.boardNo));
 						tr.append($("<td>").text(board.categoryName));
-						tr.append($("<td>").text(board.boardTitle));
+						td.append(board.boardTitle+ " [" + board.replyCount + "]");
+						tr.append(td);
 						tr.append($("<td>").text(board.boardWriter));
 						tr.append($("<td>").text(board.createDate));
 						tr.append($("<td>").text(board.count));

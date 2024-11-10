@@ -33,6 +33,15 @@ public class MediaFile {
 		this.filePath = filePath;
 		this.uploadDate = uploadDate;
 	}
+	
+	public MediaFile(int fileNo, String fileType, String originFileName, String changeFileName, String filePath) {
+		super();
+		this.fileNo = fileNo;
+		this.fileType = fileType;
+		this.originFileName = originFileName;
+		this.changeFileName = changeFileName;
+		this.filePath = filePath;
+	}
 
 	public MediaFile(int fileNo, String fileType, String originFileName, String changeFileName, int refBno,
 			String filePath, Date uploadDate, String status) {

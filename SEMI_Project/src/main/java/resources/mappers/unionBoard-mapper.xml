@@ -112,21 +112,26 @@
 	</entry>
 	
 	<entry key="selectReply">
-		SELECT  NICKNAME,
-		        REPLY_CONTENT,
-		        TO_CHAR(REPLY_DATE, 'YYYY-MM-DD') REPLY_DATE
-		FROM    TB_REPLY R
-		JOIN    TB_USERINFO USING(USER_NO)
-		WHERE   REF_BOARD_NO = ?
-		AND     R.STATUS = 'Y'
-		ORDER BY REPLY_DATE DESC
+		SELECT  *
+		FROM    (SELECT  ROWNUM RNUM, A.*
+		         FROM    (SELECT  NICKNAME,
+		                          REPLY_CONTENT,
+		                          TO_CHAR(REPLY_DATE, 'YYYY-MM-DD') REPLY_DATE,
+		                          REPLY_NO
+		                  FROM    TB_REPLY R
+		                  JOIN    TB_USERINFO USING(USER_NO)
+		                  WHERE   REF_BOARD_NO = ?
+		                  AND     R.STATUS = 'Y'
+		                  ORDER BY REPLY_DATE DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
 	</entry>
 	
 	<entry key="insertReply">
 		INSERT INTO TB_REPLY(USER_NO,
 		                     REF_BOARD_NO,
-		                     REPLY_CONTENT)
-		VALUES(?,?,?)
+		                     REPLY_CONTENT,
+		                     REPLY_NO)
+		VALUES(?,?,?,SEQ_REPLYNO.NEXTVAL)
 	</entry>
 	
 	<entry key="selectTitleKeyBoard">
@@ -206,7 +211,8 @@
 	</entry>
 	
 	<entry key="selectMediaFile">
-		SELECT  FILE_TYPE,
+		SELECT  FILE_NO,
+				FILE_TYPE,
 		        ORIGINFILE_NAME,
 		        CHANGEFILE_NAME,
 		        FILE_PATH
@@ -221,6 +227,138 @@
 		                           WORKOUT_CONTENT,
 		                           WORKOUT_NO) 
 		VALUES(?,?,?,SEQ_WORKNO.NEXTVAL)
+	</entry>
+	
+	<entry key="selectReplyCount">
+		SELECT	COUNT(*) COUNT
+		FROM	TB_REPLY
+		WHERE	REF_BOARD_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="deleteMyReply">
+		UPDATE  TB_REPLY
+		SET     STATUS = 'N'
+		WHERE   REPLY_NO = ?
+	</entry>
+	
+	<entry key="deleteBoard">
+		UPDATE  TB_UNIONBOARD
+		SET     STATUS = 'N'
+		WHERE   BOARD_NO = ?
+	</entry>
+	
+	<entry key="checkMedia">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_MEDIAFILE
+		WHERE   REF_BOARD_NO = ?
+	</entry>
+	
+	<entry key="deleteMedia">
+		UPDATE  TB_MEDIAFILE
+		SET     STATUS = 'N'
+		WHERE   REF_BOARD_NO = ?
+	</entry>
+	
+	<entry key="updateBoard">
+		UPDATE  TB_UNIONBOARD
+		SET     CATEGORY_NO = ?,
+		        BOARD_TITLE = ?,
+		        BOARD_CONTENT = ?,
+		        MODIFY_DATE = SYSDATE
+		WHERE   BOARD_NO = ?
+		AND     BOARD_WRITER = ?
+	</entry>
+	
+	<entry key="popularBoardListCount">
+		SELECT  COUNT(*) COUNT
+		FROM    (SELECT COUNT(*) A
+		        FROM    TB_RECOMMEND
+		        GROUP BY BOARD_NO)
+		WHERE   A >= 2
+	</entry>
+	
+	<entry key="selectPopularBoardList">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		      FROM (SELECT B.BOARD_NO, 
+		                   CATEGORY_NAME, 
+		                   B.BOARD_TITLE,  
+		                   NICKNAME, 
+		                   B.COUNT,         
+		                   TO_CHAR(B.CREATE_DATE, 'yyyy-MM-dd') CREATE_DATE,
+		                   COALESCE(R.RECOMMEND_COUNT, 0) RECOMMEND_COUNT,
+		                   COALESCE(RE.REPLY_COUNT, 0) REPLY_COUNT
+		            FROM TB_UNIONBOARD B
+		            JOIN TB_USERINFO U ON B.BOARD_WRITER = U.USER_NO
+		            JOIN TB_CATEGORY C ON B.CATEGORY_NO = C.CATEGORY_NO
+		            LEFT JOIN (SELECT BOARD_NO, COUNT(*) RECOMMEND_COUNT
+		                      FROM TB_RECOMMEND
+		                      GROUP BY BOARD_NO
+		            ) R ON B.BOARD_NO = R.BOARD_NO
+		            LEFT JOIN (SELECT REF_BOARD_NO, COUNT(*) REPLY_COUNT
+		                      FROM TB_REPLY
+		                      GROUP BY REF_BOARD_NO
+		            ) RE ON B.BOARD_NO = RE.REF_BOARD_NO
+		            WHERE B.STATUS = 'Y'
+		            ORDER BY B.CREATE_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+		AND RECOMMEND_COUNT >= 2
+	</entry>
+	
+	<entry key="selectPopularTitleKeyBoard">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		      FROM (SELECT B.BOARD_NO, 
+		                   CATEGORY_NAME, 
+		                   B.BOARD_TITLE,  
+		                   NICKNAME, 
+		                   B.COUNT,         
+		                   TO_CHAR(B.CREATE_DATE, 'yyyy-MM-dd') CREATE_DATE,
+		                   COALESCE(R.RECOMMEND_COUNT, 0) RECOMMEND_COUNT,
+		                   COALESCE(RE.REPLY_COUNT, 0) REPLY_COUNT
+		            FROM TB_UNIONBOARD B
+		            JOIN TB_USERINFO U ON B.BOARD_WRITER = U.USER_NO
+		            JOIN TB_CATEGORY C ON B.CATEGORY_NO = C.CATEGORY_NO
+		            LEFT JOIN (SELECT BOARD_NO, COUNT(*) RECOMMEND_COUNT
+		                      FROM TB_RECOMMEND
+		                      GROUP BY BOARD_NO
+		            ) R ON B.BOARD_NO = R.BOARD_NO
+		            LEFT JOIN (SELECT REF_BOARD_NO, COUNT(*) REPLY_COUNT
+		                      FROM TB_REPLY
+		                      GROUP BY REF_BOARD_NO
+		            ) RE ON B.BOARD_NO = RE.REF_BOARD_NO
+		            WHERE B.STATUS = 'Y'
+		            AND   B.BOARD_TITLE LIKE ?
+		            ORDER BY B.CREATE_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+		AND RECOMMEND_COUNT >= 2
+	</entry>
+	
+	<entry key="selectPopularKeyBoardCount">
+		SELECT COUNT(*) COUNT
+		FROM (SELECT B.BOARD_NO, 
+		             CATEGORY_NAME, 
+		             B.BOARD_TITLE,  
+		             NICKNAME, 
+		             B.COUNT,         
+		             TO_CHAR(B.CREATE_DATE, 'yyyy-MM-dd') CREATE_DATE,
+		             COALESCE(R.RECOMMEND_COUNT, 0) AS RECOMMEND_COUNT,
+		             COALESCE(RE.REPLY_COUNT, 0) AS REPLY_COUNT
+		      FROM TB_UNIONBOARD B
+		      JOIN TB_USERINFO U ON B.BOARD_WRITER = U.USER_NO
+		      JOIN TB_CATEGORY C ON B.CATEGORY_NO = C.CATEGORY_NO
+		      LEFT JOIN (SELECT BOARD_NO, COUNT(*) AS RECOMMEND_COUNT
+		                 FROM TB_RECOMMEND
+		                 GROUP BY BOARD_NO
+		      ) R ON B.BOARD_NO = R.BOARD_NO
+		      LEFT JOIN (SELECT REF_BOARD_NO, COUNT(*) AS REPLY_COUNT
+		                 FROM TB_REPLY
+		                 GROUP BY REF_BOARD_NO
+		      ) RE ON B.BOARD_NO = RE.REF_BOARD_NO
+		      WHERE B.STATUS = 'Y'
+		      AND B.BOARD_TITLE LIKE ?
+		)
 	</entry>
 
 </properties>

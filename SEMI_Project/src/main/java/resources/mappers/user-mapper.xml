@@ -246,4 +246,17 @@
 		AND		STATUS = 'Y'
 	</entry>
 	
+	<entry key="pointUpEvent">
+		UPDATE  TB_USERINFO
+		SET     POINT = POINT + ?
+		WHERE   USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="loginEventRollback">
+		UPDATE  TB_LOGINCOUNT
+		SET     LOGIN_EVENT = 0
+		WHERE   USER_NO = ?
+	</entry>
+	
 </properties>

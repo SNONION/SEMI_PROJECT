@@ -84,6 +84,13 @@ public class CategoryListController extends HttpServlet {
 		
 		ArrayList<UnionBoard> list = service.selectCateBoardList(cateNo, p);
 		
+		for(UnionBoard u : list) {
+			int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+			int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+			u.setReplyCount(replyCount);
+			u.setRecommend(recommend);
+		}
+		
 		request.setAttribute("p", p);
 		request.setAttribute("cateNo", cateNo);
 		request.setAttribute("list", list);

@@ -104,6 +104,11 @@ public class MyPageController extends HttpServlet {
 			
 			// 운동 기록을 가져옴
 			ArrayList<WorkoutList> wList = service.selectWorkoutList(user.getUserNo(), p1);
+			
+			for(WorkoutList wl : wList) {
+				String str = wl.getWorkoutContent().replace("\n","<br>");
+				wl.setWorkoutContent(str);
+			}
 	
 			// 내가 작성한 문의글 내역을 가져옴
 			ArrayList<Request> rList = service.selectRequest(user.getUserNo(), p2);
