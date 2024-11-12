@@ -17,6 +17,7 @@ import com.kh.unionBoard.model.vo.Reply;
 import com.kh.unionBoard.model.vo.UnionBoard;
 import com.kh.user.model.service.UserService;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 
 /**
  * Servlet implementation class BoardDetailController
@@ -82,6 +83,10 @@ public class BoardDetailController extends HttpServlet {
 		
 		// 게시판 정보가 있는 경우s
 		if(ub != null && result > 0) {
+			
+			UserTier tier = new UnionBoardService().selectTierImg(nickname);
+			ub.setTierPath(tier.getTierPath());
+			ub.setTierName(tier.getTierOriginFileName());
 			
 			request.setAttribute("loginNickname", loginNickname);
 			request.setAttribute("boardNo", boardNo);

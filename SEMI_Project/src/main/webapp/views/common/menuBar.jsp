@@ -107,7 +107,20 @@ i{
 .dropdown-item{
 	color: orange;
 }
-
+/* 이미지 미리보기 창 스타일 */
+.preview-box {
+    position: absolute;
+    display: none;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background: #fff;
+    z-index: 10;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+}
+.preview-box img {
+    width: 150px;  /* 미리보기 이미지 크기 */
+    height: auto;
+}
 </style>
 
 

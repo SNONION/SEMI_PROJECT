@@ -10,6 +10,7 @@ import com.kh.unionBoard.model.vo.Category;
 import com.kh.unionBoard.model.vo.MediaFile;
 import com.kh.unionBoard.model.vo.Reply;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 public class UnionBoardService {
 
@@ -493,6 +494,17 @@ public class UnionBoardService {
 		JDBCTemplate.close(con);
 		
 		return bList;
+	}
+
+	public UserTier selectTierImg(String boardWriter) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		UserTier tier = dao.selectTierImg(con, boardWriter);
+		
+		JDBCTemplate.close(con);
+		
+		return tier;
 	}
 
 }

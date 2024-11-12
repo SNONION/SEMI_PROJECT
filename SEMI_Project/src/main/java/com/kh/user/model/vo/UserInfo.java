@@ -19,8 +19,19 @@ public class UserInfo {
 	private Date modifyDate;
 	private String status;
 	
+	// 티어 이미지의 경로와 파일명을 담아둘 변수
+	private String tierPath;
+	private String tierName;
+	
 	public UserInfo() {
 		super();
+	}
+	
+	public UserInfo(int userNo, String userId, int point) {
+		super();
+		this.userNo = userNo;
+		this.userId = userId;
+		this.point = point;
 	}
 
 	public UserInfo(int userNo, String userId) {
@@ -76,6 +87,22 @@ public class UserInfo {
 		this.enrollDate = enrollDate;
 		this.modifyDate = modifyDate;
 		this.status = status;
+	}
+	
+	public String getTierPath() {
+		return tierPath;
+	}
+
+	public void setTierPath(String tierPath) {
+		this.tierPath = tierPath;
+	}
+
+	public String getTierName() {
+		return tierName;
+	}
+
+	public void setTierName(String tierName) {
+		this.tierName = tierName;
 	}
 
 	public int getUserNo() {
