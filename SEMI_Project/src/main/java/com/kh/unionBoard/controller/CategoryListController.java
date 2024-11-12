@@ -48,6 +48,10 @@ public class CategoryListController extends HttpServlet {
 		
 		switch(cateType){
 		
+			case "announce" :
+				cateNo = 10;
+				listCount = service.cateBoardCount(cateNo);
+				break;
 			case "free" : 
 				cateNo = 20;
 				listCount = service.cateBoardCount(cateNo);

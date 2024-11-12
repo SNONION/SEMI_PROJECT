@@ -87,7 +87,11 @@ public class BoardKeySearchController extends HttpServlet {
 			if(cateNo != 999) {
 				bList = new UnionBoardService().selectCateTitleKeyBoard(keyword, cateNo, p);	
 				
-				switch(cateNo) {		
+				switch(cateNo) {
+				
+					case 10 :
+						cateName = "공지사항";
+						break;
 					case 20 :
 						cateName = "자유게시판";
 						break;

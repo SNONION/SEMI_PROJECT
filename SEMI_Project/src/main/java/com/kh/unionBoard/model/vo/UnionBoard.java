@@ -19,6 +19,13 @@ public class UnionBoard {
 	public UnionBoard() {
 		super();
 	}
+	
+	public UnionBoard(int boardNo, String boardTitle, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.count = count;
+	}
 
 	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardWriter,
 			int count, String createDate) {

@@ -963,4 +963,103 @@ public class UnionBoardDao {
 		return count;
 	}
 
+	public ArrayList<UnionBoard> simpleBoardList(Connection con, PageInfo p) {
+		
+		ArrayList<UnionBoard> bList = new ArrayList<>();
+		String select = pro.getProperty("simpleBoardList");
+		
+		// 시작번호 : (현재 페이지 - 1 * 한 페이지에 보여줄 게시글 수) + 1
+		int startRow = ((p.getCurrentPage() - 1) * p.getwListLimit()) + 1;
+		
+		// 끝번호 : 현재 페이지 수 * 게시글 보여줄 수
+		int endRow = p.getCurrentPage() * p.getwListLimit();
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				bList.add(new UnionBoard(rset.getInt("BOARD_NO"),
+									     rset.getString("BOARD_TITLE"),
+									     rset.getInt("COUNT")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return bList;
+	}
+
+	public int selectAnnounceCount(Connection con) {
+		
+		int count = 0;
+		String select = pro.getProperty("selectAnnounceCount");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				count = rset.getInt("COUNT");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return count;
+	}
+
+	public ArrayList<UnionBoard> announceBoardList(Connection con, PageInfo p) {
+		
+		ArrayList<UnionBoard> bList = new ArrayList<>();
+		String select = pro.getProperty("announceBoardList");
+		
+		// 시작번호 : (현재 페이지 - 1 * 한 페이지에 보여줄 게시글 수) + 1
+		int startRow = ((p.getCurrentPage() - 1) * p.getwListLimit()) + 1;
+		
+		// 끝번호 : 현재 페이지 수 * 게시글 보여줄 수
+		int endRow = p.getCurrentPage() * p.getwListLimit();
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				bList.add(new UnionBoard(rset.getInt("BOARD_NO"),
+									     rset.getString("CATEGORY_NAME"),
+									     rset.getString("BOARD_TITLE"),
+									     rset.getString("NICKNAME"),
+									     rset.getInt("COUNT"),
+									     rset.getString("CREATE_DATE"),
+									     rset.getInt("RECOMMEND_COUNT"),
+									     rset.getInt("REPLY_COUNT")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return bList;
+	}
+
 }
