@@ -135,8 +135,9 @@
 	<script>
 		$("#cate-area").on("click","tr",function(){
 			var boardNo = $(this).children().first().text();
+			var userNo = $("input[name=userNo]").val();
 			
-			location.href="/semi/boardDetailView.un?boardNo=" + boardNo;
+			location.href="/semi/boardDetailView.un?boardNo=" + boardNo + "&userNo=" + userNo;
 		});
 	
 		$(".pageBtn-area button").click(function(){

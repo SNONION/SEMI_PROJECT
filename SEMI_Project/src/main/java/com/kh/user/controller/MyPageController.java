@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Request;
+import com.kh.unionBoard.model.vo.Reply;
 import com.kh.user.model.service.UserService;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
@@ -75,6 +76,14 @@ public class MyPageController extends HttpServlet {
 			int wstartPage; // 페이지 하단에 보여질 페이징바 시작 수
 			int wendPage; // 페이지 하단에 보여질 페이징바 끝 수
 			
+			
+			int reListCount;
+			int repageLimit;
+			int reListLimit;
+			int remaxPage;
+			int restartPage;
+			int reendPage;	
+			
 			currentPage = 1;
 			
 			rListCount = service.countRequestList(user.getUserNo());
@@ -91,6 +100,13 @@ public class MyPageController extends HttpServlet {
 			wstartPage = (currentPage - 1) / wpageLimit * wpageLimit + 1;
 			wendPage = (wstartPage + wpageLimit) - 1;
 			
+			reListCount = service.countReply();
+			repageLimit = 10;
+			reListLimit = 15;
+			remaxPage = (int) Math.ceil((double)reListCount / reListLimit);
+			restartPage = (currentPage - 1) / repageLimit * repageLimit + 1;
+			reendPage = (restartPage + repageLimit) - 1;
+			
 			if(wmaxPage < wendPage) {
 				wendPage = wmaxPage;
 			}
@@ -99,9 +115,13 @@ public class MyPageController extends HttpServlet {
 				rendPage = rmaxPage;
 			}
 			
+			if(remaxPage < reendPage) {
+				reendPage = remaxPage;
+			}
+			
 			PageInfo p1 = new PageInfo(wListCount, currentPage, wpageLimit, wListLimit, wmaxPage, wstartPage, wendPage); // 운동기록용
 			PageInfo p2 = new PageInfo(rListCount, currentPage, rpageLimit, rListLimit, rmaxPage, rstartPage, rendPage); // 문의글용
-			
+			PageInfo p3 = new PageInfo(reListCount, currentPage, repageLimit, reListLimit,remaxPage,restartPage,reendPage); // 댓글용
 			// 운동 기록을 가져옴
 			ArrayList<WorkoutList> wList = service.selectWorkoutList(user.getUserNo(), p1);
 	
@@ -111,13 +131,18 @@ public class MyPageController extends HttpServlet {
 			// 내가 구매한 아이템 목록 가져옴
 			ArrayList<MyItems> iList = service.selectMyItems(user.getUserNo());
 			
+			// 모든 댓글 가져옴
+			ArrayList<Reply> reList = service.selectReply(p3);
+			System.out.println(reList);
 			request.setAttribute("loginCount", loginCount);
 			request.setAttribute("p1", p1);
 			request.setAttribute("p2", p2);
+			request.setAttribute("p3", p3);
 			request.setAttribute("user", user);
 			request.setAttribute("wList", wList);
 			request.setAttribute("iList", iList);
 			request.setAttribute("rList", rList);
+			request.setAttribute("reList", reList);
 			request.getRequestDispatcher("/views/user/mypage.jsp").forward(request, response);
 		}
 		else {

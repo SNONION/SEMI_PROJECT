@@ -23,6 +23,9 @@
 	cursor: pointer;
 	background-color: gray;
 }
+.fixed-td {
+    word-wrap: break-word;  /* 긴 단어도 자동 줄바꿈 */
+}
 </style>
 </head>
 <body>
@@ -59,8 +62,37 @@
 				</tbody>
 			</table>
 		</div>
-
-
+		<h3 align="center">이단 감시소</h3>
+		<br>
+		<div class="total-reply">
+			<table class="table table-dark table-striped" style="table-layout: fixed;">
+				<thead>
+					<tr>
+						<th width="120px">작성자</th>
+						<th width="120px">게시글번호</th>
+						<th width="600px">내용</th>
+						<th width="120px">날짜</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="r" items="${reList}">
+						<tr>
+							<td>${r.nickname}</td>
+							<td>${r.refBno}</td>
+							<td class="fixed-td">${r.replyContent}</td>
+							<td>${r.replyDate}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="rePageBtn-area" align="center">
+			<c:forEach var="i" begin="${p3.startPage}" end="${p3.endPage}">
+				<button type="button" class="btn btn-outline-secondary">${i}</button>
+			</c:forEach>
+		</div>
+		
 		<br> <br>
 		<h3 align="center">My Item List</h3>
 		<br>

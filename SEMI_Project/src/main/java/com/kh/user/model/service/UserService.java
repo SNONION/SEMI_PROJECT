@@ -8,6 +8,7 @@ import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
+import com.kh.unionBoard.model.vo.Reply;
 import com.kh.user.model.dao.UserDao;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
@@ -392,6 +393,28 @@ public class UserService {
 		JDBCTemplate.close(con);
 		
 		return nickname;
+	}
+	
+	public ArrayList<Reply> selectReply(PageInfo p3) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<Reply> reList = dao.selectReply(con,p3);
+		
+		JDBCTemplate.close(con);
+		
+		return reList;
+	}
+
+	public int countReply() {
+		
+		Connection con =JDBCTemplate.getConnection();
+		
+		int result = dao.countReply(con);
+		
+		JDBCTemplate.close(con);
+			
+		return result;
 	}
 
 }
