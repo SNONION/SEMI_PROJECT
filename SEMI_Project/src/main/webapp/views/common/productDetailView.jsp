@@ -77,12 +77,12 @@
 
 <%@ include file="/views/common/menuBar.jsp" %>
 
-<form action="/detail.sh" method="get" id="detail-form" > <!-- enctype="multipart/form-data" -->
 
     <!-- 모달을 여는 버튼 -->
     <button type="button" id="openModalBtn" class="btn btn-primary">
         상품 상세 보기
     </button>
+		<form action="/detail.sh" method="get" id="detail-form" > <!-- enctype="multipart/form-data" -->
 
     <!-- 모달 -->
     <div id="myModal" class="modal">

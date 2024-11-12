@@ -12,6 +12,7 @@ import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.vo.Product;
 import com.kh.shop.model.vo.ShopMediaFile;
+import com.kh.user.model.vo.MyItems;
 
 public class ShopDao {
 
@@ -111,6 +112,7 @@ public class ShopDao {
 	public int insertProduct(Connection con, Product p) {
 
 		int result = 0;
+		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertProduct");
 
 		try {
@@ -127,16 +129,20 @@ public class ShopDao {
 			result = pstmt.executeUpdate();
 			
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			JDBCTemplate.close(pstmt);
-		}
+			if (result > 0) {
+				JDBCTemplate.commit(con);  // 커밋
+            } else {
+            	JDBCTemplate.rollback(con);  // 롤백
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTemplate.close(pstmt);
+            JDBCTemplate.close(con);
+        }
 
-		
-		return result;
-	}
+        return result;
+    }
 	
 	
 
@@ -168,29 +174,38 @@ public class ShopDao {
 		return proNo;
 	}
 
-	public int insertShopMediaFile(Connection con, ShopMediaFile smf) {
+	public int insertShopMediaFiles(Connection con, ArrayList<ShopMediaFile> smfList) {
 
 		int result = 0;
-		String sql = pro.getProperty("insertShopMediaFile");
+		String sql = pro.getProperty("insertShopMediaFiles");
+		PreparedStatement pstmt = null;
 		
 		try {
+			for(ShopMediaFile smf : smfList) {
 			pstmt = con.prepareStatement(sql);
 			
 			pstmt.setInt(1, smf.getRefBno());
-			pstmt.setString(2, smf.getOriginName());
-			pstmt.setString(3, smf.getChangeName());
-			pstmt.setString(4, smf.getFilePath());
+			pstmt.setString(2, smf.getChangeName());
+			pstmt.setString(3, smf.getFilePath());
 
-			result = pstmt.executeUpdate();				
+			result = pstmt.executeUpdate();		
+			}
 			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			JDBCTemplate.close(pstmt);
-		}				
-		
-		return result;
+			if (result == smfList.size()) {
+				JDBCTemplate.commit(con);  // 모두 성공하면 커밋
+            } else {
+            	JDBCTemplate.rollback(con);  // 실패하면 롤백
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+        	JDBCTemplate.close(pstmt);
+        	JDBCTemplate.close(con);
+        }
+
+        return result;
+        
+        
 	}
 
 	public Product selectProduct(Connection con, int pno) {
@@ -331,6 +346,39 @@ public class ShopDao {
 		
 		
 }
+
+	public boolean insertMyItems(Connection con, MyItems order) {
+		
+		int result = 0;		
+        PreparedStatement pstmt = null;        
+        
+        String sql = pro.getProperty("insertMyItems");       
+
+        try {
+            
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, order.getProNo());
+            pstmt.setString(2, order.getProName());
+            pstmt.setInt(3, order.getBuyerNo());
+            pstmt.setInt(4, order.getProCount());         
+
+            result = pstmt.executeUpdate();
+            return result>0; // 성공 시 true 반환
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // 실패 시 false 반환
+        } finally {
+            JDBCTemplate.close(pstmt); // 자원 해제
+            
+        }
+
+		
+		
+
+	}
+
+	
 }
 
 

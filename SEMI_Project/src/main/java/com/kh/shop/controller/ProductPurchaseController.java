@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kh.shop.model.service.ShopService;
 import com.kh.shop.model.vo.Product;
+import com.kh.user.model.vo.MyItems;
 
 /**
  * Servlet implementation class ProductPurchaseController
@@ -38,20 +39,31 @@ public class ProductPurchaseController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		 	int boardNo = Integer.parseInt(request.getParameter("boardNo")) ;
-		 	int quantity = Integer.parseInt(request.getParameter("quantity")); 
-		 	       
+		 	int proNo = Integer.parseInt(request.getParameter("proNo"));
+		 	String proName = request.getParameter("proName");
+		 	int buyerNo = Integer.parseInt(request.getParameter("buyerNo"));
+		 	int proCount = Integer.parseInt(request.getParameter("proCount"));		 	
+		 	
+//		 	private int proNo;
+//		    private String proName; // 보여줄때는 상품명을 보여줄 예정
+//			private int buyerNo;
+//			private int proCount; 
+	
 	        // Service를 사용하여 주문 처리
 	       
-	        Product order = new Product();
-	        order.setBoardNo(boardNo);
-	        order.setQuantity(quantity);
+	        MyItems order = new MyItems();
+	        order.setProNo(proNo);
+	        order.setProName(proName);
+	        order.setBuyerNo(buyerNo);
+	        order.setProCount(proCount);
 	        
-	        ShopService shopService = new ShopService();
-	        boolean isSuccess = shopService.purchaseProduct(order);
+	        
+	        
+	        ShopService service = new ShopService();
+	        boolean result = service.insertMyItems(order);
 
 	        // 결과에 따라 응답 처리
-	        if (isSuccess) {
+	        if (result) {
 	            request.setAttribute("message", "구매가 완료되었습니다!");
 	            request.setAttribute("order", order);
 	        } else {
