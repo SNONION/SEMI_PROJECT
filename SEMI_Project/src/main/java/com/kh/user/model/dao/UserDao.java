@@ -14,9 +14,11 @@ import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 import com.kh.user.model.vo.WorkoutList;
 
 public class UserDao {
@@ -542,7 +544,8 @@ public class UserDao {
 			
 			if(rset.next()) {
 				user = new UserInfo(rset.getInt("USER_NO"),
-									rset.getString("USER_ID"));
+									rset.getString("USER_ID"),
+									rset.getInt("POINT"));
 			}
 			
 		} catch (SQLException e) {
@@ -809,6 +812,82 @@ public class UserDao {
 			pstmt = con.prepareStatement(update);
 			
 			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public ArrayList<UserTier> selectUserTier(Connection con) {
+		
+		ArrayList<UserTier> tList = new ArrayList<>();
+		String select = pro.getProperty("selectUserTier");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				tList.add(new UserTier(rset.getInt("TIER_NO"),
+									   rset.getString("TIER_PATH"),
+									   rset.getString("TIER_ORIGINFILENAME"),
+									   rset.getString("GRADE_NAME")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return tList;
+	}
+
+	public ArrayList<Grade> selectGradeInfo(Connection con) {
+		
+		ArrayList<Grade> gList = new ArrayList<>();
+		String select = pro.getProperty("selectGradeInfo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				gList.add(new Grade(rset.getInt("GRADE_NO"),
+									rset.getString("GRADE_NAME"),
+									rset.getInt("MIN_POINT"),
+									rset.getInt("MAX_POINT")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return gList;
+	}
+
+	public int updateGradeName(Connection con, int userNo, int gradeNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateGradeName");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, gradeNo);
+			pstmt.setInt(2, userNo);
 			
 			result = pstmt.executeUpdate();
 			

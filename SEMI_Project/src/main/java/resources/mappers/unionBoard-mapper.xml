@@ -407,5 +407,16 @@
 		            ORDER BY B.BOARD_NO DESC) A)
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
+	
+	<entry key="selectTierImg">
+		SELECT  TIER_NO,
+		        TIER_PATH,
+		        TIER_ORIGINFILENAME,
+		        GRADE_NO
+		FROM    TB_TIERIMG
+		WHERE   GRADE_NO = (SELECT  GRADE_NO
+		                    FROM    TB_USERINFO
+		                    WHERE   NICKNAME = ?)
+	</entry>
 
 </properties>

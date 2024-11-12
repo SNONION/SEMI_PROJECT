@@ -9,22 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.UnionBoard;
 import com.kh.user.model.vo.UserTier;
 
 /**
- * Servlet implementation class UnionBoardListController
+ * Servlet implementation class DetailBoardListController
  */
-@WebServlet("/unionBoardListView.un")
-public class UnionBoardListController extends HttpServlet {
+@WebServlet("/detailBoardList.un")
+public class DetailBoardListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UnionBoardListController() {
+    public DetailBoardListController() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -70,9 +71,9 @@ public class UnionBoardListController extends HttpServlet {
 			u.setTierName(tier.getTierOriginFileName());
 		}
 		
-		request.setAttribute("p", p);
-		request.setAttribute("bList", bList);
-		request.getRequestDispatcher("/views/unionBoard/unionBoardListView.jsp").forward(request, response);
+		response.setContentType("json/application;charset=UTF-8");
+		Gson gson = new Gson();
+		gson.toJson(bList, response.getWriter());
 	}
 
 	/**

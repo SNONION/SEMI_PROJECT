@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 /**
  * Servlet implementation class SimpleBoardController
@@ -94,6 +95,12 @@ public class SimpleBoardController extends HttpServlet {
 			
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> aList = new UnionBoardService().announceBoardList(p);
+					
+			for(UnionBoard ub : aList) {
+				UserTier tier = new UnionBoardService().selectTierImg(ub.getBoardWriter());
+				ub.setTierPath(tier.getTierPath());
+				ub.setTierName(tier.getTierOriginFileName());
+			}
 			
 			response.setContentType("json/application;charset=UTF-8");
 			Gson gson = new Gson();

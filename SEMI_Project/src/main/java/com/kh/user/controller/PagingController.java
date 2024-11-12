@@ -18,6 +18,7 @@ import com.kh.unionBoard.model.vo.Reply;
 import com.kh.unionBoard.model.vo.UnionBoard;
 import com.kh.user.model.service.UserService;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 import com.kh.user.model.vo.WorkoutList;
 
 /**
@@ -76,6 +77,14 @@ public class PagingController extends HttpServlet {
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> bList = new UnionBoardService().announceBoardList(p);
 			
+			for(UnionBoard u : bList) {
+				
+				// 작성자 이미지 가져오는 과정
+				UserTier tier = new UnionBoardService().selectTierImg(u.getBoardWriter());
+				u.setTierPath(tier.getTierPath());
+				u.setTierName(tier.getTierOriginFileName());
+			}
+			
 			gson.toJson(bList, response.getWriter());
 		}
 		
@@ -102,6 +111,15 @@ public class PagingController extends HttpServlet {
 			
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> pList = new UnionBoardService().selectPopularBoardList(p);
+			
+			for(UnionBoard u : pList) {
+				
+				// 작성자 이미지 가져오는 과정
+				UserTier tier = uService.selectTierImg(u.getBoardWriter());
+				
+				u.setTierPath(tier.getTierPath());
+				u.setTierName(tier.getTierOriginFileName());
+			}
 			
 			gson.toJson(pList, response.getWriter());
 		}
@@ -130,7 +148,7 @@ public class PagingController extends HttpServlet {
 
 			PageInfo p3 = new PageInfo(blistCount, currentPage, bpageLimit, blistLimit, bmaxPage, bstartPage, bendPage); // 게시판 페이지용
 			ArrayList<Reply> replyList = uService.selectReply(boardNo, p3);
-
+			
 			gson.toJson(replyList,response.getWriter());
 		}
 		
@@ -176,10 +194,15 @@ public class PagingController extends HttpServlet {
 			}
 			
 			for(UnionBoard u : bList) {
-				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
-				int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+				int recommend = uService.selectRecomCount(u.getBoardNo());
+				int replyCount = uService.selectReplyCount(u.getBoardNo());
 				u.setReplyCount(replyCount);
 				u.setRecommend(recommend);
+				
+				// 작성자 이미지 가져오는 과정
+				UserTier tier = uService.selectTierImg(u.getBoardWriter());
+				u.setTierPath(tier.getTierPath());
+				u.setTierName(tier.getTierOriginFileName());
 			}
 			
 			gson.toJson(bList, response.getWriter());
@@ -263,6 +286,12 @@ public class PagingController extends HttpServlet {
 				int replyCount = uService.selectReplyCount(u.getBoardNo());
 				u.setReplyCount(replyCount);
 				u.setRecommend(recommend);
+					
+				// 작성자 이미지 가져오는 과정
+				UserTier tier = uService.selectTierImg(u.getBoardWriter());
+				u.setTierPath(tier.getTierPath());
+				u.setTierName(tier.getTierOriginFileName());
+			
 			}
 			
 			gson.toJson(bList,response.getWriter());
@@ -303,6 +332,11 @@ public class PagingController extends HttpServlet {
 				int replyCount = uService.selectReplyCount(l.getBoardNo());
 				l.setReplyCount(replyCount);
 				l.setRecommend(recommend);
+				
+				// 작성자 이미지 가져오는 과정
+				UserTier tier = uService.selectTierImg(l.getBoardWriter());
+				l.setTierPath(tier.getTierPath());
+				l.setTierName(tier.getTierOriginFileName());
 			}
 			
 			gson.toJson(list,response.getWriter());

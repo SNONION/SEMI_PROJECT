@@ -9,7 +9,7 @@
 <style>
 #cate-area tr:hover{
 	cursor: pointer;
-	background-color: gray;
+	background-color: orange;
 }
 </style>
 
@@ -130,7 +130,11 @@
 										</c:if>
 										${l.boardTitle}[${l.replyCount}]
 									</td>
-									<td>${l.boardWriter}</td>
+									<td>
+										${l.boardWriter}
+										<img src="/semi${l.tierPath}${l.tierName}"
+												width='20px' height='20px' style='margin-left: 5px; margin-bottom: 5px;'>
+									</td>
 									<td>${l.createDate}</td>
 									<td>${l.count}</td>
 									<td>${l.recommend}</td>
@@ -142,13 +146,13 @@
 			</table>
 		</div>
 		<div class="pageBtn-area" align="center">
-			<c:if test="${p.currentPage > 1}">
+			<c:if test="${p.currentPage > 5}">
 				<a href="/semi/categoeyListView.un?currentPage=${p.currentPage - 1}" class="btn btn-outline-secondary"><</a>
 			</c:if>
 			<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 				<button type="button" class="btn btn-outline-secondary">${i}</button>
 			</c:forEach>
-			<c:if test="${p.currentPage != p.endPage}">
+			<c:if test="${p.currentPage != p.maxPage}">
 				<a href="/semi/categoeyListView.un?currentPage=${p.currentPage + 1}" class="btn btn-outline-secondary">></a>
 			</c:if>
 		</div>
@@ -191,7 +195,12 @@
 						tr.append($("<td>").text(cate.categoryName));
 						td.append(cate.boardTitle+ " [" + cate.replyCount + "]");
 						tr.append(td);
-						tr.append($("<td>").text(cate.boardWriter));
+						
+						var writerTd = $("<td>").text(cate.boardWriter);
+						var imgTag = $("<img width='20px' height='20px' style='margin-left: 5px; margin-bottom: 5px;'>").attr("src","/semi" + cate.tierPath + cate.tierName);
+						writerTd.append(imgTag);
+						tr.append(writerTd);
+						
 						tr.append($("<td>").text(cate.createDate));
 						tr.append($("<td>").text(cate.count));
 						tr.append($("<td>").text(cate.recommend));
@@ -203,6 +212,47 @@
 					alert("요청 오류");
 				}
 			});
+		});
+		
+		$(function() {
+		    // 미리보기 박스 생성
+		    const previewBox = $('<div class="preview-box"></div>').appendTo('body');
+
+		    // 마우스를 이미지가 있는 행에 올렸을 때 이벤트 처리
+		    $("#cate-area").on("mouseenter", "tr", function() {
+		        var boardNo = $(this).children().first().text();
+
+		        // 이전 이미지 초기화
+		        previewBox.empty();
+
+		        // Ajax 요청으로 이미지 가져오기
+		        $.ajax({
+		            url : "/semi/imgPreview.un",
+		            data : {
+		                boardNo : boardNo
+		            },
+		            success : function(file) {
+		                // 파일이 있을 경우 미리보기 이미지 생성
+		                if (file != null) {
+		                    var img = $("<img>").attr("src", "/semi" + file.filePath + file.changeFileName);
+		                    previewBox.append(img).show();
+		                }
+		            },
+		            error : function() {
+		                console.log("호출 오류");
+		            }
+		        });
+		    }).on("mouseleave", "tr", function() {
+		        // 마우스가 tr에서 벗어날 때 미리보기 창 숨기기
+		        previewBox.empty();
+		        previewBox.hide();
+		    }).on("mousemove", "tr", function(event) {
+		        // 마우스 이동에 따라 미리보기 창 위치 조정
+		        previewBox.css({
+		            top: event.pageY + 10 + "px", // 마우스 위치 기준으로 아래 10px
+		            left: event.pageX + 10 + "px" // 마우스 위치 기준으로 오른쪽 10px
+		        });
+		    });
 		});
 	</script>
 

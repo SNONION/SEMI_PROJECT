@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 /**
  * Servlet implementation class CategoryListController
@@ -93,6 +94,11 @@ public class CategoryListController extends HttpServlet {
 			int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
 			u.setReplyCount(replyCount);
 			u.setRecommend(recommend);
+			
+			// 작성자 이미지 가져오는 과정
+			UserTier tier = new UnionBoardService().selectTierImg(u.getBoardWriter());
+			u.setTierPath(tier.getTierPath());
+			u.setTierName(tier.getTierOriginFileName());
 		}
 		
 		request.setAttribute("p", p);

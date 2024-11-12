@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 /**
  * Servlet implementation class AnnouncementController
@@ -56,6 +57,12 @@ public class AnnouncementController extends HttpServlet {
 		PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 		
 		ArrayList<UnionBoard> bList = new UnionBoardService().announceBoardList(p);
+		
+		for(UnionBoard u : bList) {
+			UserTier tier = new UnionBoardService().selectTierImg(u.getBoardWriter());
+			u.setTierPath(tier.getTierPath());
+			u.setTierName(tier.getTierOriginFileName());
+		}
 		
 		request.setAttribute("p", p);
 		request.setAttribute("bList", bList);

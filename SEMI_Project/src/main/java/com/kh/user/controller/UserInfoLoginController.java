@@ -2,6 +2,7 @@ package com.kh.user.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.kh.user.model.service.UserService;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.UserInfo;
 
@@ -86,6 +88,14 @@ public class UserInfoLoginController extends HttpServlet {
 			}
 			else if(date > 1){
 				service.updateOnlyLoginCount(loginUser.getUserNo());
+			}
+			
+			ArrayList<Grade> gList = service.selectGradeInfo();
+			
+			for(Grade g : gList) {
+				if(loginUser.getPoint() >= g.getMinPoint() && loginUser.getPoint() < g.getMaxPoint()) {
+					service.updateGradeName(loginUser.getUserNo(), g.getGradeNo());
+				}
 			}
 			
 			session.setAttribute("loginUser", loginUser);
