@@ -49,7 +49,6 @@ public class UserInfoLoginController extends HttpServlet {
 		String userPwd = request.getParameter("userPwd");
 		
 		UserInfo loginUser = service.loginUser(userId,userPwd);
-		
 		HttpSession session = request.getSession();
 		
 		if(loginUser != null) {
@@ -65,41 +64,41 @@ public class UserInfoLoginController extends HttpServlet {
 			
 			// 위에서 변경된 형식을 int형으로 변경하여 계산
 			int date = Integer.parseInt(javaDate) - Integer.parseInt(sqlDate);
+			int loginEvent = lc.getLoginEvent();
+			int getPoint = 0;
+			String alertMsg = "";
 			
 			if(date == 1) {
 				// 출력할 필요가 없으니 따로 변수에 담을 필요가 없다.
 				service.updateAllLoginCount(loginUser.getUserNo());
+				
+				// 1일 차이만 났을 경우 포인트 지급
+				if(loginEvent == 7 || loginEvent == 14 || loginEvent == 21) {
+					getPoint = 15;
+					service.pointUpEvent(loginUser.getUserNo(), getPoint); 
+				}
+				
+				if(loginEvent == 30) {
+					getPoint = 30;
+					service.pointUpEvent(loginUser.getUserNo(), getPoint);
+					service.loginEventRollback(loginUser.getUserNo());
+				}
 			}
 			else if(date > 1){
 				service.updateOnlyLoginCount(loginUser.getUserNo());
 			}
 			
-			int loginEvent = lc.getLoginEvent();
-			int point = 0;
-			String alertMsg = "";
-			
-			if(loginEvent == 7 || loginEvent == 14 || loginEvent == 21) {
-				point = 15;
-				service.pointUpEvent(loginUser.getUserNo(), point); 
-			}
-			
-			if(loginEvent == 30) {
-				point = 30;
-				service.pointUpEvent(loginUser.getUserNo(), point);
-				service.loginEventRollback(loginUser.getUserNo());
-			}
-			
 			session.setAttribute("loginUser", loginUser);
 			
-			if(point == 0) {
+			if(getPoint == 0) {
 				session.setAttribute("alertMsg", "환영합니다.");
 			}
-			else if(point > 0) {
-				alertMsg = loginEvent + "일 연속 출석으로 [" + point + "point]가 지급되었습니다." ;
+			else if(getPoint > 0) {
+				alertMsg = loginEvent + "일 연속 출석으로 [" + getPoint + "point]가 지급되었습니다." ;
 				session.setAttribute("alertMsg", alertMsg);
 			}
 			
-			request.getRequestDispatcher("/unionBoardListView.un?currentPage=1").forward(request, response);
+			request.getRequestDispatcher("/views/common/mainPage.jsp").forward(request, response);
 			
 		}else {
 			session.setAttribute("alertMsg", "일치하는 회원 정보가 없습니다.");

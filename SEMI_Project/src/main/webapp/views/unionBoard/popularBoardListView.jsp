@@ -28,6 +28,9 @@
 				<li class="nav-item">
 					<button type="button" onclick="goToUnion();" class="btn btn-dark">통합</button>
 				</li>
+				<li>
+					<button type="button" onclick="goToAnnounce();" class="btn btn-dark">공지</button>
+				</li>
 				<li class="nav-item">
 					<button type="button" onclick="goTopopul();" class="btn btn-dark">인기</button>
 				</li>
@@ -64,6 +67,15 @@
 			function writeBoard(){
 				var userNo = $("input[name=userNo]").val();
 				location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
+			};
+			
+			function goToAnnounce(){
+				location.href="/semi/categoeyListView.un?currentPage=1&type=announce"
+			};
+			
+			function goTopopul(){
+				
+				location.href="/semi/popularBoardListView.un?currentPage=1&type=popular"
 			};
 		
 			function goToUnion(){
@@ -133,9 +145,15 @@
 			</table>
 		</div>
 		<div class="pageBtn-area" align="center">
+			<c:if test="${p.currentPage > 1}">
+				<a href="/semi/popularBoardListView.un?currentPage=${p.currentPage - 1}" class="btn btn-outline-secondary"><</a>
+			</c:if>
 			<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 				<button type="button" class="btn btn-outline-secondary">${i}</button>
 			</c:forEach>
+			<c:if test="${p.currentPage != p.endPage}">
+				<a href="/semi/popularBoardListView.un?currentPage=${p.currentPage + 1}" class="btn btn-outline-secondary">></a>
+			</c:if>
 		</div>
 	</div>
 

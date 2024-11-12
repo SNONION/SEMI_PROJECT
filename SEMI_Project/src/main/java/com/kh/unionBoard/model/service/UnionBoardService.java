@@ -462,4 +462,37 @@ public class UnionBoardService {
 		return count;
 	}
 
+	public ArrayList<UnionBoard> simpleBoardList(PageInfo p) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<UnionBoard> bList = dao.simpleBoardList(con, p);
+		
+		JDBCTemplate.close(con);
+		
+		return bList;
+	}
+
+	public int selectAnnounceCount() {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int count = dao.selectAnnounceCount(con);
+		
+		JDBCTemplate.close(con);
+		
+		return count;
+	}
+
+	public ArrayList<UnionBoard> announceBoardList(PageInfo p) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<UnionBoard> bList = dao.announceBoardList(con, p);
+		
+		JDBCTemplate.close(con);
+		
+		return bList;
+	}
+
 }

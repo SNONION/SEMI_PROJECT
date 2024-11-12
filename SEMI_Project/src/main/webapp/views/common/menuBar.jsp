@@ -126,10 +126,17 @@ i{
 					<button type="button" class="btn btn-outline-warning dropdown-toggle"
 						data-toggle="dropdown">MENU</button>
 					<div class="dropdown-menu" style="background: black; border: 1px solid orange;">
-						<a class="dropdown-item" onclick="shopPage();" id="home">SHOP</a>
-						<a class="dropdown-item" onclick="myPage();" id="mypage">MYPAGE</a>
-						<a class="dropdown-item" onclick="unionBoardPage();" id="board">BOARD</a>
-						<a class="dropdown-item" href="/semi/LogoutUserInfo.us">LOGOUT</a>
+						<c:choose>
+							<c:when test="${empty loginUser}">
+								<a class="dropdown-item" href="/semi/views/common/loginPage.jsp">LOGIN PAGE</a>
+							</c:when>
+							<c:otherwise>
+								<a class="dropdown-item" onclick="shopPage();" id="home">SHOP</a>
+								<a class="dropdown-item" onclick="myPage();" id="mypage">MYPAGE</a>
+								<a class="dropdown-item" onclick="unionBoardPage();" id="board">BOARD</a>
+								<a class="dropdown-item" href="/semi/LogoutUserInfo.us">LOGOUT</a>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
@@ -150,7 +157,7 @@ i{
 		}
 		
 		function backToMain(){
-			location.href="/semi/unionBoardListView.un?currentPage=1";
+			location.href="/semi/views/common/mainPage.jsp";
 		}
 		
 		function unionBoardPage(){

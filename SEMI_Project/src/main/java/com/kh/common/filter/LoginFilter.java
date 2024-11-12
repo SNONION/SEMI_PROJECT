@@ -19,7 +19,7 @@ import com.kh.user.model.vo.UserInfo;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-@WebFilter({"*.un","*.sh"})
+@WebFilter({"/unionBoardListView.un","/boardDetailView.un","/deleteBoard.un","/popularBoardListView.un","/categoeyListView.un","*.sh"})
 public class LoginFilter extends HttpFilter implements Filter {
        
     /**
@@ -53,7 +53,7 @@ public class LoginFilter extends HttpFilter implements Filter {
 		}
 		else {
 			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스 입니다.");
-			servletResponse.sendRedirect(servletRequest.getContextPath());
+			servletRequest.getRequestDispatcher("/views/common/mainPage.jsp").forward(servletRequest, servletResponse);
 		}
 	}
 

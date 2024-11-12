@@ -301,7 +301,7 @@
 		                      GROUP BY REF_BOARD_NO
 		            ) RE ON B.BOARD_NO = RE.REF_BOARD_NO
 		            WHERE B.STATUS = 'Y'
-		            ORDER BY B.CREATE_DATE DESC) A)
+		            ORDER BY RECOMMEND_COUNT DESC) A)
 		WHERE RNUM BETWEEN ? AND ?
 		AND RECOMMEND_COUNT >= 2
 	</entry>
@@ -359,6 +359,53 @@
 		      WHERE B.STATUS = 'Y'
 		      AND B.BOARD_TITLE LIKE ?
 		)
+	</entry>
+	
+	<entry key="simpleBoardList">
+		SELECT  *
+		FROM    (SELECT  ROWNUM RNUM, A.*
+		         FROM    (SELECT  BOARD_NO,
+		                          BOARD_TITLE,
+		                          COUNT
+		                  FROM    TB_UNIONBOARD
+		                  WHERE   STATUS = 'Y'
+		                  ORDER BY BOARD_NO DESC) A)
+		WHERE   RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectAnnounceCount">
+		SELECT  COUNT(*) COUNT
+		FROM    TB_UNIONBOARD
+		WHERE   CATEGORY_NO = 10
+		AND		STATUS = 'Y'
+	</entry>
+
+	<entry key="announceBoardList">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		      FROM (SELECT B.BOARD_NO, 
+		                   CATEGORY_NAME, 
+		                   B.BOARD_TITLE,  
+		                   NICKNAME, 
+		                   B.COUNT,         
+		                   TO_CHAR(B.CREATE_DATE, 'yyyy-MM-dd') CREATE_DATE,
+		                   COALESCE(R.RECOMMEND_COUNT, 0) RECOMMEND_COUNT,
+		                   COALESCE(RE.REPLY_COUNT, 0) REPLY_COUNT
+		            FROM TB_UNIONBOARD B
+		            JOIN TB_USERINFO U ON B.BOARD_WRITER = U.USER_NO
+		            JOIN TB_CATEGORY C ON B.CATEGORY_NO = C.CATEGORY_NO
+		            LEFT JOIN (SELECT BOARD_NO, COUNT(*) RECOMMEND_COUNT
+		                      FROM TB_RECOMMEND
+		                      GROUP BY BOARD_NO
+		            ) R ON B.BOARD_NO = R.BOARD_NO
+		            LEFT JOIN (SELECT REF_BOARD_NO, COUNT(*) REPLY_COUNT
+		                      FROM TB_REPLY
+		                      GROUP BY REF_BOARD_NO
+		            ) RE ON B.BOARD_NO = RE.REF_BOARD_NO
+		            WHERE B.STATUS = 'Y'
+		            AND   B.CATEGORY_NO = 10
+		            ORDER BY B.BOARD_NO DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
 	</entry>
 
 </properties>
