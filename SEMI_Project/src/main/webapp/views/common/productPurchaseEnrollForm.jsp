@@ -22,14 +22,18 @@
 <div>
     <h3>상품명: ${product.proName}</h3>
     <p>가격: ${product.price}</p>
-    <img src="${contextPath}/uploadfiles/${product.boardNo}.jpg" alt="${product.proName}">
+    <img src="semi/uploadfiles/${product.boardNo}.jpg" alt="${product.proName}">
 </div>
 
-<form action="${contextPath}/update.sh" method="post">
+<form action="/update.sh" method="post">
     <input type="hidden" name="boardNo" value="${product.boardNo}">
     <label for="quantity">수량:</label>
     <input type="number" name="quantity" id="quantity" min="1" required>
-    <button type="submit">구매하기</button>
+    <c:if test="${not empty loginUser}">
+	    <button onclick="location.href='purchase.sh?boardNo=${p.boardNo}'">상품 구매하기</button>
+		</c:if>
+    
+    
 </form>
 
 </body>

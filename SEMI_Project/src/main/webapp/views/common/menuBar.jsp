@@ -123,7 +123,6 @@ i{
 }
 </style>
 
-
 </head>
 <body>
 
@@ -168,7 +167,7 @@ i{
 			alert(msg);
 		<%session.removeAttribute("alertMsg");%>
 		}
-		
+
 		function backToMain(){
 			location.href="/semi/views/common/mainPage.jsp";
 		}
@@ -191,7 +190,11 @@ i{
 			$("<form>", {
 				method : "post",
 				action : "/semi/mypage.us"
-			}).appendTo($("body")).submit();
+			}).append($("<input>", {
+				type : "hidden",
+				name : "userId",
+				value : "${loginUser.userId}"
+			})).appendTo($("body")).submit();
 
 		};
 	</script>

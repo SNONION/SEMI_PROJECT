@@ -53,6 +53,7 @@ public class MyPageController extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserService service = new UserService();
 		
+		// 로그인 기능 추가 후 session.getParameter로 받아오기
 		UserInfo loginUser = (UserInfo)session.getAttribute("loginUser");
 		
 		if(loginUser != null) {

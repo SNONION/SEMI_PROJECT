@@ -47,6 +47,15 @@
 	
 	
 	
+	<entry key="selectShopMediaFile">
+		
+	SELECT *
+	FROM TB_SHOPMEDIAFILE
+	WHERE FILE_NO = ? 
+	
+	</entry>
+
+	
 	<entry key="selectProductList">
 		
 	SELECT * 
@@ -72,6 +81,37 @@
 				VALUES(?,?)
 		
 	
+
+	</entry>	
+	
+
+
+	<entry key="totalCount">
+		
+		SELECT COUNT(*)
+		FROM TB_PRODUCT
+		
+	
+
 	</entry>
+	
+	
+	<entry key="insertMyItems">
+		
+	INSERT INTO MY_ITEMS (PRO_NO, PRO_NAME, BUYER_NO, PRO_COUNT)
+	VALUES (?, ?, ?, ?)
+
+	</entry>	
+	
+	
+	<entry key="insertShopMediaFiles">
+		
+	INSERT INTO TB_SHOPMEDIAFILE (FILE_NO,FILE_NAME,FILE_PATH)
+	VALUES (?,?,?)
+
+	</entry>
+	
+	
+
 
 </properties>
