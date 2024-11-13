@@ -113,15 +113,13 @@
 	
 	
 	<div class="outer">
-	 <br>
-	 <h2 align="center">상품 게시판</h2>
 	<br> <br>
 	
 	<%--글작성 버튼은 로그인한 회원일 경우 보일 수 있도록 조건처리 --%>
 	
 	<c:if test="${not empty loginUser && loginUser.userId == 'admin01'}">
 		<div align="center">
-			<a href="#" class="btn btn-info" id="openModalBtn">상품 게시</a>		<!-- insert/update구분 -->
+			<a href="#" class="btn btn-outline-warning" id="openModalBtn">상품 게시</a>		<!-- insert/update구분 -->
 		</div>	
 	</c:if>
 
@@ -405,6 +403,6 @@
 		</div>
 </div>
 	
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>
