@@ -1,11 +1,16 @@
 package com.kh.user.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.kh.user.model.service.UserService;
+import com.kh.user.model.vo.UserInfo;
 
 /**
  * Servlet implementation class UserInfoInsertController
@@ -34,28 +39,59 @@ public class UserInfoInsertController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		HttpSession session = request.getSession();
 		
-		// 데이터를 받아옴 -> request.getParameter();
+		String inputId = request.getParameter("inputId");
+		String inputPwd = request.getParameter("inputPwd");
+		String userName = request.getParameter("userName");
+		String nickname = request.getParameter("nickname");
+		String gender = request.getParameter("gender");
+		String phoneFront = request.getParameter("phoneFront");
+		String phoneMiddle = request.getParameter("phoneMiddle");
+		String phoneLast = request.getParameter("phoneLast");
+		String phone = phoneFront + "-" + phoneMiddle + "-" + phoneLast;
+		String email = request.getParameter("email");
+		String address = request.getParameter("address");
 		
-		// UserInfo 테이블에 위에서 받아온 회원정보를 삽입하는 기능 insertUserInfo();
-		
-//		var inputId = $("#inputId").val();
-//		var userPwd = $("#inputPwd").val();
-//		var doubleCheckPwd = $("#doubleCheckPwd").val();
-//		var userName = $("#userName").val();
-//		var nickname = $("#nickname").val();
-//		var gender = $("input[name=gender]:checked").val();
-//		var phoneFront = $("#phoneFront").val();
-//		var phoneMiddle = $("#phoneMiddle").val();
-//		var phoneLast = $("#phoneLast").val();
-//		var phone = phoneFront + "-" + phoneMiddle + "-" + phoneLast;
-//		var email = $("#email").val();
-//		var address = $("#address").val();
-		
-		// 회원정보 insert 성공시 if문 통과
-		// if문 안에서 TB_MYITEMS에 회원번호(USER_NO)를 들고가서 TB_LOGINCOUNT에 insert 구문 INSERT INTO TB_LOGINCOUNT(USER_NO) VALUES(?)
-		
-		// 둘다 성공시 메인페이지로 복귀
+		UserInfo user = new UserInfo();
+		user.setUserId(inputId);
+		user.setUserPwd(inputPwd);
+	    user.setUserName(userName);
+	    user.setNickname(nickname);
+	    user.setGender(gender);
+	    user.setPhone(phone);
+	    user.setEmail(email);
+	    user.setAddress(address);
+	    
+	    // 입력받은 회원 번호 테이블에 insert
+	    // 입력하면서 회원 포인트 1포인트 지급 (첫 회원가입 보너스)
+	    int UserInsert = new UserService().insertUserInfo(user);
+	    
+	    // 입력된 회원 정보에서 회원번호 추출
+	    int userNo = new UserService().selectUserNo(inputId);
+	    
+	    // 전달할 메시지를 담아두는 문자열
+	    String alertMsg = "";
+	    
+	    if(UserInsert > 0) {
+	    	// insert가 성공했을 경우 loginCount에 회원정보 생성
+	    	int insertLoginInfo = new UserService().insertLoginInfo(userNo);
+	    	
+	    	if(insertLoginInfo > 0) {
+	    		// 로그인 횟수 , 연속 로그인 전부 1씩 증가
+	    		new UserService().updateAllLoginCount(userNo);
+	    		
+	    		alertMsg = nickname + "님 가입을 축하드립니다. (1포인트 지급)";
+	    	}
+	    }
+	    else {
+	    	alertMsg = "회원가입이 정상적으로 처리되지 않았습니다.";
+	    }
+	    
+	    session.setAttribute("alertMsg", alertMsg);
+	    response.sendRedirect(request.getContextPath());
+
 	}
 
 }

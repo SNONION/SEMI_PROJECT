@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,8 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%@ include file="/views/common/menuBar.jsp" %>
-	
+	<%@ include file="/views/common/mainPage.jsp"%>
+
 	<!-- 
 		************ 작성 기준 ************
 		
@@ -31,7 +31,7 @@
 		5. 파일명 변경하는 클래스 재정의 해뒀습니다 (new MyFileRenamePolicy())
 		6. jsp파일 생성시 /views/상위파일명/파일명.jsp로 작성해주세요.
 	-->
-	
-	
+
+
 </body>
 </html>

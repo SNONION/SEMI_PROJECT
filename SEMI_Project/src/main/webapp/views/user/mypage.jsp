@@ -9,23 +9,19 @@
 <title>Insert title here</title>
 
 <style>
-h3 {
-	color: orange;
-}
-
 #rList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: orange;
 }
 
 #iList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: orange;
 }
 
 #wList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: orange;
 }
 </style>
 </head>
@@ -155,6 +151,9 @@ h3 {
 							<tr>
 								<th id="workoutContent"></th>
 							</tr>
+							<tr style="display:none;">
+								<th id="workoutNo"></th>
+							</tr>
 						</table>
 					</div>
 
@@ -175,20 +174,28 @@ h3 {
 					
 					$.ajax({
 						url : "/semi/deleteWorkout.us",
+						method : "post",
 						data : {
-							workoutTitle : $("#workoutTitle").text(),
-							workoutContent : $("#workoutContent").text(),
+							workoutNo : $("#workoutNo").text(),
 							userNo : "${user.userNo}"
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
-							window.location.reload();
+							workoutListGet();
 						},
 						error : function(){
 							alert("요청 오류");
 						}
 					});
 				}
+			};
+			
+			function workoutListGet(){
+				
+				$("<form>", {
+					method : "post",
+					action : "/semi/mypage.us"
+				}).appendTo($("body")).submit();
 			};
 		</script>
 
@@ -197,7 +204,11 @@ h3 {
 				<thead>
 					<tr align="center">
 						<th width="800px">TITLE</th>
-						<th width="200px">DATE</th>
+						<th width="120px">DATE</th>
+						<th width="120px">
+							<button type="button" onclick="workoutEnrollBtn();"
+								class="btn btn-outline-secondary btn-sm" style="margin-left:20px;">글작성</button>
+						</th>
 					</tr>
 				</thead>
 				<tbody id="wList-tbody">
@@ -205,15 +216,16 @@ h3 {
 						<c:when test="${empty wList}">
 							<tr align="center">
 								<td>기록된 운동을 찾을 수 없습니다.</td>
-								<td>-</td>
+								<td colspan="2">-</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="i" items="${wList}">
 								<tr align="center">
 									<td style="display: none;">${i.workoutContent}</td>
+									<td style="display: none;">${i.workoutNo}</td>
 									<td>${i.workoutTitle}</td>
-									<td>${i.workoutDate}</td>
+									<td colspan="2">${i.workoutDate}</td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -238,7 +250,7 @@ h3 {
 
 					<!-- 문의 머리글 -->
 					<div class="modal-header">
-						<h4 class="modal-title">문의사항</h4>
+						<h4 class="modal-title">관리자에게 문의하기</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -417,9 +429,53 @@ h3 {
 				</c:forEach>
 			</div>
 		</div>
+		
+		<!-- 티어이미지 설정창 -->
+		<div class="modal" id="tierModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form action="" >
+						<!-- 티어이미지 설정창 헤더 -->
+						<div class="modal-header">
+							<h4 class="modal-title">USER TIER IMG MANAGEMENT</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<!-- 티어 이미지 설정 바디 -->
+						<div class="modal-body" align="center">
+							<table border="1">
+								<thead>
+									<tr align="center">
+										<th width="120px">티어명</th>
+										<th width="200px">티어 이미지</th>
+									</tr>
+								</thead>
+								<tbody id="tierImg-area">
+									<c:forEach var="tierImg" items="${tList}">
+										<tr align="center">
+											<td>${tierImg.gradeName}</td>
+											<td>
+												<img src="/semi${tierImg.tierPath}${tierImg.tierOriginFileName}" width="100px" height="100px">
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+
+						<!-- 티어 이미지 설정 버튼 구역 -->
+						<div class="modal-footer">
+							
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 
 		<br> <br> <br>
 		<div class="updateUser-area" align="center">
+			<button type="button" data-toggle="modal" data-target="#tierModal"
+				class="btn btn-outline-warning">회원 티어 정보</button>
 			<button type="button" onclick="updateUserInfo();"
 				class="btn btn-outline-warning">회원정보 변경</button>
 			<button type="button"
@@ -460,6 +516,12 @@ h3 {
 								<tr>
 									<td><input type="password" name="checkPwd" id="checkPwd" required></td>
 								</tr>
+								<tr>
+									<td style="font-size:10px;"><br>4~15자까지 가능(첫글자 특수기호 가능)</td>
+								</tr>
+								<tr id="checkText-area">
+								
+								</tr>
 							</table>
 						</div>
 
@@ -478,12 +540,22 @@ h3 {
 				var newPwd = $("#newPwd").val();
 				var checkPwd = $("#checkPwd").val();
 				
+				var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
+				
 				if(userPwd != null && newPwd != null && checkPwd != null){
 					if(newPwd == checkPwd){
-						return true;
+						if(pwRegExp.test(newPwd)){
+							return true;
+						}
+						else{
+							$("#checkText-area").append($("<td style='font-size:10px;'>").text("비밀번호 형식에 맞게 입력해주세요."));
+							$("#newPwd").val("");
+							$("#checkPwd").val("");
+							return false;
+						}
 					}
 					else{
-						alert("비밀번호가 일치하지 않습니다.");
+						$("#checkText-area").append($("<td>").text("비밀번호가 일치하지 않습니다."));
 						$("#checkPwd").val("");
 						return false;
 					}
@@ -522,14 +594,12 @@ h3 {
 			
 			if(${not empty wList}){
 				var workoutContent = $(this).children().first().text();
-				var workoutTitle = $(this).children().first().next().text();
-				var workoutDate = $(this).children().first().next().next().text();
+				var workoutNo = $(this).children().first().next().text();
+				var workoutTitle = $(this).children().first().next().next().text();
+				var workoutDate = $(this).children().first().next().next().next().text();
 				
-				console.log(workoutContent);
-				console.log(workoutTitle);
-				console.log(workoutDate);
-				
-				$("#workoutContent").text(workoutContent);
+				$("#workoutNo").text(workoutNo);
+				$("#workoutContent").html(workoutContent);
 				$("#workoutTitle").text(workoutTitle);
 				$("#workoutDate").text(workoutDate);
 				
@@ -537,13 +607,16 @@ h3 {
 			}
 			else{
 				if(confirm("운동을 기록하시겠습니까?")){
-					// 게시판 -> 글 작성으로 이동
-					
-					alert("아직 구현되지 않은 기능입니다.\n <mypage.jsp 426번줄부터 시작>")
-					
+					var userNo = "${user.userNo}"
+					location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
 				}
 			}
 		});
+		
+		function workoutEnrollBtn(){
+			var userNo = "${user.userNo}"
+			location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
+		}
 	
 		$("#rList-tbody").on("click", "tr", function() {
 			var requestNo = $(this).children().first().text();

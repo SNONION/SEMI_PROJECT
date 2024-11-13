@@ -9,9 +9,11 @@ import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.user.model.dao.UserDao;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 import com.kh.user.model.vo.WorkoutList;
 
 public class UserService {
@@ -336,6 +338,131 @@ public class UserService {
 		JDBCTemplate.close(con);
 		
 		return result;
+	}
+
+	public int insertUserInfo(UserInfo user) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.insertUserInfo(con, user);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int selectUserNo(String inputId) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.selectUserNo(con, inputId);
+		
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int insertLoginInfo(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.insertLoginInfo(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public String selectNickname(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		String nickname = dao.selectNickname(con, userNo);
+		
+		JDBCTemplate.close(con);
+		
+		return nickname;
+	}
+
+	public void pointUpEvent(int userNo, int point) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.pointUpEvent(con, userNo, point);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+	}
+
+	public void loginEventRollback(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.loginEventRollback(con, userNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+	}
+
+	public ArrayList<UserTier> selectUserTier() {
+
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<UserTier> tList = dao.selectUserTier(con);
+		
+		JDBCTemplate.close(con);
+		
+		return tList;
+	}
+
+	public ArrayList<Grade> selectGradeInfo() {
+		
+		Connection con  = JDBCTemplate.getConnection();
+		
+		ArrayList<Grade> gList = dao.selectGradeInfo(con);
+		
+		JDBCTemplate.close(con);
+		
+		return gList;
+	}
+
+	public void updateGradeName(int userNo, int gradeNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateGradeName(con, userNo, gradeNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
 	}
 
 }

@@ -31,11 +31,12 @@ public class WorkoutDeleteController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String workoutTitle = request.getParameter("workoutTitle");
-		String workoutContent = request.getParameter("workoutContent");
+		int workoutNo = Integer.parseInt(request.getParameter("workoutNo"));
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		
-		WorkoutList workout = new WorkoutList(userNo, workoutTitle, workoutContent);
+		WorkoutList workout = new WorkoutList();
+		workout.setUserNo(userNo);
+		workout.setWorkoutNo(workoutNo);
 		
 		int result = new UserService().deleteWorkout(workout);
 		

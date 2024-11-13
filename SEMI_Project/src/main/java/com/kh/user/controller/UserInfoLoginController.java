@@ -2,6 +2,7 @@ package com.kh.user.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.kh.user.model.service.UserService;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.UserInfo;
 
@@ -43,16 +45,17 @@ public class UserInfoLoginController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		UserService service = new UserService();
+		
 		String userId = request.getParameter("userId");
 		String userPwd = request.getParameter("userPwd");
 		
-		UserInfo loginUser = new UserService().loginUser(userId,userPwd);
-		
+		UserInfo loginUser = service.loginUser(userId,userPwd);
 		HttpSession session = request.getSession();
 		
 		if(loginUser != null) {
-			LoginCount lc = new UserService().LoginCountInfo(loginUser.getUserNo());
-			
+			LoginCount lc = service.LoginCountInfo(loginUser.getUserNo());
+				
 			// 편의를 위해 날짜 형식변경
 			String sqlDate = new SimpleDateFormat("yyyyMMdd").format(lc.getLoginDate()); 
 			String javaDate = new SimpleDateFormat("yyyyMMdd").format(new Date()); 
@@ -63,23 +66,55 @@ public class UserInfoLoginController extends HttpServlet {
 			
 			// 위에서 변경된 형식을 int형으로 변경하여 계산
 			int date = Integer.parseInt(javaDate) - Integer.parseInt(sqlDate);
+			int loginEvent = lc.getLoginEvent();
+			int getPoint = 0;
+			String alertMsg = "";
 			
 			if(date == 1) {
 				// 출력할 필요가 없으니 따로 변수에 담을 필요가 없다.
-				new UserService().updateAllLoginCount(loginUser.getUserNo());
+				service.updateAllLoginCount(loginUser.getUserNo());
+				
+				// 1일 차이만 났을 경우 포인트 지급
+				if(loginEvent == 7 || loginEvent == 14 || loginEvent == 21) {
+					getPoint = 15;
+					service.pointUpEvent(loginUser.getUserNo(), getPoint); 
+				}
+				
+				if(loginEvent == 30) {
+					getPoint = 30;
+					service.pointUpEvent(loginUser.getUserNo(), getPoint);
+					service.loginEventRollback(loginUser.getUserNo());
+				}
 			}
 			else if(date > 1){
-				new UserService().updateOnlyLoginCount(loginUser.getUserNo());
+				service.updateOnlyLoginCount(loginUser.getUserNo());
+			}
+			
+			ArrayList<Grade> gList = service.selectGradeInfo();
+			
+			for(Grade g : gList) {
+				if(loginUser.getPoint() >= g.getMinPoint() && loginUser.getPoint() < g.getMaxPoint()) {
+					service.updateGradeName(loginUser.getUserNo(), g.getGradeNo());
+				}
 			}
 			
 			session.setAttribute("loginUser", loginUser);
-			session.setAttribute("alertMsg", "환영합니다.");
+			
+			if(getPoint == 0) {
+				session.setAttribute("alertMsg", "환영합니다.");
+			}
+			else if(getPoint > 0) {
+				alertMsg = loginEvent + "일 연속 출석으로 [" + getPoint + "point]가 지급되었습니다." ;
+				session.setAttribute("alertMsg", alertMsg);
+			}
+			
+			request.getRequestDispatcher("/views/common/mainPage.jsp").forward(request, response);
 			
 		}else {
 			session.setAttribute("alertMsg", "일치하는 회원 정보가 없습니다.");
+			response.sendRedirect(request.getContextPath());
 		}
 
-		response.sendRedirect(request.getContextPath());
 	}
 
 }

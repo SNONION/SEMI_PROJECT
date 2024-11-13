@@ -1,22 +1,50 @@
 package com.kh.unionBoard.model.vo;
 
-import java.sql.Date;
-
 public class Reply {
     
-    private int userNo;
+	private int userNo;
+	private int replyNo;
+    private String nickname; // 회원번호로 회원의 닉네임을 가져옴
 	private int refBno;
 	private String replyContent;
-	private Date replyDate;
+	private String replyDate;
 	private String status;
 	
 	public Reply() {
 		super();
 	}
+	
+	public Reply(String nickname, String replyContent, String replyDate) {
+		super();
+		this.nickname = nickname;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
+	
+	public Reply(int replyNo, String nickname, String replyContent, String replyDate) {
+		super();
+		this.replyNo = replyNo;
+		this.nickname = nickname;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
 
-	public Reply(int userNo, int refBno, String replyContent, Date replyDate, String status) {
+	public Reply(int userNo, String nickname, int refBno, String replyContent, String replyDate, String status) {
 		super();
 		this.userNo = userNo;
+		this.nickname = nickname;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+		this.status = status;
+	}
+	
+	public Reply(int userNo, int replyNo, String nickname, int refBno, String replyContent, String replyDate,
+			String status) {
+		super();
+		this.userNo = userNo;
+		this.replyNo = replyNo;
+		this.nickname = nickname;
 		this.refBno = refBno;
 		this.replyContent = replyContent;
 		this.replyDate = replyDate;
@@ -29,6 +57,22 @@ public class Reply {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+	
+	public int getReplyNo() {
+		return replyNo;
+	}
+
+	public void setReplyNo(int replyNo) {
+		this.replyNo = replyNo;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public int getRefBno() {
@@ -47,11 +91,11 @@ public class Reply {
 		this.replyContent = replyContent;
 	}
 
-	public Date getReplyDate() {
+	public String getReplyDate() {
 		return replyDate;
 	}
 
-	public void setReplyDate(Date replyDate) {
+	public void setReplyDate(String replyDate) {
 		this.replyDate = replyDate;
 	}
 
@@ -65,8 +109,8 @@ public class Reply {
 
 	@Override
 	public String toString() {
-		return "TB_Reply [userNo=" + userNo + ", refBno=" + refBno + ", replyContent=" + replyContent + ", replyDate="
-				+ replyDate + ", status=" + status + "]";
+		return "Reply [userNo=" + userNo + ", replyNo=" + replyNo + ", nickname=" + nickname + ", refBno=" + refBno
+				+ ", replyContent=" + replyContent + ", replyDate=" + replyDate + ", status=" + status + "]";
 	}
 	
 }
