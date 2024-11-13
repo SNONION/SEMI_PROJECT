@@ -171,7 +171,7 @@ a{
 								var tr = $("<tr align='center'>");
 								
 								tr.append($("<td>").text(b.boardNo));
-								tr.append($("<td>").text(b.boardTitle));
+								tr.append($("<td>").text(b.boardTitle + " [" + b.replyCount + "]"));
 								tr.append($("<td>").text(b.count));
 								
 								$("#board-area").append(tr);
@@ -194,7 +194,7 @@ a{
 							<tr align="center">
 								<th>No.</th>
 								<th width="400px">제목</th>
-								<th width="80px">조회수</th>
+								<th width="80px">추천수</th>
 							</tr>
 						</thead>
 						<tbody id="popular-area">
@@ -221,8 +221,8 @@ a{
 								var tr = $("<tr align='center'>");
 								
 								tr.append($("<td>").text(b.boardNo));
-								tr.append($("<td>").text(b.boardTitle));
-								tr.append($("<td>").text(b.count));
+								tr.append($("<td>").text(b.boardTitle + " [" + b.replyCount + "]"));
+								tr.append($("<td>").text(b.recommend));
 								
 								
 								$("#popular-area").append(tr);
