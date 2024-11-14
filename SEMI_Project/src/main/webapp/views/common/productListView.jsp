@@ -117,8 +117,6 @@
 	
 	
 	<div class="outer">
-	 <br>
-	 <h2 align="center">상품 게시판</h2>
 	<br> <br>
 	
 	<%--글작성 버튼은 로그인한 회원일 경우 보일 수 있도록 조건처리 --%>
@@ -364,6 +362,6 @@
 		</div>
 </div>
 	
-
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </body>
 </html>

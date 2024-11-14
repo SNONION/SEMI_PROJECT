@@ -64,7 +64,6 @@
     String bno = request.getParameter("bno"); 
     // bno를 사용하여 DB에서 상품 정보를 가져오는 로직 추가
     // 예시로, 아래와 같이 product 객체를 가져온 후 사용
-    Product product = new ShopService().selectProduct(bno); // 실제 DB에서 상품 정보 가져오는 메소드로 수정
 %>
 
 <!-- 상품 정보 표시 -->
@@ -120,5 +119,6 @@
     }
 </script>
 
+<br><br><br><br><br><br><br>
 </body>
 </html>
