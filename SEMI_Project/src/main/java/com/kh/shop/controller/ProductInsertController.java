@@ -66,13 +66,14 @@ public class ProductInsertController extends HttpServlet {
             
             
             
-            // 폼에서 받은 데이터 처리
+            // 폼에서 받은 데이터 처리            
+           
             int proNo = Integer.parseInt(multiRequest.getParameter("proNo"));
             int shopFileNo = Integer.parseInt(multiRequest.getParameter("shopFileNo"));
             String proName = multiRequest.getParameter("proName");
             String proMenual = multiRequest.getParameter("proMenual");
             int price = Integer.parseInt(multiRequest.getParameter("price"));
-            String status = multiRequest.getParameter("status");
+            
             
             // 상품 객체 생성
             Product p = new Product();
@@ -81,7 +82,7 @@ public class ProductInsertController extends HttpServlet {
             p.setProName(proName);
             p.setProMenual(proMenual);
             p.setPrice(price);
-            p.setStatus(status);
+
             
             // 파일 업로드 처리 (파일이 있을 경우만 처리)
             ShopMediaFile smf = null;

@@ -21,15 +21,21 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
+                        
+            display: flex;
+	        align-items: center;
+	        justify-content: center;
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* 기본 폭을 90%로 설정하여 작은 화면에서도 보기 좋게 조정 */
+        max-width: 600px; /* 최대 너비 제한 */
+        max-height: 90vh; /* 최대 높이를 설정하여 화면 아래가 잘리지 않도록 조정 */
+        overflow-y: auto; /* 내용이 넘칠 경우 스크롤바 표시 */
+    }
 
         /* 닫기 버튼 */
         .close {

@@ -11,7 +11,8 @@ import com.kh.user.model.vo.MyItems;
 
 public class ShopService {
 
-
+	private ShopDao shopDao = new ShopDao();
+	
 	public int listCount() {
 		
 		Connection con = JDBCTemplate.getConnection();
@@ -43,23 +44,50 @@ public class ShopService {
 	
 	}
 
-	public int insertProduct(Product p, ArrayList<ShopMediaFile> smfList) {
+	public int insertProduct(Product p, ShopMediaFile smf) {
 		
 		Connection con = JDBCTemplate.getConnection();
 		
 		//fileNo를 미리 뽑아놓고 해당 번호로 게시글과 첨부파일 넣어주기
-		int result = new ShopDao().insertProduct(con,p);
+		int proNo = new ShopDao().selectProNo(con);
+		p.setProNo(proNo);
+		int result1 = new ShopDao().insertProduct(con,p);
+		int result2 = 1;
+		int result3 = 1;
 		
-		if(result > 0) { 
-			//게시글 객체에 추출한 게시글 넣어주기
+		if(result1 > 0) { 
 			
-			 result = new ShopDao().insertShopMediaFiles(con,smfList);
+			if(smf != null) {
 				
+				// 파일 번호를 먼저 뽑아준다
+				int fileNo = new ShopDao().selectFileNo(con, p);
+				smf.setShopFileNo(fileNo);
+				// 파일을 삽입
+				result2 = new ShopDao().insertShopMedia(con, smf);
+
+				// 파일이 있었던 경우 제품테이블의 SHOP_FILE_NO에 파일 번호를 UPDATE해준다.
+				p.setShopFileNo(fileNo);
+				result3 = new ShopDao().updateProduct(con, p);
+			}
+			
+		}
+		else {
+			JDBCTemplate.rollback(con);
 		}
 		
+		int result = result1 * result2 * result3;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+	
 		return result;
 		
-		}			
+	}			
 		
 	
 
@@ -150,12 +178,7 @@ public class ShopService {
 	    return isSuccess; // 성공 여부 반환
 	}
 
-	public ShopMediaFile selectShopMediaFile(int bno) {
-
-
-		
-		return null;
-	}
+	
 
 	
 	
@@ -184,7 +207,6 @@ public class ShopService {
 	    // Product 객체를 생성하고 필요한 속성 설정
 	  
 	    // DAO 메소드를 호출하여 DB에 주문 정보를 저장합니다.
-		ShopDao shopDao = new ShopDao();
 	    boolean result = shopDao.insertMyItems(con,order);
 
 	    if (result) {
@@ -198,6 +220,49 @@ public class ShopService {
 	    
 	    return result; // 성공 여부 반환
 	    
+	}
+
+	public ShopMediaFile selectMediaInfo(Product p) {
+		
+		Connection con = JDBCTemplate.getConnection();
+
+		
+		ShopMediaFile smf = shopDao.selectMediaInfo(con, p);
+		
+		JDBCTemplate.close(con);
+		
+		return smf;
+	}
+
+	public int updateUserPoint(Product pro, int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		int userPoint = shopDao.selectUserPoint(con, userNo);
+		
+		if(userPoint > pro.getPrice()) {
+			
+			int mPoint = shopDao.updateUserPoint(con, pro, userNo);
+			
+			if(mPoint > 0) {
+				int insertPro = shopDao.insertMyItemsList(con, pro, userNo);
+				
+				if(insertPro > 0) {
+					result = 1;
+				}
+			}
+		}
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
 	}
 	
 	       
