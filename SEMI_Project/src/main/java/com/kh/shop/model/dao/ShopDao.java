@@ -561,6 +561,95 @@ public class ShopDao {
 		return result;
 	}
 
+	public int selectFileNoFromProduct(Connection con, int proNo) {
+		
+		int fileNo = 0;
+		String select = pro.getProperty("selectFileNoFromProduct");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, proNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				fileNo = rset.getInt("FILE_NO");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+		
+		return fileNo;
+	}
+
+	public int deleteProduct(Connection con, int proNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("deleteProduct");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, proNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            JDBCTemplate.close(pstmt);
+        }
+		
+		return result;
+	}
+
+	public int deleteMediaFile(Connection con, int fileNo) {
+		
+		int result = 0;
+		String delete = pro.getProperty("deleteMediaFile");
+		
+		try {
+			pstmt = con.prepareStatement(delete);
+			
+			pstmt.setInt(1, fileNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            JDBCTemplate.close(pstmt);
+        }
+		
+		return result;
+	}
+
+	public int deleteMyItemsList(Connection con, int proNo) {
+		
+		int result = 0;
+		String delete = pro.getProperty("deleteMyItemsList");
+		
+		try {
+			pstmt = con.prepareStatement(delete);
+			
+			pstmt.setInt(1, proNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            JDBCTemplate.close(pstmt);
+        }
+		
+		return result;
+	}
+
 	
 }
 
