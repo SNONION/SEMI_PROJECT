@@ -88,6 +88,7 @@ public class BoardDetailController extends HttpServlet {
 			ub.setTierPath(tier.getTierPath());
 			ub.setTierName(tier.getTierOriginFileName());
 			
+			request.setAttribute("loginUser", loginUser);
 			request.setAttribute("loginNickname", loginNickname);
 			request.setAttribute("boardNo", boardNo);
 			request.setAttribute("p2", p2);

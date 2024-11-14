@@ -70,7 +70,7 @@
 			<div class="writeBtn-area" align="center">
 				<input type="hidden" name=userNo value="${loginUser.userNo}">
 				<button type="button" onclick="writeBoard();"
-					class="btn btn-outline-secondary btn-sm" style="margin-left:20px;">글작성</button>
+					class="btn btn-outline-warning" style="margin-left:20px;">글작성</button>
 			</div>
 		</nav>
 

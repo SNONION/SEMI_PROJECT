@@ -24,12 +24,16 @@
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
+        background-color: #FEFEFE;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* 기본 폭을 90%로 설정하여 작은 화면에서도 보기 좋게 조정 */
+        max-width: 600px; /* 최대 너비를 설정하여 너무 커지지 않도록 제한 */
+        margin: auto; /* 자동으로 중앙에 배치 */
+        position: relative; /* 위치 설정 */
+        top: 50%; /* 화면 중앙 정렬을 위해 위쪽에서 50% 이동 */
+        transform: translateY(-50%); /* 정확한 수직 중앙 배치를 위해 사용 */
+    }
 
         /* 닫기 버튼 */
         .close {

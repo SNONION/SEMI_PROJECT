@@ -15,7 +15,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
 
-
+<meta name ="google-signin-client_id" content="535387066748-f46vteepvqbbihan729cuit3umrdp7eo.apps.googleusercontent.com">
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -33,7 +33,10 @@
 	href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 	integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
 	crossorigin="anonymous">
-
+	
+<!-- 구글 api 사용을 위한 스크립트 -->
+<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+	
 <style>
 body {
 	background-color: black;
@@ -67,7 +70,7 @@ body {
 	box-shadow: 0px 0px 15px 5px white;
 	border-radius: 20px;
 	width: 20%;
-	height: 30%;
+	height: 40%;
 	position: absolute;
 	margin: auto;
 	right: 0px;
@@ -100,6 +103,14 @@ body {
 	border: 3px solid orange;
 	cursor: pointer;
 }
+
+.googlelogin-form{
+	border: 1px solid black;
+	width: 50px;
+	height: 50px;
+	border-radius: 10px;
+	background-color: white;
+}
 </style>
 
 </head>
@@ -110,7 +121,7 @@ body {
 			<h1></h1>
 		</div>
 		<div class="img-area">
-			<div class="util-area">
+			<div class="util-area" align="center">
 				<form action="/semi/loginUserInfo.us" method="post"
 					class="login-form">
 					<div class="input-group mb-3">
@@ -127,6 +138,14 @@ body {
 						<button type="button" class="btn btn-outline-warning btn-sm"
 							style="color: orange; border: 1px solid orange;"
 							data-toggle="modal" data-target="#signInModal">SGIN IN</button>
+					</div>
+					<br><br>
+					<div class="googlelogin-form" id="GgCustomLogin">
+						<a href="javascript:void(0)"> 
+							<span id="icon-area">
+								<img src="https://www.ghec.ca/images/google-g-logo.png" width="50px" height="50px">
+							</span>
+						</a>
 					</div>
 				</form>
 			</div>
@@ -249,118 +268,157 @@ body {
 	</div>
 	
 	<script>
-            function signIn(){
-                var inputId = $("#inputId").val();
-                var userPwd = $("#inputPwd").val();
-                var doubleCheckPwd = $("#doubleCheckPwd").val();
-                var userName = $("#userName").val();
-                var nickname = $("#nickname").val();
-                var gender = $("input[name=gender]:checked").val();
-                var phoneFront = $("#phoneFront").val();
-                var phoneMiddle = $("#phoneMiddle").val();
-                var phoneLast = $("#phoneLast").val();
-                var phone = phoneFront + "-" + phoneMiddle + "-" + phoneLast;
-                var email = $("#email").val();
-                var address = $("#address").val();
-                
-                var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
-                
-                if(pwRegExp.test(userPwd)){
-                    if(userPwd == doubleCheckPwd){
-                        return true;
-                    }
-                    else{
-                        $("#checkPwdnameBox").text("비밀번호가 일치하지 않습니다.");
-                        return false;
-                    }
-                }
-                else{
-                    $("#checkPwdnameBox").text("형식 -> 8~15자까지 가능(첫글자 특수기호 가능)");
-                    return false;
-                }
-    
-            };
-        
-            function idCheckBtn(){
-                var inputId = $("#inputId").val();
-                var idRegExp = /^[0-9a-zA-Z]{6,15}$/;
-                
-                if(idRegExp.test(inputId)){
-                    if(inputId != ""){
-                        $.ajax({
-                            url : "/semi/checkIdDup.us",
-                            data : {
-                                userId : $("#inputId").val(),
-                            },	
-                            success : function(imsg){
-                                if(imsg == 'NNNNN'){
-                                    $("#checkIdBox").text("이미 사용중인 아이디입니다.");
-                                    $("#enroll").attr("disabled", true);
-                                }
-                                else{
-                                    $("#checkIdBox").text("사용 가능한 아이디입니다.");
-                                }
-                            },
-                            error : function(){
-                                alert("요청 실패");
-                            }
-                        });
-                    }
-                    else{
-                        $("#checkIdBox").text("아이디를 입력해주세요.");
-                    }
-                }
-                else{
-                    $("#checkIdBox").text("형식 -> 8~15자로 특수기호 없이 입력");
-                }
-            };
-            
-            function nicknameCheckBtn(){
-                var nickname = $("#nickname").val();
-                var nickRegExp = /^[0-9a-zA-Z가-힣]{1,15}$/;
-                
-                if(nickRegExp.test(nickname)){
-                    if(nickname != ""){
-                        $.ajax({
-                            url : "/semi/checkIdDup.us",
-                            data : {
-                                nickname : $("#nickname").val()
-                            },	
-                            success : function(nmsg){
-                                if(nmsg == 'NNNNN'){
-                                    $("#checkNicknameBox").text("이미 사용중인 닉네임입니다.");
-                                    $("#enroll").attr("disabled", true);
-                                }
-                                else{
-                                    if($("#checkIdBox").text() == "사용 가능한 아이디입니다."){
-                                        $("#checkNicknameBox").text("사용 가능한 닉네임입니다.");
-                                        $("#enroll").attr("disabled", false);
-                                    }
-                                    else{
-                                        $("#checkNicknameBox").text("아이디 먼저 중복확인 해주세요.");
-                                    }
-                                }
-                            },
-                            error : function(){
-                                alert("요청 실패");
-                            }
-                        });
-                    }
-                    else{
-                        $("#checkNicknameBox").text("닉네임을 입력해주세요.");
-                    }
-                }
-                else{
-                    $("#checkNicknameBox").text("형식 -> 1~15자까지 가능(특수기호 불가)");
-                }
-            };
+		//처음 실행하는 함수
+		function init() {
+		
+		gapi.load('auth2', function() {
+				gapi.auth2.init();
+				options = new gapi.auth2.SigninOptionsBuilder();
+				options.setPrompt('select_account');
+				// 추가는 Oauth 승인 권한 추가 후 띄어쓰기 기준으로 추가
+				options.setScope('email profile openid https://www.googleapis.com/auth/user.birthday.read');
+				// 인스턴스의 함수 호출 - element에 로그인 기능 추가
+				// GgCustomLogin은 li태그안에 있는 ID, 위에 설정한 options와 아래 성공,실패시 실행하는 함수들
+				gapi.auth2.getAuthInstance().attachClickHandler('GgCustomLogin', options, onSignIn, onSignInFailure);
+			})
+		}
 
-            var msg = "<%=alertMsg%>";
+		function onSignIn(googleUser) {
+			var access_token = googleUser.getAuthResponse().access_token
+			$.ajax({
+				// people api를 이용하여 프로필 및 생년월일에 대한 선택동의후 가져온다.
+				url : 'https://people.googleapis.com/v1/people/me',
+				data : {
+					// key에 자신의 API 키를 넣습니다.
+					personFields : 'birthdays',
+					key : 'AIzaSyAbL_m9noTSe7nscGyZYXUJ5e_r4z-CDBM',
+					'access_token' : access_token
+				},
+				method : 'GET'
+			}).done(function(e) {
+				//프로필을 가져온다.
+				var profile = googleUser.getBasicProfile();
+				console.log(profile)
+			}).fail(function(e) {
+				console.log(e);
+			})
+		}
+		function onSignInFailure(t) {
+			console.log(t);
+		}
 
-            if (msg != "null") {
-                alert(msg);
-                <%session.removeAttribute("alertMsg");%>
-            }
-        </script>
+		 function signIn(){
+		     var inputId = $("#inputId").val();
+		     var userPwd = $("#inputPwd").val();
+		     var doubleCheckPwd = $("#doubleCheckPwd").val();
+		     var userName = $("#userName").val();
+		     var nickname = $("#nickname").val();
+		     var gender = $("input[name=gender]:checked").val();
+		     var phoneFront = $("#phoneFront").val();
+		     var phoneMiddle = $("#phoneMiddle").val();
+		     var phoneLast = $("#phoneLast").val();
+		     var phone = phoneFront + "-" + phoneMiddle + "-" + phoneLast;
+		     var email = $("#email").val();
+		     var address = $("#address").val();
+		     
+		     var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
+		     
+		     if(pwRegExp.test(userPwd)){
+		         if(userPwd == doubleCheckPwd){
+		             return true;
+		         }
+		         else{
+		             $("#checkPwdnameBox").text("비밀번호가 일치하지 않습니다.");
+		             return false;
+		         }
+		     }
+		     else{
+		         $("#checkPwdnameBox").text("형식 -> 8~15자까지 가능(첫글자 특수기호 가능)");
+		         return false;
+		     }
+		
+		 };
+		
+		 function idCheckBtn(){
+		     var inputId = $("#inputId").val();
+		     var idRegExp = /^[0-9a-zA-Z]{6,15}$/;
+		     
+		     if(idRegExp.test(inputId)){
+		         if(inputId != ""){
+		             $.ajax({
+		                 url : "/semi/checkIdDup.us",
+		                 data : {
+		                     userId : $("#inputId").val(),
+		                 },	
+		                 success : function(imsg){
+		                     if(imsg == 'NNNNN'){
+		                         $("#checkIdBox").text("이미 사용중인 아이디입니다.");
+		                         $("#enroll").attr("disabled", true);
+		                     }
+		                     else{
+		                         $("#checkIdBox").text("사용 가능한 아이디입니다.");
+		                     }
+		                 },
+		                 error : function(){
+		                     alert("요청 실패");
+		                 }
+		             });
+		         }
+		         else{
+		             $("#checkIdBox").text("아이디를 입력해주세요.");
+		         }
+		     }
+		     else{
+		         $("#checkIdBox").text("형식 -> 8~15자로 특수기호 없이 입력");
+		     }
+		 };
+		 
+		 function nicknameCheckBtn(){
+		     var nickname = $("#nickname").val();
+		     var nickRegExp = /^[0-9a-zA-Z가-힣]{1,15}$/;
+		     
+		     if(nickRegExp.test(nickname)){
+		         if(nickname != ""){
+		             $.ajax({
+		                 url : "/semi/checkIdDup.us",
+		                 data : {
+		                     nickname : $("#nickname").val()
+		                 },	
+		                 success : function(nmsg){
+		                     if(nmsg == 'NNNNN'){
+		                         $("#checkNicknameBox").text("이미 사용중인 닉네임입니다.");
+		                         $("#enroll").attr("disabled", true);
+		                     }
+		                     else{
+		                         if($("#checkIdBox").text() == "사용 가능한 아이디입니다."){
+		                             $("#checkNicknameBox").text("사용 가능한 닉네임입니다.");
+		                             $("#enroll").attr("disabled", false);
+		                         }
+		                         else{
+		                             $("#checkNicknameBox").text("아이디 먼저 중복확인 해주세요.");
+		                         }
+		                     }
+		                 },
+		                 error : function(){
+		                     alert("요청 실패");
+		                 }
+		             });
+		         }
+		         else{
+		             $("#checkNicknameBox").text("닉네임을 입력해주세요.");
+		         }
+		     }
+		     else{
+		         $("#checkNicknameBox").text("형식 -> 1~15자까지 가능(특수기호 불가)");
+		     }
+		 };
+		
+		 var msg = "<%=alertMsg%>";
+		
+		 if (msg != "null") {
+		     alert(msg);
+		     <%session.removeAttribute("alertMsg");%>
+		 }
+		</script>
 </body>
 </html>

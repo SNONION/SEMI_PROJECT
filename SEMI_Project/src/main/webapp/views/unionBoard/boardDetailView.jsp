@@ -31,15 +31,13 @@ h5 {
 
 	<div class="outer">
 
-		<br> <br>
-		<div class="title-area" align="center">
-			<h3>BOARD DETAIL</h3>
-		</div>
 		<br>
+		<div class="title-area" align="center">
+		</div>
 		<div class="btn-area" align="center">
 			<button type="button" onclick="backPage();" class="btn btn-outline-secondary">뒤로가기</button>
 		</div>
-		<br><br>
+		<br>
 		<div class="detail-area">
 			<div class="container">
 				<table class="table table-dark table-striped">
@@ -77,19 +75,18 @@ h5 {
 					</tr>
 					<tr align="right">
 						<th colspan="4">
+							<button type="button" onclick="recomCount();" class="btn btn-outline-danger btn-sm">
+										추천 <span id="countUp">${ub.recommend}</span>
+							</button>
+							<button type="button" onclick="reportBoard();" class="btn btn-outline-danger btn-sm">신고하기</button>
 							<c:choose>
 								<c:when test="${ub.boardWriter eq nickname}">
-									<button type="button" onclick="recomCount();" class="btn btn-outline-danger btn-sm">
-										추천 <span id="countUp">${ub.recommend}</span>
-									</button> 
 									<button type="button" onclick="updateBoard();" class="btn btn-outline-warning btn-sm">수정하기</button>
 									<button type="button" onclick="deleteBoard();" class="btn btn-outline-danger btn-sm">삭제하기</button>
 								</c:when>
-								<c:otherwise>
-									<button type="button" onclick="recomCount();" class="btn btn-outline-danger btn-sm">
-										추천 <span id="countUp">${ub.recommend}</span>
-									</button>
-								</c:otherwise>
+								<c:when test="${loginUser.userId == 'admin01'}">
+									<button type="button" onclick="deleteBoard();" class="btn btn-outline-danger btn-sm">삭제하기</button>
+								</c:when>
 							</c:choose>
 						</th>
 					</tr>
@@ -98,6 +95,11 @@ h5 {
 		</div>
 		
 		<script>
+			function reportBoard(){
+				
+				alert("게시판이 신고되었습니다.");
+			};
+		
 			function updateBoard(){
 				
 				location.href="/semi/updateBoard.un?boardNo=${boardNo}";
@@ -350,7 +352,7 @@ h5 {
 			<div class="writeBtn-area" align="center">
 				<input type="hidden" name=userNo value="${loginUser.userNo}">
 				<button type="button" onclick="writeBoard();"
-					class="btn btn-outline-secondary" style="margin-left:20px;">글작성</button>
+					class="btn btn-outline-warning" style="margin-left:20px;">글작성</button>
 			</div>
 		</nav>
 

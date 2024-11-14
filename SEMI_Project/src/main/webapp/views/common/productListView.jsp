@@ -24,28 +24,30 @@
 		}
 	
 	.modal {
-    display: none; 
-    position: fixed;
-    z-index: 1; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-    padding-top: 60px;
-	}
-
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Flexbox 중앙 배치 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 	/* Modal Content */
 	.modal-content {
-	    background-color: #fefefe;
-	    margin: 5% auto;
-	    padding: 20px;
-	    border: 1px solid #888;
-	    width: 80%;
-	    max-width: 600px;
-	}
+        background-color: #FEFEFE;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* 기본 너비 */
+        max-width: 600px; /* 최대 너비 */
+        max-height: 90vh; /* 최대 높이를 화면의 90%로 설정 */
+        overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+    }
 	
 	/* Modal Header */
 	.modal-header {
