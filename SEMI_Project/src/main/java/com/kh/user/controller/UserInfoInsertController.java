@@ -39,7 +39,7 @@ public class UserInfoInsertController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession();
 		
 		String inputId = request.getParameter("inputId");
@@ -91,6 +91,7 @@ public class UserInfoInsertController extends HttpServlet {
 	    
 	    session.setAttribute("alertMsg", alertMsg);
 	    response.sendRedirect(request.getContextPath());
+
 	}
 
 }

@@ -98,8 +98,7 @@ i{
 
 #AD-area{
 	margin-top: 80px;
-	border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 20px;
     width: 100%;
     height: 200px;
 }
@@ -107,9 +106,36 @@ i{
 .dropdown-item{
 	color: orange;
 }
+/* 이미지 미리보기 창 스타일 */
+.preview-box {
+    position: absolute;
+    display: none;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background: #fff;
+    z-index: 10;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+}
+.preview-box img {
+    width: 150px;  /* 미리보기 이미지 크기 */
+    height: auto;
+}
 
+#home1{
+	color: rgb(211, 205, 205);
+	font-size: 50px;
+	font-family: 'Viking-Normal', serif;
+	font-weight: 900;
+	text-shadow: 0px 0px 4px gold
+                        , 0px -5px 4px chocolate
+                        , 0px -15px 14px orange
+                        , 0px -22px 19px red;
+}
+
+#adimg{
+	border-radius: 20px;
+}
 </style>
-
 
 </head>
 <body>
@@ -119,7 +145,7 @@ i{
 		<br>
 		<div class="menubar">
 			<div class="backbtn-area">
-				<h1 onclick="backToMain();" id="home">HELL-C</h1>
+				<span onclick="backToMain();" id="home1">HELL-</span><span onclick="backToMain();" id="home1">C</span>
 			</div>
 			<div class="dropdown-area">
 				<div class="dropdown">
@@ -143,7 +169,7 @@ i{
 		</div>
 		<div class="AD-area" id="AD-area">
 			<!-- 광고리스트를 가져와 랜덤으로 출력할 예정 (새로고침이나 페이지 이동시 변경됨) -->
-			<img src="/semi/resources/shopImgFile/ad-test.gif" width="100%" height = "100%">
+			<img src="/semi/resources/shopImgFile/sam-sulek.gif" width="100%" height = "100%" id="adimg">
 		</div>
 	</div>
 	
@@ -155,7 +181,7 @@ i{
 			alert(msg);
 		<%session.removeAttribute("alertMsg");%>
 		}
-		
+
 		function backToMain(){
 			location.href="/semi/views/common/mainPage.jsp";
 		}
@@ -178,7 +204,11 @@ i{
 			$("<form>", {
 				method : "post",
 				action : "/semi/mypage.us"
-			}).appendTo($("body")).submit();
+			}).append($("<input>", {
+				type : "hidden",
+				name : "userId",
+				value : "${loginUser.userId}"
+			})).appendTo($("body")).submit();
 
 		};
 	</script>

@@ -169,7 +169,8 @@
 	
 	<entry key="loginUser">
 		SELECT  USER_NO,
-		        USER_ID
+		        USER_ID,
+		        POINT
 		FROM    TB_USERINFO
 		WHERE   USER_ID = ?
 		AND     USER_PWD = ?
@@ -280,5 +281,25 @@
 		WHERE   USER_NO = ?
 	</entry>
 	
+	<entry key="selectUserTier">
+		SELECT  TIER_NO,
+		        TIER_PATH,
+		        TIER_ORIGINFILENAME,
+		        GRADE_NAME
+		FROM    TB_TIERIMG
+		JOIN    TB_GRADE USING(GRADE_NO)
+	</entry>
+	
+	<entry key="selectGradeInfo">
+		SELECT  *
+		FROM    TB_GRADE
+	</entry>
+	
+	<entry key="updateGradeName">
+		UPDATE  TB_USERINFO
+		SET     GRADE_NO = ?
+		WHERE   USER_NO = ?
+		AND     STATUS = 'Y'
+	</entry>
 
 </properties>

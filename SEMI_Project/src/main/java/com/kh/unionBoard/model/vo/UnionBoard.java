@@ -16,6 +16,10 @@ public class UnionBoard {
 	private int recommend;
 	private int replyCount;
 	
+	// 티어 이미지의 경로와 파일명을 담아둘 변수
+	private String tierPath;
+	private String tierName;
+	
 	public UnionBoard() {
 		super();
 	}
@@ -93,6 +97,22 @@ public class UnionBoard {
 		this.replyCount = replyCount;
 	}
 	
+	public String getTierPath() {
+		return tierPath;
+	}
+
+	public void setTierPath(String tierPath) {
+		this.tierPath = tierPath;
+	}
+
+	public String getTierName() {
+		return tierName;
+	}
+
+	public void setTierName(String tierName) {
+		this.tierName = tierName;
+	}
+
 	public int getReplyCount() {
 		return replyCount;
 	}
@@ -186,7 +206,7 @@ public class UnionBoard {
 		return "UnionBoard [boardNo=" + boardNo + ", categoryName=" + categoryName + ", boardTitle=" + boardTitle
 				+ ", boardContent=" + boardContent + ", boardWriter=" + boardWriter + ", count=" + count
 				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", status=" + status + ", recommend="
-				+ recommend + ", replyCount=" + replyCount + "]";
+				+ recommend + ", replyCount=" + replyCount + ", tierPath=" + tierPath + ", tierName=" + tierName + "]";
 	}
-
+	
 }

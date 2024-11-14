@@ -15,6 +15,7 @@ import com.kh.unionBoard.model.vo.Category;
 import com.kh.unionBoard.model.vo.MediaFile;
 import com.kh.unionBoard.model.vo.Reply;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 public class UnionBoardDao {
 
@@ -1060,6 +1061,35 @@ public class UnionBoardDao {
 		}
 		
 		return bList;
+	}
+
+	public UserTier selectTierImg(Connection con, String boardWriter) {
+		
+		UserTier tier = null;
+		String select = pro.getProperty("selectTierImg");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setString(1, boardWriter);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				tier = new UserTier(rset.getInt("TIER_NO"),
+								    rset.getString("TIER_PATH"),
+								    rset.getString("TIER_ORIGINFILENAME"),
+								    rset.getString("GRADE_NO"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return tier;
 	}
 
 }

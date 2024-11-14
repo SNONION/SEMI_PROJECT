@@ -53,7 +53,7 @@ public class LoginFilter extends HttpFilter implements Filter {
 		}
 		else {
 			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스 입니다.");
-			servletRequest.getRequestDispatcher("/views/common/mainPage.jsp").forward(servletRequest, servletResponse);
+			servletRequest.getRequestDispatcher("/views/common/loginPage.jsp").forward(servletRequest, servletResponse);
 		}
 	}
 

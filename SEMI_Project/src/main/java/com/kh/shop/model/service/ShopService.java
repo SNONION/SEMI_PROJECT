@@ -7,10 +7,12 @@ import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.dao.ShopDao;
 import com.kh.shop.model.vo.Product;
 import com.kh.shop.model.vo.ShopMediaFile;
+import com.kh.user.model.vo.MyItems;
 
 public class ShopService {
 
-
+	private ShopDao shopDao = new ShopDao();
+	
 	public int listCount() {
 		
 		Connection con = JDBCTemplate.getConnection();
@@ -46,52 +48,48 @@ public class ShopService {
 		
 		Connection con = JDBCTemplate.getConnection();
 		
-		//boardNo를 미리 뽑아놓고 해당 번호로 게시글과 첨부파일 넣어주기
-		int boardNo = new ShopDao().selectProduct(con);
+		//fileNo를 미리 뽑아놓고 해당 번호로 게시글과 첨부파일 넣어주기
+		int proNo = new ShopDao().selectProNo(con);
+		p.setProNo(proNo);
+		int result1 = new ShopDao().insertProduct(con,p);
+		int result2 = 1;
+		int result3 = 1;
 		
-		if(boardNo != 0) { //추출한 게시글 번호가 0이 아닐 때 (제대로 추출되었을 때)
-			//게시글 객체에 추출한 게시글 넣어주기
-			p.setBoardNo(boardNo);
-			int result = new ShopDao().insertProduct(con,p); //게시글 등록이 잘 되었는지 여부
+		if(result1 > 0) { 
 			
-			//첨부파일 등록처리 후 사용할 변수
-			int result2 = 1; //첨부파일이 없어도 게시글 등록처리는 될 수 있도록 1로 초기화해놓기
-			
-			//첨부파일이 없는 경우 게시글만 등록할 수 있도록 처리
-			
-			if(result>0 && smf != null) { //게시글 등록이 성공했고 전달받은 첨부파일 정보도 있을 때
-				//첨부파일 정보 db에 등록
-				//첨부파일이 어떠한 게시글에 등록된 첨부파일인지 알 수 있도록 참조게시글 번호 추가해주기
-				smf.setRefBno(boardNo);
+			if(smf != null) {
 				
-				result2 = new ShopDao().insertShopMediaFile(con,smf); //첨부파일 등록이 되었는지 여부
-				
-					//result !=0 && result2 !=0		
-				
+				// 파일 번호를 먼저 뽑아준다
+				int fileNo = new ShopDao().selectFileNo(con, p);
+				smf.setShopFileNo(fileNo);
+				// 파일을 삽입
+				result2 = new ShopDao().insertShopMedia(con, smf);
+
+				// 파일이 있었던 경우 제품테이블의 SHOP_FILE_NO에 파일 번호를 UPDATE해준다.
+				p.setShopFileNo(fileNo);
+				result3 = new ShopDao().updateProduct(con, p);
 			}
 			
-			//게시글 등록 또는 게시글 + 첨부파일 등록처리 후
-			//트랜잭션 처리하기
-			if(result*result2 >0) { // 둘다 0이 아닌경우 조건 통과
-				JDBCTemplate.commit(con);
-			}else { //실패
-				JDBCTemplate.rollback(con);
-			}
-			//자원반납
-			JDBCTemplate.close(con);
-			
-			//번호는 잘 뽑혔고 등록처리 후 결과값
-			return result*result2;
-				
-				
-			}else { //게시글 번호부터 제대로 추출 안됐을 때
-				//자원반납
-				JDBCTemplate.close(con);
-				return boardNo; //등록처리하지 않고 되돌리기 boardNo 제대로 추출안됐으면 0으로 돌아옴
-						
-		}			
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
 		
-	}
+		int result = result1 * result2 * result3;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+	
+		return result;
+		
+	}			
+		
+	
 
 
 	public Product selectProduct(int pno) {
@@ -180,17 +178,129 @@ public class ShopService {
 	    return isSuccess; // 성공 여부 반환
 	}
 
-	public ShopMediaFile selectShopMediaFile(int bno) {
+	
+
+	
+	
+	public int totalCount() {
+	    Connection con = JDBCTemplate.getConnection();
+	    
+	    int result = new ShopDao().totalCount(con);  // ShopDao에서 totalCount 호출
+
+	    JDBCTemplate.close(con);  // Connection 자원 해제
+	    
+	    return result;  // 총 상품 개수를 반환
+	}
+
+	
+	
+	public ArrayList<Product> productList(int startPage, int endPage) {
 
 
 		
 		return null;
 	}
-	
-	
-	
-	
+
+	public boolean insertMyItems(MyItems order) {
+
+		Connection con = JDBCTemplate.getConnection();
+	    // Product 객체를 생성하고 필요한 속성 설정
+	  
+	    // DAO 메소드를 호출하여 DB에 주문 정보를 저장합니다.
+	    boolean result = shopDao.insertMyItems(con,order);
+
+	    if (result) {
+	        JDBCTemplate.commit(con); // 성공 시 커밋
+	    } else {
+	        JDBCTemplate.rollback(con); // 실패 시 롤백
+	    }
+	    
+	    // 자원 해제
+	    JDBCTemplate.close(con);
+	    
+	    return result; // 성공 여부 반환
+	    
 	}
+
+	public ShopMediaFile selectMediaInfo(Product p) {
+		
+		Connection con = JDBCTemplate.getConnection();
+
+		
+		ShopMediaFile smf = shopDao.selectMediaInfo(con, p);
+		
+		JDBCTemplate.close(con);
+		
+		return smf;
+	}
+
+	public int updateUserPoint(Product pro, int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = 0;
+		int userPoint = shopDao.selectUserPoint(con, userNo);
+		
+		if(userPoint > pro.getPrice()) {
+			
+			int mPoint = shopDao.updateUserPoint(con, pro, userNo);
+			
+			if(mPoint > 0) {
+				int insertPro = shopDao.insertMyItemsList(con, pro, userNo);
+				
+				if(insertPro > 0) {
+					result = 1;
+				}
+			}
+		}
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int deleteProduct(int proNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result0 = shopDao.deleteMyItemsList(con, proNo);
+		
+		int fileNo = shopDao.selectFileNoFromProduct(con, proNo);
+		
+		int result1 = shopDao.deleteProduct(con, proNo);
+		int result2 = 1;
+		
+		if(result1 > 0 && fileNo > 0) {
+			
+			result2 = shopDao.deleteMediaFile(con, fileNo);
+		}
+		
+		int result = result1 * result2;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result + result0;
+	}
+	
+	       
+}
+	
+	
+	
+	
+	
 	
 	
 

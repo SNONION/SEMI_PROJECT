@@ -11,17 +11,17 @@
 <style>
 #rList-tbody tr:hover {
 	cursor: pointer;
-	background-color: blue;
+	background-color: orange;
 }
 
 #iList-tbody tr:hover {
 	cursor: pointer;
-	background-color: blue;
+	background-color: orange;
 }
 
 #wList-tbody tr:hover {
 	cursor: pointer;
-	background-color: blue;
+	background-color: orange;
 }
 .fixed-td {
     word-wrap: break-word;  /* 긴 단어도 자동 줄바꿈 */
@@ -492,9 +492,53 @@
 				</c:forEach>
 			</div>
 		</div>
+		
+		<!-- 티어이미지 설정창 -->
+		<div class="modal" id="tierModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form action="" >
+						<!-- 티어이미지 설정창 헤더 -->
+						<div class="modal-header">
+							<h4 class="modal-title">USER TIER IMG MANAGEMENT</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<!-- 티어 이미지 설정 바디 -->
+						<div class="modal-body" align="center">
+							<table border="1">
+								<thead>
+									<tr align="center">
+										<th width="120px">티어명</th>
+										<th width="200px">티어 이미지</th>
+									</tr>
+								</thead>
+								<tbody id="tierImg-area">
+									<c:forEach var="tierImg" items="${tList}">
+										<tr align="center">
+											<td>${tierImg.gradeName}</td>
+											<td>
+												<img src="/semi${tierImg.tierPath}${tierImg.tierOriginFileName}" width="100px" height="100px">
+											</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+
+						<!-- 티어 이미지 설정 버튼 구역 -->
+						<div class="modal-footer">
+							
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 
 		<br> <br> <br>
 		<div class="updateUser-area" align="center">
+			<button type="button" data-toggle="modal" data-target="#tierModal"
+				class="btn btn-outline-warning">회원 티어 정보</button>
 			<button type="button" onclick="updateUserInfo();"
 				class="btn btn-outline-warning">회원정보 변경</button>
 			<button type="button"
