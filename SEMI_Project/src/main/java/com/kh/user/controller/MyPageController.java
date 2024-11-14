@@ -151,7 +151,7 @@ public class MyPageController extends HttpServlet {
 			
 			// 모든 댓글 가져옴
 			ArrayList<Reply> reList = service.selectReply(p3);
-			
+
 			ArrayList<UserTier> tList = service.selectUserTier();
 			
 			request.setAttribute("loginCount", loginCount);
