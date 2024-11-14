@@ -14,9 +14,17 @@ public class UnionBoard {
 	private Date modifyDate;
 	private String status;
 	private int recommend;
+	private int replyCount;
 	
 	public UnionBoard() {
 		super();
+	}
+	
+	public UnionBoard(int boardNo, String boardTitle, int count) {
+		super();
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.count = count;
 	}
 
 	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardWriter,
@@ -54,6 +62,43 @@ public class UnionBoard {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.status = status;
+	}
+	
+	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardWriter, int count, 
+			String createDate, int recommend, int replyCount) {
+		super();
+		this.boardNo = boardNo;
+		this.categoryName = categoryName;
+		this.boardTitle = boardTitle;
+		this.boardWriter = boardWriter;
+		this.count = count;
+		this.createDate = createDate;
+		this.recommend = recommend;
+		this.replyCount = replyCount;
+	}
+
+	public UnionBoard(int boardNo, String categoryName, String boardTitle, String boardContent, String boardWriter,
+			int count, String createDate, Date modifyDate, String status, int recommend, int replyCount) {
+		super();
+		this.boardNo = boardNo;
+		this.categoryName = categoryName;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.boardWriter = boardWriter;
+		this.count = count;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.status = status;
+		this.recommend = recommend;
+		this.replyCount = replyCount;
+	}
+	
+	public int getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 	public int getBoardNo() {
@@ -141,7 +186,7 @@ public class UnionBoard {
 		return "UnionBoard [boardNo=" + boardNo + ", categoryName=" + categoryName + ", boardTitle=" + boardTitle
 				+ ", boardContent=" + boardContent + ", boardWriter=" + boardWriter + ", count=" + count
 				+ ", createDate=" + createDate + ", modifyDate=" + modifyDate + ", status=" + status + ", recommend="
-				+ recommend + "]";
+				+ recommend + ", replyCount=" + replyCount + "]";
 	}
 
 }

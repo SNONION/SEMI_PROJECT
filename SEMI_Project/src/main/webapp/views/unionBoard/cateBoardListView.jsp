@@ -18,21 +18,17 @@
 	<%@ include file="/views/common/menuBar.jsp"%>
 
 	<div class="outer">
-		<div class="container" align="center">
-			<br> <br>
-			<h3>Board</h3>
-			<br>
-		</div>
-		
-		<div class="writeBtn-area" align="center">
-			<input type="hidden" name=userNo value="${loginUser.userNo}">
-			<button type="button" onclick="writeBoard();" class="btn btn-outline-secondary btn-sm">글작성</button>
-		</div>
 		<br> <br>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
 					<button type="button" onclick="goToUnion();" class="btn btn-dark">통합</button>
+				</li>
+				<li>
+					<button type="button" onclick="goToAnnounce();" class="btn btn-dark">공지</button>
+				</li>
+				<li class="nav-item">
+					<button type="button" onclick="goTopopul();" class="btn btn-dark">인기</button>
 				</li>
 				<li class="nav-item">
 					<button type="button" onclick="goToFree();" class="btn btn-dark">자유</button>
@@ -50,10 +46,16 @@
 					<button type="button" onclick="goToReq();" class="btn btn-dark">문의</button>
 				</li>
 			</ul>
-			<form class="form-inline" action="/semi">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+			<form class="form-inline" action="/semi/searchKeyword.un?currentPage=1" method="post">
+				<input type="hidden" name="categoryNo" value="${cateNo}">
+				<input class="form-control mr-sm-2" type="text" name="keyword" placeholder="Search">
 				<button class="btn btn-success" type="submit">Search</button>
 			</form>
+			<div class="writeBtn-area" align="center">
+				<input type="hidden" name=userNo value="${loginUser.userNo}">
+				<button type="button" onclick="writeBoard();"
+					class="btn btn-outline-secondary" style="margin-left:20px;">글작성</button>
+			</div>
 		</nav>
 
 
@@ -61,6 +63,15 @@
 			function writeBoard(){
 				var userNo = $("input[name=userNo]").val();
 				location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
+			};
+			
+			function goToAnnounce(){
+				location.href="/semi/categoeyListView.un?currentPage=1&type=announce"
+			};
+			
+			function goTopopul(){
+				
+				location.href="/semi/popularBoardListView.un?currentPage=1&type=popular"
 			};
 			
 			function goToUnion(){
@@ -104,8 +115,8 @@
 				<tbody id="cate-area">
 					<c:choose>
 						<c:when test="${empty list}">
-							<tr>
-								<td>게시물이 없습니다.</td>
+							<tr align="center">
+								<td colspan="7">게시물이 없습니다.</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
@@ -113,7 +124,12 @@
 								<tr>
 									<td>${l.boardNo}</td>
 									<td>${l.categoryName}</td>
-									<td>${l.boardTitle}</td>
+									<td>
+										<c:if test="${l.recommend >= 2}">
+											<i class="fas fa-star"></i>&nbsp;
+										</c:if>
+										${l.boardTitle}[${l.replyCount}]
+									</td>
 									<td>${l.boardWriter}</td>
 									<td>${l.createDate}</td>
 									<td>${l.count}</td>
@@ -126,18 +142,27 @@
 			</table>
 		</div>
 		<div class="pageBtn-area" align="center">
+			<c:if test="${p.currentPage > 1}">
+				<a href="/semi/categoeyListView.un?currentPage=${p.currentPage - 1}" class="btn btn-outline-secondary"><</a>
+			</c:if>
 			<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 				<button type="button" class="btn btn-outline-secondary">${i}</button>
 			</c:forEach>
+			<c:if test="${p.currentPage != p.endPage}">
+				<a href="/semi/categoeyListView.un?currentPage=${p.currentPage + 1}" class="btn btn-outline-secondary">></a>
+			</c:if>
 		</div>
 	</div>
 
 	<script>
 		$("#cate-area").on("click","tr",function(){
 			var boardNo = $(this).children().first().text();
-			var userNo = $("input[name=userNo]").val();
-			
-			location.href="/semi/boardDetailView.un?boardNo=" + boardNo + "&userNo=" + userNo;
+
+			if(boardNo != '게시물이 없습니다.'){
+				var userNo = $("input[name=userNo]").val();
+				
+				location.href="/semi/boardDetailView.un?boardNo=" + boardNo + "&userNo=" + userNo;
+			}
 		});
 	
 		$(".pageBtn-area button").click(function(){
@@ -156,10 +181,16 @@
 					for(var cate of list){
 						
 						var tr = $("<tr>");
+						var td = $("<td>");
+						
+						if (cate.recommend >= 2) {
+						    td.append('<i class="fas fa-star"></i>&nbsp;');
+						}
 						
 						tr.append($("<td>").text(cate.boardNo));
 						tr.append($("<td>").text(cate.categoryName));
-						tr.append($("<td>").text(cate.boardTitle));
+						td.append(cate.boardTitle+ " [" + cate.replyCount + "]");
+						tr.append(td);
 						tr.append($("<td>").text(cate.boardWriter));
 						tr.append($("<td>").text(cate.createDate));
 						tr.append($("<td>").text(cate.count));

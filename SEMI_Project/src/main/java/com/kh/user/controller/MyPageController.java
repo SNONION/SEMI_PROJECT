@@ -124,6 +124,11 @@ public class MyPageController extends HttpServlet {
 			PageInfo p3 = new PageInfo(reListCount, currentPage, repageLimit, reListLimit,remaxPage,restartPage,reendPage); // 댓글용
 			// 운동 기록을 가져옴
 			ArrayList<WorkoutList> wList = service.selectWorkoutList(user.getUserNo(), p1);
+			
+			for(WorkoutList wl : wList) {
+				String str = wl.getWorkoutContent().replace("\n","<br>");
+				wl.setWorkoutContent(str);
+			}
 	
 			// 내가 작성한 문의글 내역을 가져옴
 			ArrayList<Request> rList = service.selectRequest(user.getUserNo(), p2);
@@ -133,7 +138,8 @@ public class MyPageController extends HttpServlet {
 			
 			// 모든 댓글 가져옴
 			ArrayList<Reply> reList = service.selectReply(p3);
-			System.out.println(reList);
+			
+			
 			request.setAttribute("loginCount", loginCount);
 			request.setAttribute("p1", p1);
 			request.setAttribute("p2", p2);

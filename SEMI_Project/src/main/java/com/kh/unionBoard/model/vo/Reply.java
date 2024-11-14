@@ -3,6 +3,7 @@ package com.kh.unionBoard.model.vo;
 public class Reply {
     
 	private int userNo;
+	private int replyNo;
     private String nickname; // 회원번호로 회원의 닉네임을 가져옴
 	private int refBno;
 	private String replyContent;
@@ -23,6 +24,17 @@ public class Reply {
 		this.replyDate = replyDate;
 	}
 
+	
+
+	public Reply(int replyNo, String nickname, int refBno, String replyContent, String replyDate) {
+		super();
+		this.replyNo = replyNo;
+		this.nickname = nickname;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
+
 
 
 	public Reply(String nickname, String replyContent, String replyDate) {
@@ -31,10 +43,30 @@ public class Reply {
 		this.replyContent = replyContent;
 		this.replyDate = replyDate;
 	}
+	
+	public Reply(int replyNo, String nickname, String replyContent, String replyDate) {
+		super();
+		this.replyNo = replyNo;
+		this.nickname = nickname;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
 
 	public Reply(int userNo, String nickname, int refBno, String replyContent, String replyDate, String status) {
 		super();
 		this.userNo = userNo;
+		this.nickname = nickname;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+		this.status = status;
+	}
+	
+	public Reply(int userNo, int replyNo, String nickname, int refBno, String replyContent, String replyDate,
+			String status) {
+		super();
+		this.userNo = userNo;
+		this.replyNo = replyNo;
 		this.nickname = nickname;
 		this.refBno = refBno;
 		this.replyContent = replyContent;
@@ -59,6 +91,14 @@ public class Reply {
 
 	public void setUserNo(int userNo) {
 		this.userNo = userNo;
+	}
+	
+	public int getReplyNo() {
+		return replyNo;
+	}
+
+	public void setReplyNo(int replyNo) {
+		this.replyNo = replyNo;
 	}
 
 	public String getNickname() {
@@ -103,8 +143,8 @@ public class Reply {
 
 	@Override
 	public String toString() {
-		return "Reply [userNo=" + userNo + ", nickname=" + nickname + ", refBno=" + refBno + ", replyContent="
-				+ replyContent + ", replyDate=" + replyDate + ", status=" + status + "]";
+		return "Reply [userNo=" + userNo + ", replyNo=" + replyNo + ", nickname=" + nickname + ", refBno=" + refBno
+				+ ", replyContent=" + replyContent + ", replyDate=" + replyDate + ", status=" + status + "]";
 	}
 	
 }

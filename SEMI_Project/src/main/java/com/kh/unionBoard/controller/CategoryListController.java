@@ -48,6 +48,10 @@ public class CategoryListController extends HttpServlet {
 		
 		switch(cateType){
 		
+			case "announce" :
+				cateNo = 10;
+				listCount = service.cateBoardCount(cateNo);
+				break;
 			case "free" : 
 				cateNo = 20;
 				listCount = service.cateBoardCount(cateNo);
@@ -83,6 +87,13 @@ public class CategoryListController extends HttpServlet {
 		PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 		
 		ArrayList<UnionBoard> list = service.selectCateBoardList(cateNo, p);
+		
+		for(UnionBoard u : list) {
+			int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+			int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+			u.setReplyCount(replyCount);
+			u.setRecommend(recommend);
+		}
 		
 		request.setAttribute("p", p);
 		request.setAttribute("cateNo", cateNo);

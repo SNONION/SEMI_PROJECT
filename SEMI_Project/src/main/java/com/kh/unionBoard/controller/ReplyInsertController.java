@@ -42,7 +42,7 @@ public class ReplyInsertController extends HttpServlet {
 		String replyContent = request.getParameter("replyContent");
 		int userNo = Integer.parseInt(request.getParameter("userNo"));
 		int boardNo = Integer.parseInt(request.getParameter("boardNo"));
-		
+
 		Reply reply = new Reply();
 		reply.setUserNo(userNo);
 		reply.setRefBno(boardNo);

@@ -26,7 +26,8 @@
 		FROM    (SELECT  ROWNUM RNUM, A.*
 		         FROM    (SELECT  WORKOUT_TITLE,
 		                          WORKOUT_CONTENT,
-		                          TO_CHAR(WORKOUT_DATE, 'YYYY-MM-DD') WORKOUT_DATE
+		                          TO_CHAR(WORKOUT_DATE, 'YYYY-MM-DD') WORKOUT_DATE,
+		                          WORKOUT_NO
 		                  FROM    TB_WORKOUTLIST
 		                  WHERE   USER_NO = ?
 		                  ORDER BY WORKOUT_DATE DESC) A)
@@ -121,9 +122,8 @@
 	
 	<entry key="deleteWorkout">
 		DELETE FROM TB_WORKOUTLIST
-		WHERE   USER_NO = ?
-		AND     WORKOUT_TITLE = ?
-		AND     WORKOUT_CONTENT = ?
+		WHERE   WORKOUT_NO = ?
+		AND		USER_NO = ?
 	</entry>
 	
 	<entry key="selectAnswer">
@@ -249,7 +249,8 @@
 	<entry key="selectReply">
 		SELECT *
 		FROM(SELECT ROWNUM RNUM ,A.*
-		     FROM (SELECT NICKNAME,
+		     FROM (SELECT 	REPLY_NO,
+		     				NICKNAME,
 		                    REF_BOARD_NO,
 		                    REPLY_CONTENT,
 		                    REPLY_DATE
@@ -259,9 +260,25 @@
 		            ORDER BY REPLY_DATE DESC) A)
 		WHERE RNUM BETWEEN ? AND ?
 	</entry>
+	
 	<entry key="countReply">
-			SELECT COUNT(*) JOJ
-	FROM TB_REPLY
-	WHERE STATUS='Y'
+		SELECT COUNT(*) JOJ
+		FROM TB_REPLY
+		WHERE STATUS='Y'
 	</entry>
+
+	<entry key="pointUpEvent">
+		UPDATE  TB_USERINFO
+		SET     POINT = POINT + ?
+		WHERE   USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="loginEventRollback">
+		UPDATE  TB_LOGINCOUNT
+		SET     LOGIN_EVENT = 0
+		WHERE   USER_NO = ?
+	</entry>
+	
+
 </properties>

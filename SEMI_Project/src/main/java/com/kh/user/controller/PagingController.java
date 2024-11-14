@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Request;
 import com.kh.unionBoard.model.service.UnionBoardService;
+import com.kh.unionBoard.model.vo.Reply;
 import com.kh.unionBoard.model.vo.UnionBoard;
 import com.kh.user.model.service.UserService;
 import com.kh.user.model.vo.UserInfo;
@@ -50,6 +51,139 @@ public class PagingController extends HttpServlet {
 		
 		response.setContentType("json/application;charset=UTF-8");
 		Gson gson = new Gson();
+		
+		if(type.equals("announcement")) {
+			
+			int listCount; // 총 게시글 갯수를 담아줄 변수
+			int pageLimit; // 페이지 하단에 보여질 페이징바 최대 갯수
+			int listLimit; // 한 페이지에 보여질 게시글 개수
+			int maxPage; // 가장 마지막 페이지는 몇번째 페이지 인지 (총 페이지 갯수)
+			int startPage; // 페이지 하단에 보여질 페이징바 시작 수
+			int endPage; // 페이지 하단에 보여질 페이징바 끝 수
+			
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			listCount = new UnionBoardService().selectAnnounceCount();
+			pageLimit = 10;
+			listLimit = 15;
+			maxPage = (int)Math.ceil(((double)listCount/listLimit));
+			startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+			endPage = (startPage + pageLimit) - 1;
+			
+			if(maxPage < endPage) {
+				endPage = maxPage;
+			}
+			
+			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
+			ArrayList<UnionBoard> bList = new UnionBoardService().announceBoardList(p);
+			
+			gson.toJson(bList, response.getWriter());
+		}
+		
+		if(type.equals("popularBoard")) {
+			
+			int listCount; // 총 게시글 갯수를 담아줄 변수
+			int pageLimit; // 페이지 하단에 보여질 페이징바 최대 갯수
+			int listLimit; // 한 페이지에 보여질 게시글 개수
+			int maxPage; // 가장 마지막 페이지는 몇번째 페이지 인지 (총 페이지 갯수)
+			int startPage; // 페이지 하단에 보여질 페이징바 시작 수
+			int endPage; // 페이지 하단에 보여질 페이징바 끝 수
+			
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			listCount = new UnionBoardService().popularBoardListCount();
+			pageLimit = 10;
+			listLimit = 15;
+			maxPage = (int)Math.ceil(((double)listCount/listLimit));
+			startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+			endPage = (startPage + pageLimit) - 1;
+			
+			if(maxPage < endPage) {
+				endPage = maxPage;
+			}
+			
+			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
+			ArrayList<UnionBoard> pList = new UnionBoardService().selectPopularBoardList(p);
+			
+			gson.toJson(pList, response.getWriter());
+		}
+		
+		if(type.equals("reply")) {
+			
+			int boardNo = Integer.parseInt(request.getParameter("boardNo"));
+			
+			int blistCount; // 총 게시글 갯수를 담아줄 변수
+			int bpageLimit; // 페이지 하단에 보여질 페이징바 최대 갯수
+			int blistLimit; // 한 페이지에 보여질 게시글 개수
+			int bmaxPage; // 가장 마지막 페이지는 몇번째 페이지 인지 (총 페이지 갯수)
+			int bstartPage; // 페이지 하단에 보여질 페이징바 시작 수
+			int bendPage; // 페이지 하단에 보여질 페이징바 끝 수
+			
+			blistCount = uService.selectReplyCount(boardNo);
+			bpageLimit = 5;
+			blistLimit = 15;
+			bmaxPage = (int)Math.ceil(((double)blistCount/blistLimit));
+			bstartPage = (currentPage - 1) / bpageLimit * bpageLimit + 1;
+			bendPage = (bstartPage + bpageLimit) - 1;
+			
+			if(bmaxPage < bendPage) {
+				bendPage = bmaxPage;
+			}
+
+			PageInfo p3 = new PageInfo(blistCount, currentPage, bpageLimit, blistLimit, bmaxPage, bstartPage, bendPage); // 게시판 페이지용
+			ArrayList<Reply> replyList = uService.selectReply(boardNo, p3);
+
+			gson.toJson(replyList,response.getWriter());
+		}
+		
+		if(type.equals("keywordBoard")) {
+			
+			String keyword = request.getParameter("keyword");
+			
+			int listCount; // 총 게시글 갯수를 담아줄 변수
+			int pageLimit; // 페이지 하단에 보여질 페이징바 최대 갯수
+			int listLimit; // 한 페이지에 보여질 게시글 개수
+			int maxPage; // 가장 마지막 페이지는 몇번째 페이지 인지 (총 페이지 갯수)
+			int startPage; // 페이지 하단에 보여질 페이징바 시작 수
+			int endPage; // 페이지 하단에 보여질 페이징바 끝 수
+			int cateNo = 0;
+			
+			if(request.getParameter("cateNo") != null) {
+				cateNo = Integer.parseInt(request.getParameter("cateNo"));
+				listCount = new UnionBoardService().selectCateKeyBoardCount(keyword, cateNo);
+			}
+			else {
+				listCount = new UnionBoardService().selectKeyBoardCount(keyword);
+			}
+			
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+			pageLimit = 10;
+			listLimit = 15;
+			maxPage = (int)Math.ceil(((double)listCount/listLimit));
+			startPage = (currentPage - 1) / pageLimit * pageLimit + 1;
+			endPage = (startPage + pageLimit) - 1;
+			
+			if(maxPage < endPage) {
+				endPage = maxPage;
+			}
+			
+			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
+			ArrayList<UnionBoard> bList = null;
+			
+			if(cateNo != 0) {
+				bList = new UnionBoardService().selectCateTitleKeyBoard(keyword, cateNo, p);	
+			}
+			else {
+				bList = new UnionBoardService().selectTitleKeyBoard(keyword, p);	
+			}
+			
+			for(UnionBoard u : bList) {
+				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+				int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+				u.setReplyCount(replyCount);
+				u.setRecommend(recommend);
+			}
+			
+			gson.toJson(bList, response.getWriter());
+		}
 		
 		if(type.equals("workout")) {
 			
@@ -126,6 +260,8 @@ public class PagingController extends HttpServlet {
 			
 			for(UnionBoard u : bList) {
 				int recommend = uService.selectRecomCount(u.getBoardNo());
+				int replyCount = uService.selectReplyCount(u.getBoardNo());
+				u.setReplyCount(replyCount);
 				u.setRecommend(recommend);
 			}
 			
@@ -164,6 +300,8 @@ public class PagingController extends HttpServlet {
 			
 			for(UnionBoard l : list) {
 				int recommend = uService.selectRecomCount(l.getBoardNo());
+				int replyCount = uService.selectReplyCount(l.getBoardNo());
+				l.setReplyCount(replyCount);
 				l.setRecommend(recommend);
 			}
 			

@@ -98,7 +98,8 @@ public class UserDao {
 			while(rset.next()) {
 				wList.add(new WorkoutList(rset.getString("WORKOUT_TITLE"),
 										  rset.getString("WORKOUT_CONTENT"),
-										  rset.getString("WORKOUT_DATE")));
+										  rset.getString("WORKOUT_DATE"),
+										  rset.getInt("WORKOUT_NO")));
 			}
 			
 		} catch (SQLException e) {
@@ -388,9 +389,8 @@ public class UserDao {
 		try {
 			pstmt = con.prepareStatement(delete);
 			
-			pstmt.setInt(1, workout.getUserNo());
-			pstmt.setString(2, workout.getWorkoutTitle());
-			pstmt.setString(3, workout.getWorkoutContent());
+			pstmt.setInt(1, workout.getWorkoutNo());
+			pstmt.setInt(2, workout.getUserNo());
 			
 			result = pstmt.executeUpdate();
 			
@@ -799,7 +799,8 @@ public class UserDao {
 			
 			rset = pstmt.executeQuery();
 			while(rset.next()) {
-				reList.add(new Reply(rset.getString("NICKNAME"),
+				reList.add(new Reply(rset.getInt("REPLY_NO"),
+									 rset.getString("NICKNAME"),
 									 rset.getInt("REF_BOARD_NO"),
 									 rset.getString("REPLY_CONTENT"),
 									 rset.getString("REPLY_DATE")));
@@ -839,4 +840,47 @@ public class UserDao {
 		
 		return result;
 	}	
+	public int pointUpEvent(Connection con, int userNo, int point) {
+		
+		int result = 0;
+		String update = pro.getProperty("pointUpEvent");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, point);
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int loginEventRollback(Connection con, int userNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("loginEventRollback");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
 }

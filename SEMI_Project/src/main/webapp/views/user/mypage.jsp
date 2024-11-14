@@ -11,17 +11,17 @@
 <style>
 #rList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 
 #iList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 
 #wList-tbody tr:hover {
 	cursor: pointer;
-	background-color: gray;
+	background-color: blue;
 }
 .fixed-td {
     word-wrap: break-word;  /* 긴 단어도 자동 줄바꿈 */
@@ -67,26 +67,57 @@
 		<div class="total-reply">
 			<table class="table table-dark table-striped" style="table-layout: fixed;">
 				<thead>
-					<tr>
-						<th width="120px">작성자</th>
+					<tr align="center">
+						<th width="100px">작성자</th>
 						<th width="120px">게시글번호</th>
-						<th width="600px">내용</th>
+						<th width="540px">내용</th>
 						<th width="120px">날짜</th>
+					    <th width="100px" >삭제</th> <!-- 삭제 버튼 열 추가 -->
 					</tr>
 				</thead>
 				<tbody>
 					<c:forEach var="r" items="${reList}">
 						<tr>
-							<td>${r.nickname}</td>
-							<td>${r.refBno}</td>
+							<td style="display: none;" align="center">${r.replyNo}</td>
+							<td align="center">${r.nickname}</td>
+							<td align="center">${r.refBno}</td>
 							<td class="fixed-td">${r.replyContent}</td>
 							<td>${r.replyDate}</td>
+							<td><button type="button" onclick="deleteComment(this);" class="btn btn-outline-danger">삭제</button></td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</div>
+		<script>
+			function deleteComment(a){
+				var replyNo = $(a).closest("tr").children().first().text();
+				
+				$.ajax({
+					url : "/semi/deleteReply.un",
+					data : {
+						replyNo : replyNo
+					},
+					success : function(msg){
+						if(msg == 'NNNNN'){
+							console("처리 오류");
+						}
+						else{
+							alert("삭제되었습니다.");
+							window.location.reload();
+						}
+						replyUpdate();
+					},
+					error : function(){
+						alert("요청 오류");
+					}
+				});
+				
+				
+			}
+			
 		
+		</script>
 		<div class="rePageBtn-area" align="center">
 			<c:forEach var="i" begin="${p3.startPage}" end="${p3.endPage}">
 				<button type="button" class="btn btn-outline-secondary">${i}</button>
@@ -183,6 +214,9 @@
 							<tr>
 								<th id="workoutContent"></th>
 							</tr>
+							<tr style="display:none;">
+								<th id="workoutNo"></th>
+							</tr>
 						</table>
 					</div>
 
@@ -203,20 +237,28 @@
 					
 					$.ajax({
 						url : "/semi/deleteWorkout.us",
+						method : "post",
 						data : {
-							workoutTitle : $("#workoutTitle").text(),
-							workoutContent : $("#workoutContent").text(),
+							workoutNo : $("#workoutNo").text(),
 							userNo : "${user.userNo}"
 						},
 						success : function(alertMsg){
 							alert(alertMsg);
-							window.location.reload();
+							workoutListGet();
 						},
 						error : function(){
 							alert("요청 오류");
 						}
 					});
 				}
+			};
+			
+			function workoutListGet(){
+				
+				$("<form>", {
+					method : "post",
+					action : "/semi/mypage.us"
+				}).appendTo($("body")).submit();
 			};
 		</script>
 
@@ -225,7 +267,11 @@
 				<thead>
 					<tr align="center">
 						<th width="800px">TITLE</th>
-						<th width="200px">DATE</th>
+						<th width="120px">DATE</th>
+						<th width="120px">
+							<button type="button" onclick="workoutEnrollBtn();"
+								class="btn btn-outline-secondary btn-sm" style="margin-left:20px;">글작성</button>
+						</th>
 					</tr>
 				</thead>
 				<tbody id="wList-tbody">
@@ -233,15 +279,16 @@
 						<c:when test="${empty wList}">
 							<tr align="center">
 								<td>기록된 운동을 찾을 수 없습니다.</td>
-								<td>-</td>
+								<td colspan="2">-</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="i" items="${wList}">
 								<tr align="center">
 									<td style="display: none;">${i.workoutContent}</td>
+									<td style="display: none;">${i.workoutNo}</td>
 									<td>${i.workoutTitle}</td>
-									<td>${i.workoutDate}</td>
+									<td colspan="2">${i.workoutDate}</td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -266,7 +313,7 @@
 
 					<!-- 문의 머리글 -->
 					<div class="modal-header">
-						<h4 class="modal-title">문의사항</h4>
+						<h4 class="modal-title">관리자에게 문의하기</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -488,6 +535,12 @@
 								<tr>
 									<td><input type="password" name="checkPwd" id="checkPwd" required></td>
 								</tr>
+								<tr>
+									<td style="font-size:10px;"><br>4~15자까지 가능(첫글자 특수기호 가능)</td>
+								</tr>
+								<tr id="checkText-area">
+								
+								</tr>
 							</table>
 						</div>
 
@@ -506,12 +559,22 @@
 				var newPwd = $("#newPwd").val();
 				var checkPwd = $("#checkPwd").val();
 				
+				var pwRegExp = /^[0-9a-zA-Z!@#$%^&*]{4,15}$/;
+				
 				if(userPwd != null && newPwd != null && checkPwd != null){
 					if(newPwd == checkPwd){
-						return true;
+						if(pwRegExp.test(newPwd)){
+							return true;
+						}
+						else{
+							$("#checkText-area").append($("<td style='font-size:10px;'>").text("비밀번호 형식에 맞게 입력해주세요."));
+							$("#newPwd").val("");
+							$("#checkPwd").val("");
+							return false;
+						}
 					}
 					else{
-						alert("비밀번호가 일치하지 않습니다.");
+						$("#checkText-area").append($("<td>").text("비밀번호가 일치하지 않습니다."));
 						$("#checkPwd").val("");
 						return false;
 					}
@@ -550,14 +613,12 @@
 			
 			if(${not empty wList}){
 				var workoutContent = $(this).children().first().text();
-				var workoutTitle = $(this).children().first().next().text();
-				var workoutDate = $(this).children().first().next().next().text();
+				var workoutNo = $(this).children().first().next().text();
+				var workoutTitle = $(this).children().first().next().next().text();
+				var workoutDate = $(this).children().first().next().next().next().text();
 				
-				console.log(workoutContent);
-				console.log(workoutTitle);
-				console.log(workoutDate);
-				
-				$("#workoutContent").text(workoutContent);
+				$("#workoutNo").text(workoutNo);
+				$("#workoutContent").html(workoutContent);
 				$("#workoutTitle").text(workoutTitle);
 				$("#workoutDate").text(workoutDate);
 				
@@ -566,10 +627,15 @@
 			else{
 				if(confirm("운동을 기록하시겠습니까?")){
 					var userNo = "${user.userNo}"
-					location.href="/semi/boardEnrollForm.un?userNo=" + userNo;
+					location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
 				}
 			}
 		});
+		
+		function workoutEnrollBtn(){
+			var userNo = "${user.userNo}"
+			location.href="/semi/workoutEnrollForm.un?userNo=" + userNo;
+		}
 	
 		$("#rList-tbody").on("click", "tr", function() {
 			var requestNo = $(this).children().first().text();
