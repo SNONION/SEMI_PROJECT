@@ -14,8 +14,10 @@ import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Request;
 import com.kh.unionBoard.model.vo.Reply;
 import com.kh.user.model.service.UserService;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 import com.kh.user.model.vo.WorkoutList;
 
 /**
@@ -52,6 +54,7 @@ public class MyPageController extends HttpServlet {
 		HttpSession session = request.getSession();
 		UserService service = new UserService();
 		
+		// 로그인 기능 추가 후 session.getParameter로 받아오기
 		UserInfo loginUser = (UserInfo)session.getAttribute("loginUser");
 		
 		if(loginUser != null) {
@@ -129,7 +132,17 @@ public class MyPageController extends HttpServlet {
 				String str = wl.getWorkoutContent().replace("\n","<br>");
 				wl.setWorkoutContent(str);
 			}
-	
+			
+			// 로그인 유저의 회원 등급을 확인 및 등급업 시키는 과정
+			ArrayList<Grade> gList = service.selectGradeInfo();
+			
+			for(Grade g : gList) {
+				
+				if(loginUser.getPoint() > g.getMinPoint() && loginUser.getPoint() < g.getMaxPoint()) {
+					service.updateGradeName(loginUser.getUserNo(), g.getGradeNo());
+				}
+			}
+			
 			// 내가 작성한 문의글 내역을 가져옴
 			ArrayList<Request> rList = service.selectRequest(user.getUserNo(), p2);
 	
@@ -138,13 +151,14 @@ public class MyPageController extends HttpServlet {
 			
 			// 모든 댓글 가져옴
 			ArrayList<Reply> reList = service.selectReply(p3);
-			
+			ArrayList<UserTier> tList = service.selectUserTier();
 			
 			request.setAttribute("loginCount", loginCount);
 			request.setAttribute("p1", p1);
 			request.setAttribute("p2", p2);
 			request.setAttribute("p3", p3);
 			request.setAttribute("user", user);
+			request.setAttribute("tList", tList);
 			request.setAttribute("wList", wList);
 			request.setAttribute("iList", iList);
 			request.setAttribute("rList", rList);

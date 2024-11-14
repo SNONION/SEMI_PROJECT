@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.UnionBoard;
+import com.kh.user.model.vo.UserTier;
 
 /**
  * Servlet implementation class SimpleBoardController
@@ -61,6 +62,13 @@ public class SimpleBoardController extends HttpServlet {
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> bList = new UnionBoardService().simpleBoardList(p);
 			
+			for(UnionBoard u : bList) {
+				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+				int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+				u.setReplyCount(replyCount);
+				u.setRecommend(recommend);
+			}
+			
 			response.setContentType("json/application;charset=UTF-8");
 			Gson gson = new Gson();
 			gson.toJson(bList, response.getWriter());
@@ -78,6 +86,13 @@ public class SimpleBoardController extends HttpServlet {
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> pList = new UnionBoardService().selectPopularBoardList(p);
 			
+			for(UnionBoard u : pList) {
+				int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
+				int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
+				u.setReplyCount(replyCount);
+				u.setRecommend(recommend);
+			}
+			
 			response.setContentType("json/application;charset=UTF-8");
 			Gson gson = new Gson();
 			gson.toJson(pList, response.getWriter());
@@ -94,6 +109,12 @@ public class SimpleBoardController extends HttpServlet {
 			
 			PageInfo p = new PageInfo(listCount, currentPage, pageLimit, listLimit, maxPage, startPage, endPage);
 			ArrayList<UnionBoard> aList = new UnionBoardService().announceBoardList(p);
+					
+			for(UnionBoard ub : aList) {
+				UserTier tier = new UnionBoardService().selectTierImg(ub.getBoardWriter());
+				ub.setTierPath(tier.getTierPath());
+				ub.setTierName(tier.getTierOriginFileName());
+			}
 			
 			response.setContentType("json/application;charset=UTF-8");
 			Gson gson = new Gson();

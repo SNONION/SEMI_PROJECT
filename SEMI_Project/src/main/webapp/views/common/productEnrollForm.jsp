@@ -7,14 +7,9 @@
 <title>Insert title here</title>
 
 <style>
-	#enroll-form input, #enroll-form textarea{
+	#enroll-area input, #enroll-area textarea{
 		width : 100%;
 		box-sizing : border-box;	
-	}
-
-	#enroll-form td>img{
-		width : 100%;
-		height : 100%;
 	}
 
 </style>
@@ -29,7 +24,7 @@
 		<h2 align="center">상품 작성</h2>
 		<br>
 		
-		<form action="${contextPath}/insert.sh" method="post" id="enroll-form" enctype="multipart/form-data">
+		<form action="/insert.sh" method="post" id="enroll-form" enctype="multipart/form-data">
 			<!-- 작성자 정보 요청시 전달 같이 하기 -->
 			<input type="hidden" name="userNo" value="${loginUser.userNo }">
 			<table align="center">
@@ -47,9 +42,9 @@
 				</tr>
 				
 				<tr>	
-					<th>상품이미지</th>				
-					<td colspan="3" align="center" width="250" height="170">
-						<img id="titleImg">
+					<th>첨부파일(아이콘)</th>					
+					<td colspan='3'>
+						<input type="file" name="uploadFile">
 					</td>
 				</tr>	
 									
@@ -61,7 +56,7 @@
 							
 			</div>	
 			
-			<div align="center" id="enroll-content">
+			<div align="center">
 				<button type="submit">등록하기</button>
 				<button type="button" onclick="history.back()">뒤로가기</button>
 			</div>

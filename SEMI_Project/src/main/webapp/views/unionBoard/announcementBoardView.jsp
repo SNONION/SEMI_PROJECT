@@ -9,7 +9,7 @@
 <style>
 #board-area tr:hover{
 	cursor: pointer;
-	background-color: gray;
+	background-color: orange;
 }
 
 #recommedClick:hover{
@@ -58,7 +58,7 @@
 			<div class="writeBtn-area" align="center">
 				<input type="hidden" name=userNo value="${loginUser.userNo}">
 				<button type="button" onclick="writeBoard();"
-					class="btn btn-outline-secondary" style="margin-left:20px;">글작성</button>
+					class="btn btn-outline-warning" style="margin-left:20px;">글작성</button>
 			</div>
 		</nav>
 
@@ -132,7 +132,11 @@
 											<i class="fas fa-star"></i>&nbsp;
 										</c:if>
 										${b.boardTitle}[${b.replyCount}]</td>
-									<td>${b.boardWriter}</td>
+									<td>
+										${b.boardWriter}
+										<img src="/semi${b.tierPath}${b.tierName}"
+												width='20px' height='20px' style='margin-left: 5px; margin-bottom: 5px;'>
+									</td>
 									<td>${b.createDate}</td>
 									<td>${b.count}</td>
 									<td>${b.recommend}</td>
@@ -144,13 +148,13 @@
 			</table>
 		</div>
 		<div class="pageBtn-area" align="center">
-			<c:if test="${p.currentPage > 1}">
+			<c:if test="${p.currentPage > 5}">
 				<a href="/semi/announcementPage.un?currentPage=${p.currentPage - 1}" class="btn btn-outline-secondary"><</a>
 			</c:if>
 			<c:forEach var="i" begin="${p.startPage}" end="${p.endPage}">
 				<button type="button" class="btn btn-outline-secondary">${i}</button>
 			</c:forEach>
-			<c:if test="${p.currentPage != p.endPage}">
+			<c:if test="${p.currentPage != p.maxPage}">
 				<a href="/semi/announcementPage.un?currentPage=${p.currentPage + 1}" class="btn btn-outline-secondary">></a>
 			</c:if>
 		</div>
@@ -193,7 +197,12 @@
 						tr.append($("<td>").text(board.categoryName));
 						td.append(board.boardTitle + " [" + board.replyCount + "]");
 						tr.append(td);
-						tr.append($("<td>").text(board.boardWriter));
+						
+						var writerTd = $("<td>").text(board.boardWriter);
+						var imgTag = $("<img width='20px' height='20px' style='margin-left: 5px; margin-bottom: 5px;'>").attr("src","/semi" + board.tierPath + board.tierName);
+						writerTd.append(imgTag);
+						tr.append(writerTd);
+						
 						tr.append($("<td>").text(board.createDate));
 						tr.append($("<td>").text(board.count));
 						tr.append($("<td>").text(board.recommend));
@@ -205,6 +214,47 @@
 					alert("요청 오류");
 				}
 			});
+		});
+		
+		$(function() {
+		    // 미리보기 박스 생성
+		    const previewBox = $('<div class="preview-box"></div>').appendTo('body');
+
+		    // 마우스를 이미지가 있는 행에 올렸을 때 이벤트 처리
+		    $("#board-area").on("mouseenter", "tr", function() {
+		        var boardNo = $(this).children().first().text();
+
+		        // 이전 이미지 초기화
+		        previewBox.empty();
+
+		        // Ajax 요청으로 이미지 가져오기
+		        $.ajax({
+		            url : "/semi/imgPreview.un",
+		            data : {
+		                boardNo : boardNo
+		            },
+		            success : function(file) {
+		                // 파일이 있을 경우 미리보기 이미지 생성
+		                if (file != null) {
+		                    var img = $("<img>").attr("src", "/semi" + file.filePath + file.changeFileName);
+		                    previewBox.append(img).show();
+		                }
+		            },
+		            error : function() {
+		                console.log("호출 오류");
+		            }
+		        });
+		    }).on("mouseleave", "tr", function() {
+		        // 마우스가 tr에서 벗어날 때 미리보기 창 숨기기
+		        previewBox.empty();
+		        previewBox.hide();
+		    }).on("mousemove", "tr", function(event) {
+		        // 마우스 이동에 따라 미리보기 창 위치 조정
+		        previewBox.css({
+		            top: event.pageY + 10 + "px", // 마우스 위치 기준으로 아래 10px
+		            left: event.pageX + 10 + "px" // 마우스 위치 기준으로 오른쪽 10px
+		        });
+		    });
 		});
 	</script>
 

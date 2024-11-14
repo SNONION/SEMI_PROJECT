@@ -10,9 +10,11 @@ import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.unionBoard.model.vo.Reply;
 import com.kh.user.model.dao.UserDao;
+import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
 import com.kh.user.model.vo.UserInfo;
+import com.kh.user.model.vo.UserTier;
 import com.kh.user.model.vo.WorkoutList;
 
 public class UserService {
@@ -447,6 +449,43 @@ public class UserService {
 		}
 		JDBCTemplate.close(con);
 		
+	}
+
+	public ArrayList<UserTier> selectUserTier() {
+
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<UserTier> tList = dao.selectUserTier(con);
+		
+		JDBCTemplate.close(con);
+		
+		return tList;
+	}
+
+	public ArrayList<Grade> selectGradeInfo() {
+		
+		Connection con  = JDBCTemplate.getConnection();
+		
+		ArrayList<Grade> gList = dao.selectGradeInfo(con);
+		
+		JDBCTemplate.close(con);
+		
+		return gList;
+	}
+
+	public void updateGradeName(int userNo, int gradeNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateGradeName(con, userNo, gradeNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
 	}
 
 }

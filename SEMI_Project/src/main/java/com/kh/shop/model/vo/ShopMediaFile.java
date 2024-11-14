@@ -21,9 +21,11 @@ public class ShopMediaFile {
 		this.filePath = filePath;
 	}
 		
-	
-	
-
+	public ShopMediaFile(String originName, String filePath) {
+		super();
+		this.originName = originName;
+		this.filePath = filePath;
+	}
 
 	public int getRefBno() {
 		return RefBno;
