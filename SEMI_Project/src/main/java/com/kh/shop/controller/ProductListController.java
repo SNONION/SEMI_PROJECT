@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.shop.model.service.ShopService;
 import com.kh.shop.model.vo.Product;
+import com.kh.shop.model.vo.ShopMediaFile;
 import com.kh.user.model.vo.UserInfo;
 
 
@@ -78,16 +79,23 @@ public class ProductListController extends HttpServlet {
 			//상품 목록 조회
 			ArrayList<Product> pList = new ShopService().selectProduct(pi);
 			
+			for(Product p : pList) {
+				ShopMediaFile smf = new ShopService().selectMediaInfo(p);
+				p.setProPath(smf.getFilePath());
+				p.setProImgName(smf.getOriginName());
+			}
+			
 			//조회된 게시글 목록과 페이징바 정보객체를 위임시 전달하기
 			request.setAttribute("pList", pList);
 			request.setAttribute("pi", pi);
+			request.setAttribute("loginUser", loginUser);
 			request.getRequestDispatcher("/views/common/productListView.jsp").forward(request, response);
 		}
 		else {
 			session.setAttribute("alertMsg", "로그인 후 이용가능한 서비스 입니다.");
 			response.sendRedirect(request.getContextPath());
 		}
-	
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

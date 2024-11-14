@@ -12,6 +12,10 @@ public class Product {
 	private int boardNo;
 	private int quantity;
 	
+	// 파일을 저장해줄 변수
+	private String proPath;
+	private String proImgName;
+	
 	public Product() {
 		super();
 	}
@@ -47,6 +51,22 @@ public class Product {
 		this.proMenual = proMenual;
 		this.price = price;
 		this.status = status;
+	}
+
+	public String getProPath() {
+		return proPath;
+	}
+
+	public void setProPath(String proPath) {
+		this.proPath = proPath;
+	}
+
+	public String getProImgName() {
+		return proImgName;
+	}
+
+	public void setProImgName(String proImgName) {
+		this.proImgName = proImgName;
 	}
 
 	public int getQuantity() {

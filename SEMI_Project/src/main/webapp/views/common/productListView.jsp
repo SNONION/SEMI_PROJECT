@@ -24,28 +24,32 @@
 		}
 	
 	.modal {
-    display: none; 
-    position: fixed;
-    z-index: 1; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-    padding-top: 60px;
-	}
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+
+        /* Flexbox 중앙 배치 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
 	/* Modal Content */
 	.modal-content {
-	    background-color: #fefefe;
-	    margin: 5% auto;
-	    padding: 20px;
-	    border: 1px solid #888;
-	    width: 80%;
-	    max-width: 600px;
-	}
+        background-color: #fefefe;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 90%; /* 기본 너비 */
+        max-width: 600px; /* 최대 너비 */
+        max-height: 90vh; /* 최대 높이를 화면의 90%로 설정 */
+        overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+    }
 	
 	/* Modal Header */
 	.modal-header {
@@ -121,7 +125,7 @@
 	
 	<c:if test="${not empty loginUser && loginUser.userId == 'admin01'}">
 		<div align="center">
-			<a href="#" class="btn btn-info" id="openModalBtn">상품 게시</a>		<!-- insert/update구분 -->
+			<a class="btn btn-info" id="openModalBtn" data-toggle="modal" data-target="#productModal">상품 게시</a>		<!-- insert/update구분 -->
 		</div>	
 	</c:if>
 
@@ -139,38 +143,21 @@
 					<!-- Modal body -->
 					<div class="modal-body">
 						<!-- 상품 입력 폼 -->
-						<form id="productForm" enctype="multipart/form-data">
-							<div class="form-group">
-								<label for="proNo">상품 코드</label> 
-								<input type="text" id="proNo" class="form-control" required>
-							</div>
-
-							<div class="form-group">
-								<label for="shopFileNo">파일 번호</label> 
-								<input type="text" id="shopFileNo" class="form-control" required>
-							</div>
+						<form action="/semi/itemInsert.sh" method="post" id="productForm" enctype="multipart/form-data">
 
 							<div class="form-group">
 								<label for="proName">상품명</label> 
-								<input type="text" id="proName" class="form-control" required>
+								<input type="text" id="proName" name="proName" class="form-control" required>
 							</div>
 
 							<div class="form-group">
 								<label for="proMenual">상품 설명</label>
-								<textarea id="proMenual" class="form-control" required></textarea>
+								<textarea id="proMenual" name="proMenual" class="form-control" required></textarea>
 							</div>
 
 							<div class="form-group">
-								<label for="price">상품 가격</label> <input type="number" id="price"
+								<label for="price">상품 가격</label> <input type="number" name="price" id="price"
 									class="form-control" required>
-							</div>
-
-							<div class="form-group">
-								<label for="status">상태</label> <select id="status"
-									class="form-control">
-									<option value="Y">활성</option>
-									<option value="N">비활성</option>
-								</select>
 							</div>
 							
 							<div class="form-group">
@@ -205,91 +192,56 @@
 	            $("#productModal").fadeOut();  // 모달 닫기
 	        }
 	    });
-
-	    // 상품 등록 폼 제출
-	    $("#productForm").submit(function(event) {
-	        event.preventDefault();  // 폼 제출 기본 동작 방지
-	        
-	       
-	      	var formData = new FormData();	        
-	       
-	        formData.append('proNo', document.getElementById('proNo').value);	      
-	        formData.append('shopFileNo', document.getElementById('shopFileNo').value);		     
-	        formData.append('proName', document.getElementById('proName').value);		      
-	        formData.append('proMenual', document.getElementById('proMenual').value);		      
-	        formData.append('price', document.getElementById('price').value);		      
-	        formData.append('status', document.getElementById('status').value);		     
-	        formData.append('file1', document.getElementById('file1').value);	        	        
-	        // 폼 데이터 가져오기
-	       
-	         $.ajax({
-                url: '/insert.sh',  // 서버의 상품 등록 처리 서블릿 URL
-                type: 'POST',
-                data: formData,  // FormData 객체 전송
-
-                // FormData 객체를 사용할 때는 processData와 contentType을 false로 설정해야 함
-                processData: false,  // **수정된 부분**
-                contentType: false,  // **수정된 부분**	            	
-	            
-	            success: function(response) {
-	                alert("상품이 성공적으로 등록되었습니다!");
-	                $("#productModal").fadeOut();  // 모달 닫기
-	                $("#productForm")[0].reset();  // 폼 초기화
-	            },
-	            error: function(xhr, status, error) {
-	                alert("상품 등록에 실패했습니다. 다시 시도해주세요.");
-	            }
-	        });
-	    });
 	});
-	
+	   
 	
 	</script>
 	
 	
 	
 	<br>
-	
-	<table class='list-area' align='center' border='1'>
-		<thead>
-			<tr>
-				<th width='150'>상품번호</th>			
-				<th width='200'>상품명</th>
-				<th width='400'>상품설명</th>
-				<th width='200'>가격</th>		
-				
-			</tr>
+
+		<table class='list-area' align='center' border='1'>
+			<tbody>
+
+				<c:choose>
+					<c:when test="${empty pList }">
+						<!-- list가 비어있다면 -->
+						<tr>
+							<td colspan="6">등록된 상품이 없습니다</td>
+						</tr>
+
+					</c:when>
+					<c:otherwise>
+
+						<c:forEach var="p" items="${pList}">
+							<tr>
+								<td style="display:none;">${p.proNo}</td>
+								<td style="display:none;">${p.proName}</td>
+								<td style="display:none;">${p.proMenual}</td>
+								<td style="display:none;">${p.price}</td>
+								
+								<td>
+									<div class="card" style="width: 400px">
+										<img class="card-img-top" src="/semi${p.proPath}${p.proImgName}"
+											alt="Card image">
+										<div class="card-body">
+											<h4 class="card-title" style="color:black;">${p.proName}</h4>
+											<p class="card-text" style="color:black;">${p.proMenual}</p>
+											<h4 class="card-text" style="color:black;">${p.price} POINT</h4>
+										</div>
+									</div>
+									<br>
+								</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			</tbody>
+		</table>
 
 
-		</thead>
 
-		<tbody>
-				
-		<c:choose>
-			<c:when test="${empty pList }"> <!-- list가 비어있다면 -->
-				<tr>
-					<td colspan="6">등록된 상품이 없습니다</td>
-				</tr>				
-			
-			</c:when>
-			<c:otherwise>			
-				
-				<c:forEach var="p" items="${pList}">
-					<tr>
-						<td>${p.proNo }</td>
-						<td>${p.proName }</td>
-						<td>${p.proMenual }</td>
-						<td>${p.price }</td>										
-					</tr>
-				
-				</c:forEach>
-			</c:otherwise>
-		</c:choose>				
-		</tbody>		
-	</table>
-	
-	
-	
 		<!-- 모달 -->
 		
 	<!-- The Modal -->
@@ -305,14 +257,13 @@
 
 					<!-- Modal body -->
 					<div class="modal-body">
-
-						<h3 id="modalItemTitle">상품명</h3>
+						
+						<span id="modalItemNo">제품번호</span><h3 id="modalItemTitle">상품명</h3>
 						<p id="modalItemDescription">상품 설명</p>
-						<img id="modalItemImage"
-							src="${smf.filePath}${smf.changeName}"
-							alt="상품 이미지" class="modal-image"> <br>
+						<p id="modalItemPoint">포인트</p>
+						<br>
 						<!-- 구매 버튼 추가 -->
-						<button id="buyButton" class="btn btn-success">구매하기</button>
+						<button onclick="purchProduct();" class="btn btn-success">구매하기</button>
 					</div>
 				</div>
 			</div>
@@ -324,38 +275,17 @@
 				// 테이블의 행을 클릭하면 모달을 열고, 상품 정보를 설정
 				$(".list-area > tbody > tr").click(function(){
 						var proNo = $(this).children().first().text(); // 상품 번호 가져오기
-						var itemTitle = $(this).children().eq(1).text(); // 상품 제목 (두 번째 칼럼)
-						var itemDescription = $(this).children().eq(2).text(); // 상품 설명 (세 번째 칼럼)
-						var itemImage = $(this).children().eq(3).find('img').attr('src'); // 상품 이미지 (네 번째 칼럼의 이미지)
-						// 모달에 내용 채우기
-						$("#modalItemTitle").text(itemTitle);
-						$("#modalItemDescription").text(itemDescription);
-						$("#modalItemImage").attr("src",itemImage);
-						// 구매 버튼 클릭 시 AJAX 요청을 통해 purchase.sh 서블릿 실행
-						$("#buyButton").off("click").on("click",function(){
-						var proNo = $("#modalItemTitle").text(); // 예시: 상품 번호를 모달 제목에서 가져오기 (적절한 값으로 수정)
-														
-						$.ajax({
-							url : '/purchase.sh', // 서블릿 URL
-							type : 'POST', // POST 방식
-							data : {proNo : proNo}, // 서버로 보낼 데이터 (상품 번호)
-							success : function(response) {
-							// 서버에서 응답이 성공적으로 왔을 때의 처리
-							// 예를 들어, 응답을 받아서 페이지 전환이나 특정 UI 처리 등을 할 수 있음
-							alert("구매가 완료되었습니다!"); // 알림 표시
-							location.href = "location.href='list.sh?currentPage=${pi.currentPage+1}'"
-							//리스트 페이지로 리다이렉션
-							},
-							error : function() {
-							// AJAX 요청 실패 시 처리
-							alert("구매 실패했습니다.");
-							}
-							});
-							});
-
+						var proName = $(this).children().first().next().text();
+						var proMenual = $(this).children().first().next().next().text();
+						var proPrice = $(this).children().first().next().next().next().text();
+						
+						$("#modalItemNo").text(proNo);
+						$("#modalItemTitle").text(proName);
+						$("#modalItemDescription").text(proMenual);
+						$("#modalItemPoint").text(proPrice);
+						
 						// 모달 열기
 						$("#myModal").fadeIn();
-						});
 	
 						// 모달 닫기
 						$(".close").click(function() {
@@ -369,6 +299,35 @@
 							}
 						});
 					});
+			});
+			
+			function purchProduct(){
+				var proNo = $("#modalItemNo").text();
+				var proPrice = $("#modalItemPoint").text();
+				
+				$.ajax({
+					
+					url : "/semi/purchProduct.sh",
+					data : {
+						proNo : proNo,
+						proPrice : proPrice
+					},
+					success : function(msg){
+
+						if(msg == 'NNNNN'){
+							alert("당신은 거지입니다.");
+							$("#myModal").fadeOut();
+						}
+						else{
+							alert("구매되었습니다.");
+							$("#myModal").fadeOut();
+						}
+					},
+					error : function(){
+						console.log("요청 오류");
+					}
+				});
+			};
 		</script>
 
 
