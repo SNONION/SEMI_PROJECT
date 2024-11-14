@@ -59,6 +59,7 @@ public class PopularBoardController extends HttpServlet {
 		pList = new UnionBoardService().selectPopularBoardList(p);
 		
 		for(UnionBoard u : pList) {
+			
 			// 작성자 이미지 가져오는 과정
 			UserTier tier = new UnionBoardService().selectTierImg(u.getBoardWriter());
 			u.setTierPath(tier.getTierPath());
