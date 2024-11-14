@@ -161,7 +161,7 @@
 	<script>
 		$("#cate-area").on("click","tr",function(){
 			var boardNo = $(this).children().first().text();
-			
+
 			if(boardNo != '게시물이 없습니다.'){
 				var userNo = $("input[name=userNo]").val();
 				

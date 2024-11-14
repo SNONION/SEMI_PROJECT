@@ -14,6 +14,7 @@ import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
+import com.kh.unionBoard.model.vo.Reply;
 import com.kh.user.model.vo.Grade;
 import com.kh.user.model.vo.LoginCount;
 import com.kh.user.model.vo.MyItems;
@@ -561,16 +562,19 @@ public class UserDao {
 	public LoginCount LoginCountInfo(Connection con, int userNo) {
 		
 		LoginCount lc = null;
-		String select = pro.getProperty("LoginCountInfo");
+		String select = pro.getProperty("loginCountInfo");
 		
 		try {
 			pstmt = con.prepareStatement(select);
 			
 			pstmt.setInt(1, userNo);
+			System.out.println(userNo);
 			
 			rset = pstmt.executeQuery();
 			
+			
 			if(rset.next()) {
+				System.out.println("chk");
 				lc = new LoginCount(rset.getInt("LOGIN_COUNT"),
 									rset.getInt("LOGIN_EVENT"),
 									rset.getDate("LOGIN_DATE"));
@@ -781,6 +785,64 @@ public class UserDao {
 		return nickname;
 	}
 
+	public ArrayList<Reply> selectReply(Connection con, PageInfo p3) {
+		
+		ArrayList<Reply> reList = new ArrayList<>();
+		
+		String select = pro.getProperty("selectReply");
+		int startRow = (p3.getCurrentPage()-1) * p3.getwListLimit() +1;
+		int endRow = p3.getCurrentPage() * p3.getwListLimit();
+				
+		try {
+			
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, startRow);
+			pstmt.setInt(2, endRow);
+			
+			rset = pstmt.executeQuery();
+			while(rset.next()) {
+				reList.add(new Reply(rset.getInt("REPLY_NO"),
+									 rset.getString("NICKNAME"),
+									 rset.getInt("REF_BOARD_NO"),
+									 rset.getString("REPLY_CONTENT"),
+									 rset.getString("REPLY_DATE")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		return reList;
+	}
+
+	public int countReply(Connection con) {
+		
+		int result = 0;
+		String sql = pro.getProperty("countReply");
+		
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				result = rset.getInt("JOJ");
+			}
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}	
 	public int pointUpEvent(Connection con, int userNo, int point) {
 		
 		int result = 0;

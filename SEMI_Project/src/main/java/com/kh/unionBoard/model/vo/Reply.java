@@ -14,6 +14,29 @@ public class Reply {
 		super();
 	}
 	
+	
+	
+	public Reply(int userNo, int refBno, String replyContent, String replyDate) {
+		super();
+		this.userNo = userNo;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
+
+	
+
+	public Reply(int replyNo, String nickname, int refBno, String replyContent, String replyDate) {
+		super();
+		this.replyNo = replyNo;
+		this.nickname = nickname;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
+
+
+
 	public Reply(String nickname, String replyContent, String replyDate) {
 		super();
 		this.nickname = nickname;
@@ -50,6 +73,17 @@ public class Reply {
 		this.replyDate = replyDate;
 		this.status = status;
 	}
+
+	
+	public Reply(String nickname, int refBno, String replyContent, String replyDate) {
+		super();
+		this.nickname = nickname;
+		this.refBno = refBno;
+		this.replyContent = replyContent;
+		this.replyDate = replyDate;
+	}
+
+
 
 	public int getUserNo() {
 		return userNo;

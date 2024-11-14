@@ -23,6 +23,9 @@
 	cursor: pointer;
 	background-color: orange;
 }
+.fixed-td {
+    word-wrap: break-word;  /* 긴 단어도 자동 줄바꿈 */
+}
 </style>
 </head>
 <body>
@@ -59,8 +62,68 @@
 				</tbody>
 			</table>
 		</div>
-
-
+		<h3 align="center">이단 감시소</h3>
+		<br>
+		<div class="total-reply">
+			<table class="table table-dark table-striped" style="table-layout: fixed;">
+				<thead>
+					<tr align="center">
+						<th width="100px">작성자</th>
+						<th width="120px">게시글번호</th>
+						<th width="540px">내용</th>
+						<th width="120px">날짜</th>
+					    <th width="100px" >삭제</th> <!-- 삭제 버튼 열 추가 -->
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="r" items="${reList}">
+						<tr>
+							<td style="display: none;" align="center">${r.replyNo}</td>
+							<td align="center">${r.nickname}</td>
+							<td align="center">${r.refBno}</td>
+							<td class="fixed-td">${r.replyContent}</td>
+							<td>${r.replyDate}</td>
+							<td><button type="button" onclick="deleteComment(this);" class="btn btn-outline-danger">삭제</button></td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+		<script>
+			function deleteComment(a){
+				var replyNo = $(a).closest("tr").children().first().text();
+				
+				$.ajax({
+					url : "/semi/deleteReply.un",
+					data : {
+						replyNo : replyNo
+					},
+					success : function(msg){
+						if(msg == 'NNNNN'){
+							console("처리 오류");
+						}
+						else{
+							alert("삭제되었습니다.");
+							window.location.reload();
+						}
+						replyUpdate();
+					},
+					error : function(){
+						alert("요청 오류");
+					}
+				});
+				
+				
+			}
+			
+		
+		</script>
+		<div class="rePageBtn-area" align="center">
+			<c:forEach var="i" begin="${p3.startPage}" end="${p3.endPage}">
+				<button type="button" class="btn btn-outline-secondary">${i}</button>
+			</c:forEach>
+		</div>
+		
 		<br> <br>
 		<h3 align="center">My Item List</h3>
 		<br>

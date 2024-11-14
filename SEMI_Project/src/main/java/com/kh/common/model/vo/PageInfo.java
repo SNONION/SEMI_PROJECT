@@ -1,18 +1,35 @@
 package com.kh.common.model.vo;
 
+import java.util.ArrayList;
+
+import com.kh.unionBoard.model.vo.Reply;
+
 public class PageInfo {
 
 	private int wListCount;
 	private int currentPage;
 	private int pageLimit;
 	private int wListLimit;
-	
 	private int maxPage;
 	private int startPage;
 	private int endPage;
 	
 	public PageInfo() {
 		super();
+	}
+
+
+	
+
+	public PageInfo(int currentPage, int pageLimit, int wListLimit, ArrayList<Reply> reListCount, int maxPage,
+			int startPage, int endPage) {
+		super();
+		this.currentPage = currentPage;
+		this.pageLimit = pageLimit;
+		this.wListLimit = wListLimit;
+		this.maxPage = maxPage;
+		this.startPage = startPage;
+		this.endPage = endPage;
 	}
 
 	public PageInfo(int wListCount, int currentPage, int pageLimit, int wListLimit, int maxPage, int startPage,

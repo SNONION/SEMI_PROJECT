@@ -69,7 +69,7 @@ public class UserInfoLoginController extends HttpServlet {
 			int loginEvent = lc.getLoginEvent();
 			int getPoint = 0;
 			String alertMsg = "";
-			
+			System.out.println();
 			if(date == 1) {
 				// 출력할 필요가 없으니 따로 변수에 담을 필요가 없다.
 				service.updateAllLoginCount(loginUser.getUserNo());

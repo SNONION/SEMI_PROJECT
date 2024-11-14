@@ -177,7 +177,7 @@
 		AND		STATUS = 'Y'
 	</entry>
 	
-	<entry key="LoginCountInfo">
+	<entry key="loginCountInfo">
 		SELECT  LOGIN_COUNT,
 		        LOGIN_EVENT,
 		        LOGIN_DATE
@@ -247,6 +247,27 @@
 		AND		STATUS = 'Y'
 	</entry>
 	
+	<entry key="selectReply">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM ,A.*
+		     FROM (SELECT 	REPLY_NO,
+		     				NICKNAME,
+		                    REF_BOARD_NO,
+		                    REPLY_CONTENT,
+		                    REPLY_DATE
+		            FROM TB_REPLY R
+		            JOIN TB_USERINFO USING(USER_NO)
+		            WHERE R.STATUS='Y'
+		            ORDER BY REPLY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="countReply">
+		SELECT COUNT(*) JOJ
+		FROM TB_REPLY
+		WHERE STATUS='Y'
+	</entry>
+
 	<entry key="pointUpEvent">
 		UPDATE  TB_USERINFO
 		SET     POINT = POINT + ?
@@ -280,5 +301,5 @@
 		WHERE   USER_NO = ?
 		AND     STATUS = 'Y'
 	</entry>
-	
+
 </properties>
