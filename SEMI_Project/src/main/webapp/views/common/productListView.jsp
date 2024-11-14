@@ -220,7 +220,7 @@
 								<td style="display:none;">${p.price}</td>
 								
 								<td>
-									<div class="card" style="width: 400px">
+									<div class="card" style="width: 400px;">
 										<img class="card-img-top" src="/semi${p.proPath}${p.proImgName}"
 											alt="Card image">
 										<div class="card-body">
@@ -256,12 +256,14 @@
 					<!-- Modal body -->
 					<div class="modal-body">
 						
-						<span id="modalItemNo">제품번호</span><h3 id="modalItemTitle">상품명</h3>
+						<span style="display:none;" id="modalItemNo">제품번호</span>
+						<h3 id="modalItemTitle">상품명</h3>
 						<p id="modalItemDescription">상품 설명</p>
 						<p id="modalItemPoint">포인트</p>
 						<br>
 						<!-- 구매 버튼 추가 -->
 						<button onclick="purchProduct();" class="btn btn-success">구매하기</button>
+						<button onclick="productDelete();" class="btn btn-success">삭제하기</button>
 					</div>
 				</div>
 			</div>
@@ -269,6 +271,38 @@
 
 
 		<script>
+			function productDelete(){
+				var proNo = $("#modalItemNo").text();
+				var proPrice = $("#modalItemPoint").text();
+				
+				if(confirm("정말로 삭제하시겠습니까?")){
+					
+					$.ajax({
+						
+						url : "/semi/purchProduct.sh",
+						method : "post",
+						data : {
+							proNo : proNo,
+							proPrice : proPrice
+						},
+						success : function(msg){
+
+							if(msg == 'NNNNN'){
+								console.log("처리 실패");
+							}
+							else{
+								alert("삭제되었습니다.");
+								window.location.reload();
+							}
+						},
+						error : function(){
+							console.log("요청 오류");
+						}
+					});
+				}
+				
+			};
+		
 			$(function() {
 				// 테이블의 행을 클릭하면 모달을 열고, 상품 정보를 설정
 				$(".list-area > tbody > tr").click(function(){

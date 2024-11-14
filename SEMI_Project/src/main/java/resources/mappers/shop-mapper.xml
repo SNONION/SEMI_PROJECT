@@ -145,6 +145,7 @@
 		FROM    TB_PRODUCT
 		LEFT JOIN    TB_SHOPMEDIAFILE ON(SHOP_FILE_NO = FILE_NO)
 		WHERE   PRO_NO = ?
+		AND		STATUS = 'Y'
 	</entry>
 	
 	<entry key="selectUserPoint">
@@ -164,6 +165,27 @@
 	<entry key="insertMyItemsList">
 		INSERT INTO TB_MYITEMS VALUES(?,?)
 	</entry>
-
+	
+	<entry key="selectFileNoFromProduct">
+		SELECT  SHOP_FILE_NO FILE_NO
+		FROM    TB_PRODUCT
+		WHERE   PRO_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="deleteProduct">
+		DELETE FROM	TB_PRODUCT
+		WHERE	PRO_NO = ?
+	</entry>
+	
+	<entry key="deleteMediaFile">
+		DELETE FROM	TB_SHOPMEDIAFILE
+		WHERE	FILE_NO = ?
+	</entry>
+	
+	<entry key="deleteMyItemsList">
+		DELETE FROM TB_MYITEMS
+		WHERE	PRO_NO = ?
+	</entry>
 
 </properties>

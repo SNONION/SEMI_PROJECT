@@ -264,9 +264,38 @@ public class ShopService {
 		
 		return result;
 	}
+
+	public int deleteProduct(int proNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result0 = shopDao.deleteMyItemsList(con, proNo);
+		
+		int fileNo = shopDao.selectFileNoFromProduct(con, proNo);
+		
+		int result1 = shopDao.deleteProduct(con, proNo);
+		int result2 = 1;
+		
+		if(result1 > 0 && fileNo > 0) {
+			
+			result2 = shopDao.deleteMediaFile(con, fileNo);
+		}
+		
+		int result = result1 * result2;
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result + result0;
+	}
 	
 	       
-	}
+}
 	
 	
 	

@@ -64,8 +64,22 @@ public class UpdateMyItemsController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		int proNo = Integer.parseInt(request.getParameter("proNo"));
+		
+		int result = new ShopService().deleteProduct(proNo);
+		
+		String msg = "";
+		
+		if(result > 0) {
+			msg = "NNNNY";
+		}
+		else {
+			msg = "NNNNN";
+		}
+		
+		response.setContentType("text.html;charset=UTF-8");
+		response.getWriter().print(msg);
 	}
 
 }
