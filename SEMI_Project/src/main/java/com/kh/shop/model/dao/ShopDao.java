@@ -112,33 +112,22 @@ public class ShopDao {
 	public int insertProduct(Connection con, Product p) {
 
 		int result = 0;
-		PreparedStatement pstmt = null;
 		String sql = pro.getProperty("insertProduct");
 
 		try {
 			pstmt = con.prepareStatement(sql);
 			
 			pstmt.setInt(1, p.getProNo());
-			pstmt.setInt(2, p.getShopFileNo());
-			pstmt.setString(3, p.getProName());
-			pstmt.setString(4, p.getProMenual());
-			pstmt.setInt(5, p.getPrice());
-			pstmt.setString(6, p.getStatus());
-			
+			pstmt.setString(2, p.getProName());
+			pstmt.setString(3, p.getProMenual());
+			pstmt.setInt(4, p.getPrice());
 			
 			result = pstmt.executeUpdate();
 			
-			
-			if (result > 0) {
-				JDBCTemplate.commit(con);  // 커밋
-            } else {
-            	JDBCTemplate.rollback(con);  // 롤백
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             JDBCTemplate.close(pstmt);
-            JDBCTemplate.close(con);
         }
 
         return result;
@@ -244,7 +233,6 @@ public class ShopDao {
 
 	public ArrayList<Product> selectProductList(Connection con, int proNo) {
 		
-		ShopMediaFile smf = null;
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
@@ -349,9 +337,7 @@ public class ShopDao {
 
 	public boolean insertMyItems(Connection con, MyItems order) {
 		
-		int result = 0;		
-        PreparedStatement pstmt = null;        
-        
+		int result = 0;		           
         String sql = pro.getProperty("insertMyItems");       
 
         try {
@@ -363,7 +349,6 @@ public class ShopDao {
             pstmt.setInt(4, order.getProCount());         
 
             result = pstmt.executeUpdate();
-            return result>0; // 성공 시 true 반환
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -373,9 +358,207 @@ public class ShopDao {
             
         }
 
+        return result>0; // 성공 시 true 반환
 		
 		
 
+	}
+
+	public int insertShopMedia(Connection con, ShopMediaFile smf) {
+		
+		int result = 0;		           
+        String sql = pro.getProperty("insertShopMedia");       
+
+        try {
+            
+            pstmt = con.prepareStatement(sql);
+            
+            pstmt.setInt(1, smf.getShopFileNo());
+            pstmt.setString(2, smf.getOriginName());
+            pstmt.setString(3, smf.getFilePath());
+            
+            result = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTemplate.close(pstmt); // 자원 해제
+            
+        }
+		
+		return result;
+	}
+
+	public int selectFileNo(Connection con, Product p) {
+		
+		int fileNo = 0;
+		String select = pro.getProperty("selectFileNo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				fileNo = rset.getInt("FILE_NO");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+		
+		return fileNo;
+	}
+
+	public int updateProduct(Connection con, Product p) {
+		
+		int result = 0;		           
+        String sql = pro.getProperty("updateProduct");       
+
+        try {
+            
+            pstmt = con.prepareStatement(sql);
+            
+            System.out.println(p.getShopFileNo());
+            System.out.println(p.getProNo());
+            
+            pstmt.setInt(1, p.getShopFileNo());
+            pstmt.setInt(2, p.getProNo());
+           
+            result = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCTemplate.close(pstmt); // 자원 해제
+            
+        }
+		
+		return result;
+	}
+
+	public int selectProNo(Connection con) {
+		
+		int proNo = 0;
+		String select = pro.getProperty("selectProNo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				proNo = rset.getInt("PRO_NO");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+		
+		return proNo;
+	}
+
+	public ShopMediaFile selectMediaInfo(Connection con, Product p) {
+		
+		ShopMediaFile smf = new ShopMediaFile();
+		String select = pro.getProperty("selectMediaInfo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, p.getProNo());
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				smf = new ShopMediaFile(rset.getString("FILE_NAME"),
+										rset.getString("FILE_PATH"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+		
+		return smf;
+	}
+
+	public int selectUserPoint(Connection con, int userNo) {
+		
+		int point = 0;
+		String select = pro.getProperty("selectUserPoint");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				point = rset.getInt("POINT");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+	        JDBCTemplate.close(rset);
+	        JDBCTemplate.close(pstmt);
+	    }
+		
+		return point;
+	}
+
+	public int updateUserPoint(Connection con, Product pro2, int userNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateUserPoint");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, pro2.getPrice());
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            JDBCTemplate.close(pstmt);
+        }
+		
+		return result;
+	}
+
+	public int insertMyItemsList(Connection con, Product pro2, int userNo) {
+		
+		int result = 0;
+		String insert = pro.getProperty("insertMyItemsList");
+		
+		try {
+			pstmt = con.prepareStatement(insert);
+			
+			pstmt.setInt(1, pro2.getProNo());
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            JDBCTemplate.close(pstmt);
+        }
+		
+		return result;
 	}
 
 	

@@ -111,7 +111,59 @@
 
 	</entry>
 	
+	<entry key="insertProduct">
+		INSERT INTO TB_PRODUCT(PRO_NO,
+		                       PRO_NAME,
+		                       PRO_MENUAL,
+		                       PRICE)
+		VALUES(?,?,?,?)
+	</entry>
 	
+	<entry key="insertShopMedia">
+		INSERT INTO TB_SHOPMEDIAFILE VALUES(?,?,?)
+	</entry>
+	
+	<entry key="selectFileNo">
+		SELECT  SEQ_SFNO.NEXTVAL FILE_NO
+		FROM    DUAL
+	</entry>
+	
+	<entry key="updateProduct">
+		UPDATE  TB_PRODUCT
+		SET     SHOP_FILE_NO = ?
+		WHERE   PRO_NO = ?
+	</entry>
+	
+	<entry key="selectProNo">
+		SELECT  SEQ_PRONO.NEXTVAL PRO_NO
+		FROM    DUAL	
+	</entry>
+	
+	<entry key="selectMediaInfo">
+		SELECT  FILE_NAME,
+		        FILE_PATH
+		FROM    TB_PRODUCT
+		LEFT JOIN    TB_SHOPMEDIAFILE ON(SHOP_FILE_NO = FILE_NO)
+		WHERE   PRO_NO = ?
+	</entry>
+	
+	<entry key="selectUserPoint">
+		SELECT	POINT
+		FROM	TB_USERINFO
+		WHERE	USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="updateUserPoint">
+		UPDATE	TB_USERINFO
+		SET		POINT = POINT - ?
+		WHERE	USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="insertMyItemsList">
+		INSERT INTO TB_MYITEMS VALUES(?,?)
+	</entry>
 
 
 </properties>
