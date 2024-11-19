@@ -88,6 +88,7 @@
 	</div>
 
 	<script>
+	
 		// 버튼을 눌르면 이미지 부분을 클릭하면 파일을 넣을 수 있도록 설정
 		function plusImgArea(){
 			

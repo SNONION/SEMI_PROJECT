@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.common.model.vo.Quest;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.unionBoard.model.vo.Reply;
@@ -486,6 +487,79 @@ public class UserService {
 			JDBCTemplate.rollback(con);
 		}
 		JDBCTemplate.close(con);
+	}
+
+	public ArrayList<Quest> selectQuestList() {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		ArrayList<Quest> qList = dao.selectQuestList(con);
+		
+		JDBCTemplate.close(con);
+		
+		return qList;
+	}
+
+	public LoginCount selectLoginInfo(int userNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		LoginCount lc = dao.selectLoginInfo(con, userNo);
+		
+		JDBCTemplate.close(con);
+		
+		return lc;
+	}
+
+	public int updateReplyQuest() {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateReplyQuest(con);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updateUserPoint(int userNo, int reward) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateUserPoint(con, userNo, reward);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
+	}
+
+	public int updateQuestStatusN(int questNo) {
+		
+		Connection con = JDBCTemplate.getConnection();
+		
+		int result = dao.updateQuestStatusN(con, questNo);
+		
+		if(result > 0) {
+			JDBCTemplate.commit(con);
+		}
+		else {
+			JDBCTemplate.rollback(con);
+		}
+		JDBCTemplate.close(con);
+		
+		return result;
 	}
 
 }

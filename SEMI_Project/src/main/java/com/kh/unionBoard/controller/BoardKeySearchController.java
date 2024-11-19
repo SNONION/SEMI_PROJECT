@@ -67,7 +67,6 @@ public class BoardKeySearchController extends HttpServlet {
 			listCount = new UnionBoardService().selectKeyBoardCount(keyword);
 		}
 		
-		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		pageLimit = 10;
 		listLimit = 15;
 		maxPage = (int)Math.ceil(((double)listCount/listLimit));
@@ -123,12 +122,14 @@ public class BoardKeySearchController extends HttpServlet {
 		}
 		
 		for(UnionBoard u : bList) {
+			
+			// 게시글별 추천수 및 댓글 수 가져오기
 			int recommend = new UnionBoardService().selectRecomCount(u.getBoardNo());
 			int replyCount = new UnionBoardService().selectReplyCount(u.getBoardNo());
 			u.setReplyCount(replyCount);
 			u.setRecommend(recommend);
 			
-			// 작성자 이미지 가져오는 과정
+			// 회원 등급별 이미지 가져오기
 			UserTier tier = new UnionBoardService().selectTierImg(u.getBoardWriter());
 			u.setTierPath(tier.getTierPath());
 			u.setTierName(tier.getTierOriginFileName());

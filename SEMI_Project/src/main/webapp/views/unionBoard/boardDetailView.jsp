@@ -251,7 +251,7 @@ h5 {
 						var tr = $("<tr>");
 						tr.append($("<td id='checkMyNick'>").text(re.replyNo));
 						tr.append($("<td id='checkMyNick'>").text(re.nickname));
-						tr.append($("<td class='fixed-td'>").text(re.replyContent));
+						tr.append($("<td class='fixed-td'>").html(re.replyContent.replace(/\n/g, "<br>")));
 						tr.append($("<td>").text(re.replyDate));
 						$("#replyInput-area").append(tr);
 					}
@@ -280,7 +280,7 @@ h5 {
 						var tr = $("<tr>");
 						tr.append($("<td>").text(re.replyNo));
 						tr.append($("<td>").text(re.nickname));
-						tr.append($("<td class='fixed-td'>").text(re.replyContent));
+						tr.append($("<td class='fixed-td'>").html(re.replyContent.replace(/\n/g, "<br>")));
 						tr.append($("<td>").text(re.replyDate));
 						
 						tr.appendTo($("#replyInput-area"));

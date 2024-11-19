@@ -62,7 +62,33 @@
 				</tbody>
 			</table>
 		</div>
-		<h3 align="center">이단 감시소</h3>
+		
+		<br> <br>
+		<h3 align="center">TODAY QUEST LIST</h3>
+		<br>
+
+		<div class="userInfo-area">
+			<table class="table table-dark table-striped">
+				<thead>
+					<tr align="center">
+						<th width="600px">퀘스트명</th>
+						<th width="120px">목표횟수</th>
+						<th width="200px">지급포인트</th>
+						<th width="200px">보상받기</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
+		</div>
+		
+		<script>
+			
+		</script>
+		
+		<br><br>
+		<h3 align="center">댓글 확인</h3>
 		<br>
 		<div class="total-reply">
 			<table class="table table-dark table-striped" style="table-layout: fixed;">
@@ -657,12 +683,12 @@
 			
 			if(${not empty wList}){
 				var workoutContent = $(this).children().first().text();
-				var workoutNo = $(this).children().first().next().text();
-				var workoutTitle = $(this).children().first().next().next().text();
-				var workoutDate = $(this).children().first().next().next().next().text();
+				var workoutNo = $(this).children().eq(1).text();
+				var workoutTitle = $(this).children().eq(2).text();
+				var workoutDate = $(this).children().eq(3).text();
 				
 				$("#workoutNo").text(workoutNo);
-				$("#workoutContent").html(workoutContent);
+				$("#workoutContent").html(workoutContent.replace(/\n/g, "<br>"));
 				$("#workoutTitle").text(workoutTitle);
 				$("#workoutDate").text(workoutDate);
 				

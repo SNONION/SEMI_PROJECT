@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import com.kh.common.JDBCTemplate;
 import com.kh.common.model.vo.PageInfo;
+import com.kh.common.model.vo.Quest;
 import com.kh.request.model.vo.Answer;
 import com.kh.request.model.vo.Request;
 import com.kh.unionBoard.model.vo.Reply;
@@ -950,6 +951,122 @@ public class UserDao {
 			
 			pstmt.setInt(1, gradeNo);
 			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public ArrayList<Quest> selectQuestList(Connection con) {
+		
+		ArrayList<Quest> qList = new ArrayList<>();
+		String select = pro.getProperty("selectQuestList");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				qList.add(new Quest(rset.getInt("QUEST_NO"),
+									rset.getString("QUEST_TITLE"),
+									rset.getInt("QUEST_CONTENT"),
+									rset.getInt("REWARD")));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return qList;
+	}
+
+	public LoginCount selectLoginInfo(Connection con, int userNo) {
+		
+		LoginCount lc = null;
+		String select = pro.getProperty("selectLoginInfo");
+		
+		try {
+			pstmt = con.prepareStatement(select);
+			
+			pstmt.setInt(1, userNo);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				lc = new LoginCount(rset.getInt("USER_NO"),
+									rset.getInt("LOGIN_COUNT"),
+									rset.getInt("LOGIN_EVENT"),
+									rset.getDate("LOGIN_DATE"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(rset);
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return lc;
+	}
+
+	public int updateReplyQuest(Connection con) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateReplyQuest");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	public int updateUserPoint(Connection con, int userNo, int reward) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateUserPoint");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, reward);
+			pstmt.setInt(2, userNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCTemplate.close(pstmt);
+		}
+		
+		return result;
+	}
+
+	public int updateQuestStatusN(Connection con, int questNo) {
+		
+		int result = 0;
+		String update = pro.getProperty("updateQuestStatusN");
+		
+		try {
+			pstmt = con.prepareStatement(update);
+			
+			pstmt.setInt(1, questNo);
 			
 			result = pstmt.executeUpdate();
 			

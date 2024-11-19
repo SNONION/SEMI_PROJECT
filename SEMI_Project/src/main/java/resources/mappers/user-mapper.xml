@@ -301,5 +301,42 @@
 		WHERE   USER_NO = ?
 		AND     STATUS = 'Y'
 	</entry>
-
+	
+	<entry key="selectQuestList">
+		SELECT  QUEST_NO,
+                QUEST_TITLE,
+                QUEST_CONTENT,
+                REWARD
+        FROM    TB_QUEST
+	</entry>
+	
+	<entry key="selectLoginInfo">
+		SELECT  USER_NO,
+		        LOGIN_COUNT,
+		        LOGIN_EVENT,
+		        LOGIN_DATE
+		FROM    TB_LOGINCOUNT
+		WHERE   USER_NO = ?
+	</entry>
+	
+	<entry key="updateReplyQuest">
+		UPDATE	TB_QUEST
+		SET		QUEST_CONTENT = QUEST_CONTENT + 1
+		WHERE	QUEST_NO = 6
+	</entry>
+	
+	<entry key="updateUserPoint">
+		UPDATE	TB_USERINFO
+		SET		POINT = POINT + ?
+		WHERE	USER_NO = ?
+		AND		STATUS = 'Y'
+	</entry>
+	
+	<entry key="updateQuestStatusN">
+		UPDATE	TB_QUEST
+		SET		STATUS = 'N'
+		WHERE	QUEST_NO = ?
+		AND 	STATUS = 'Y'
+	</entry>
+	
 </properties>

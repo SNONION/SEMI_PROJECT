@@ -5,15 +5,23 @@ public class Quest {
     private int questNo;
 	private int refBno;
 	private String questTitle;
-	private String questContent;
+	private int questContent;
 	private int reward;
 	private String status;
 	
 	public Quest() {
 		super();
 	}
+	
+	public Quest(int questNo, String questTitle, int questContent, int reward) {
+		super();
+		this.questNo = questNo;
+		this.questTitle = questTitle;
+		this.questContent = questContent;
+		this.reward = reward;
+	}
 
-	public Quest(int questNo, int refBno, String questTitle, String questContent, int reward, String status) {
+	public Quest(int questNo, int refBno, String questTitle, int questContent, int reward, String status) {
 		super();
 		this.questNo = questNo;
 		this.refBno = refBno;
@@ -47,11 +55,11 @@ public class Quest {
 		this.questTitle = questTitle;
 	}
 
-	public String getQuestContent() {
+	public int getQuestContent() {
 		return questContent;
 	}
 
-	public void setQuestContent(String questContent) {
+	public void setQuestContent(int questContent) {
 		this.questContent = questContent;
 	}
 
