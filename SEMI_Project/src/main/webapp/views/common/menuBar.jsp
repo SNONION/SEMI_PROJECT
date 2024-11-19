@@ -127,9 +127,9 @@ i{
 	font-family: 'Viking-Normal', serif;
 	font-weight: 900;
 	text-shadow: 0px 0px 4px gold
-                        , 0px -5px 4px chocolate
-                        , 0px -15px 14px orange
-                        , 0px -22px 19px red;
+               , 0px -5px 4px chocolate
+               , 0px -15px 14px orange
+               , 0px -22px 19px red;
 }
 
 #adimg{
@@ -147,10 +147,77 @@ i{
 			<div class="backbtn-area">
 				<span onclick="backToMain();" id="home1">HELL-</span><span onclick="backToMain();" id="home1">C</span>
 			</div>
+			
+			<script>
+				$(function(){
+					$.ajax({
+						url : "/semi/questList.un",
+						success : function(qList){
+							
+							$("#questList-area tr").remove();
+							
+							for(var q of qList){
+								var tr = $("<tr align='center'>");
+								tr.append($("<td>").text(q.questNo));
+								tr.append($("<td>").text(q.questTitle));
+								tr.append($("<td>").text(q.reward));
+								
+								$("#questList-area").append(tr);
+							}
+							
+						},
+						error : function(){
+							console.log("요청 오류");
+						}
+					});
+				})
+			</script>
+			
+			<div class="dropdown-area" style="margin-right: 70px;">
+					<button type="button" class="btn btn-outline-warning" 
+									data-toggle="modal" data-target="#questModal">Quest</button>
+			</div>
+
+			<!-- 퀘스트 모달창 -->
+			<div class="modal" id="questModal">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+
+						<!-- 퀘스트 헤더 -->
+						<div class="modal-header">
+							<h4 class="modal-title">Quest List</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<!-- 퀘스트 리스트 출력 구역 -->
+						<div class="modal-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th width="120px">No.</th>
+										<th width="400px">퀘스트명</th>
+										<th width="120px">보상</th>
+									</tr>
+								</thead>
+								<tbody id="questList-area">
+									
+								</tbody>
+							</table>
+						</div>
+
+						<!-- 퀘스트 footer -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
 			<div class="dropdown-area">
 				<div class="dropdown">
 					<button type="button" class="btn btn-outline-warning dropdown-toggle"
-						data-toggle="dropdown">MENU</button>
+						data-toggle="dropdown"><i class="fas fa-bars"></i></button>
 					<div class="dropdown-menu" style="background: black; border: 1px solid orange;">
 						<c:choose>
 							<c:when test="${empty loginUser}">

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kh.unionBoard.model.service.UnionBoardService;
 import com.kh.unionBoard.model.vo.Reply;
+import com.kh.user.model.service.UserService;
 
 /**
  * Servlet implementation class ReplyInsertController
@@ -48,7 +49,10 @@ public class ReplyInsertController extends HttpServlet {
 		reply.setRefBno(boardNo);
 		reply.setReplyContent(replyContent);
 		
-		int result = new UnionBoardService().insertReply(reply);
+		int result1 = new UserService().updateReplyQuest();
+		int result2 = new UnionBoardService().insertReply(reply);
+		
+		int result = result1 * result2;
 		
 		String msg = "";
 		
